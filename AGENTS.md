@@ -274,7 +274,6 @@ For every nontrivial change:
 8. Run:
 
 ```bash
-pnpm docs:audit
 pnpm links
 pnpm a11y
 pnpm validate

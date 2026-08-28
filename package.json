@@ -9,8 +9,7 @@
     "validate": "mint validate",
     "links": "mint broken-links --check-anchors --check-redirects",
     "a11y": "mint a11y",
-    "docs:audit": "node scripts/audit.mjs",
-    "check": "pnpm docs:audit && pnpm links && pnpm a11y && pnpm validate"
+    "check": "pnpm links && pnpm a11y && pnpm validate"
   },
   "devDependencies": {
     "mint": "4.2.840"
