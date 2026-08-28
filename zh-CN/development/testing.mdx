@@ -1,0 +1,51 @@
+---
+title: 测试与质量检查
+description: 提交修改前运行前端、Rust 与跨平台检查。
+---
+
+开发期间运行最快的相关检查，提交 Pull Request 前完成完整前端与 Rust 测试。
+
+## 前端检查
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm test -- --run
+```
+
+Vitest 覆盖前端逻辑和组件。测试应保持确定性，除非由测试明确管理生命周期，否则不要依赖正在运行的正式版服务。
+
+## Rust 检查
+
+在 `src-tauri/` 中：
+
+```bash
+cargo check
+cargo test
+```
+
+CI 在 Ubuntu 22.04、macOS 14 和 Windows 上运行更严格的矩阵命令：
+
+```bash
+cargo test --all-features --locked
+```
+
+## 手动场景
+
+<AccordionGroup>
+  <Accordion title="安装与恢复">覆盖首次安装、下载中断或失败、重试、已有内核复用，以及更新不可获取时保留可用内核。</Accordion>
+  <Accordion title="服务生命周期">测试启动、健康检查、端口占用、重启、关闭和日志，并保持正式版/Debug 端口分离。</Accordion>
+  <Accordion title="Profile 与插件">切换 Profile 并验证隔离，安装和移除可选插件，确认内部插件恢复。</Accordion>
+  <Accordion title="平台打包">验证 Windows 安装包、签名公证的 macOS DMG、Linux `.deb` 和 AppImage，并执行 Wayland 冒烟测试。</Accordion>
+</AccordionGroup>
+
+{/* <!-- [CI 检查与跨平台测试矩阵](/images/zh-CN/testing.webp) --> */}
+
+## 提交 Pull Request 前
+
+- 为行为变化新增或更新测试。
+- 确认未提交密钥、本机隐私路径或生成的应用数据。
+- 涉及路径或端口时同时测试正式版和 Debug。
+- 用户可见变化需同步两种文档语言。
+
+

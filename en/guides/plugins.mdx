@@ -1,0 +1,55 @@
+---
+title: Plugins
+description: Install, update, recover, and understand plugins in DeepSeek Harness Desktop.
+---
+
+Plugins extend Harness with tools, UI panels, notifications, and desktop integrations.
+The desktop app distinguishes required internal plugins from optional preset and
+community plugins.
+
+## Plugin types
+
+| Type | Delivery | User control |
+| --- | --- | --- |
+| Internal | Bundled in the desktop installer and ensured at startup | Automatically restored when missing |
+| Preset | Offered during first-run guidance, installed from npm or GitHub | Optional; update or remove later |
+| Community | Installed manually or through a marketplace plugin | Review source and permissions first |
+
+Internal plugins currently provide the Tauri bridge, settings UI, worktree support,
+panel shell, and Skills/MCP management. The Windows Minimal-mode repair is downloaded
+from its GitHub repository when selected; its source is **not** embedded in the app.
+
+{/* <!-- [Plugin manager with status and recovery actions](/images/en/plugins.webp) --> */}
+
+## Manage a plugin
+
+<Steps>
+  <Step title="Open plugin settings">
+    Review the plugin name, source, installed state, and any reported error.
+  </Step>
+  <Step title="Choose an action">
+    Install a trusted plugin, upgrade an outdated one, or remove an optional plugin you
+    no longer use.
+  </Step>
+  <Step title="Restart if requested">
+    Some host or UI integrations become active only after the Harness service reloads.
+  </Step>
+</Steps>
+
+## Recovery
+
+If a plugin operation is interrupted, use the recovery action shown by the desktop
+panel. Internal plugins are checked before service startup and re-linked to the bundled
+copy when their dependency declaration or files are missing.
+
+<Warning>
+  A Harness plugin can execute local code. Check the repository owner, release history,
+  package contents, and requested capabilities before installation.
+</Warning>
+
+Developers can continue with [Plugin system architecture](../architecture/plugin-system).
+
+
+
+
+

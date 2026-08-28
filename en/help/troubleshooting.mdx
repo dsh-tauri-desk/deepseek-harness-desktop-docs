@@ -1,0 +1,53 @@
+---
+title: Troubleshooting
+description: Diagnose installation, startup, display, port, CLI, and plugin problems.
+---
+
+Start with the visible symptom, preserve logs, and change one thing at a time.
+
+## First checks
+
+1. Restart the desktop app and wait for the health check.
+2. Confirm the configured loopback port is not blocked by security software.
+3. Check that first-run downloads completed.
+4. Open the service log from the app data `logs` directory.
+5. Record the desktop version, operating system, active profile, and core source.
+
+## Common problems
+
+<AccordionGroup>
+  <Accordion title="Installation download fails">
+    Confirm internet access to Node.js, npm registry, and GitHub Releases. Retry after a
+    transient failure. Corporate proxies or TLS interception may require administrator
+    configuration outside the app.
+  </Accordion>
+  <Accordion title="Harness does not open">
+    Another process may own the configured port. The app normally selects a higher free
+    port automatically. Check `logs/dsh-web.log` for the exact launch error.
+  </Accordion>
+  <Accordion title="Linux window is black or crashes">
+    Prefer `.deb` on Wayland. For AppImage, try:
+    ```bash
+    WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_DMABUF_RENDERER=1 GDK_BACKEND=x11 ./Deepseek*.AppImage
+    ```
+  </Accordion>
+  <Accordion title="dsh is not recognized">
+    Enable CLI integration and open a completely new terminal. Confirm the platform shim
+    directory is present in `PATH`.
+  </Accordion>
+  <Accordion title="A plugin is broken">
+    Open plugin settings, capture the error detail, then use upgrade, recovery, or
+    uninstall for optional plugins. Required internal plugins restore at startup.
+  </Accordion>
+</AccordionGroup>
+
+{/* <!-- [Troubleshooting log and error detail](/images/en/troubleshooting.webp) --> */}
+
+## Ask for help
+
+Search or open an issue in the
+[desktop repository](https://github.com/dsh-tauri-desk/deepseek-harness-desktop/issues).
+Remove tokens, private paths, repository content, and personal data from logs first.
+Include reproducible steps and the smallest relevant log section.
+
+

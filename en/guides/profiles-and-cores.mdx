@@ -1,0 +1,48 @@
+---
+title: Profiles and cores
+description: Separate Harness configuration with profiles and choose the active core.
+---
+
+Profiles isolate Harness configuration, plugins, patches, and behavior. Cores determine
+which installed Harness distribution the desktop service runs.
+
+## Profiles
+
+The default desktop profile is `web`. Additional profiles live under
+`$DSH_HOME/profiles/<id>` and can carry different plugin and patch configuration.
+Changing the active profile restarts or reconfigures the service so desktop controls
+and plugin operations target the selected profile.
+
+{/* <!-- [Profile and core settings](/images/en/profiles-cores.webp) --> */}
+
+## Core sources
+
+| Source | Meaning | When to use it |
+| --- | --- | --- |
+| Automatic | Prefer a compatible local CLI core; otherwise use the app-managed core | Most users |
+| Local | Use the Harness core already installed for the CLI | CLI-focused development |
+| App | Use the prebuilt distribution downloaded by the desktop app | Reproducible desktop setup |
+
+The application can track and update its managed core independently from the desktop
+shell. If GitHub is unavailable, it keeps the existing local installation rather than
+removing a working core.
+
+<Warning>
+  Profiles isolate Harness data from each other, but they do not create an operating
+  system security boundary. A profile still runs with the permissions granted to the
+  application and its tools.
+</Warning>
+
+## Before switching
+
+1. Finish or pause active tool runs.
+2. Record uncommitted workspace changes.
+3. Switch the profile or core in settings.
+4. Confirm the service reconnects and the intended plugins are available.
+
+Learn how plugins relate to profiles in [Plugins](./plugins).
+
+
+
+
+

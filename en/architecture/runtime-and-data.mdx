@@ -1,0 +1,63 @@
+---
+title: Runtime and data
+description: Learn how the desktop app selects runtimes, starts Harness, and separates release and debug data.
+---
+
+The desktop shell separates managed application dependencies from Harness user data.
+This allows core updates and development builds without mixing profile state.
+
+## Runtime selection
+
+The release currently manages Node.js `v22.22.0` and pnpm `11.7.0`. For CLI startup,
+the shim prefers a compatible user runtime and command before falling back to the
+managed copies. The app-managed Harness core is downloaded from
+`deepseek-harness-pkg`; official GitHub assets are preferred and a supported mirror can
+be used as fallback.
+
+## Directory model
+
+```text
+<app-data>/
+├── runtime/
+├── dependencies/
+│   ├── dsh/
+│   ├── pnpm/
+│   └── git/          # Windows when managed Git is needed
+├── logs/
+│   └── dsh-web.log
+└── .store.dat
+
+~/.dsh/
+└── profiles/
+    └── <id>/
+```
+
+`DSH_HOME` overrides the default Harness data root when it is non-empty. Release builds
+default to `~/.dsh`; debug builds default to `~/.dsh.dev`.
+
+## Release and debug isolation
+
+| Concern | Release | Debug |
+| --- | --- | --- |
+| Default port | `3080` | `3081` |
+| Harness home | `~/.dsh` | `~/.dsh.dev` |
+| Settings store | `.store.dat` | `.store.dev.dat` |
+| Service log | `logs/dsh-web.log` | `logs/dsh-web.dev.log` |
+| Managed dependencies | Shared | Shared |
+| CLI PATH changes | Enabled by user setting | Intentionally disabled |
+
+{/* <!-- [Runtime and data directory boundaries](/images/en/runtime-data.webp) --> */}
+
+## Port behavior
+
+The service binds to `127.0.0.1`. If the preferred port is already occupied, startup
+can select a higher free port and pass the resolved URL back to the desktop client. A
+future launch can return to the preferred port after it becomes available.
+
+<Warning>
+  Shared managed dependencies reduce duplicate downloads, but profiles and debug data
+  do not provide operating-system isolation. Do not treat directory separation as a
+  sandbox.
+</Warning>
+
+

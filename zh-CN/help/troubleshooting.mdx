@@ -1,0 +1,38 @@
+---
+title: 故障排除
+description: 诊断安装、启动、显示、端口、CLI 与插件问题。
+---
+
+从可见症状开始，保留日志，并且每次只改变一个条件。
+
+## 首要检查
+
+1. 重启桌面端并等待健康检查。
+2. 确认回环端口未被安全软件阻止。
+3. 检查首次运行下载是否完成。
+4. 打开应用数据 `logs` 目录中的服务日志。
+5. 记录桌面版本、系统、活动 Profile 与内核来源。
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="安装下载失败">确认可访问 Node.js、npm registry 和 GitHub Releases。瞬时故障后重试；企业代理或 TLS 拦截可能需要管理员配置。</Accordion>
+  <Accordion title="Harness 无法打开">其他进程可能占用端口。应用通常会自动选择更高的可用端口；查看 `logs/dsh-web.log` 获取准确错误。</Accordion>
+  <Accordion title="Linux 黑屏或崩溃">
+    Wayland 下优先 `.deb`；AppImage 可尝试：
+    ```bash
+    WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_DMABUF_RENDERER=1 GDK_BACKEND=x11 ./Deepseek*.AppImage
+    ```
+  </Accordion>
+  <Accordion title="无法识别 dsh">启用 CLI 集成并打开全新终端，确认平台 shim 目录位于 `PATH`。</Accordion>
+  <Accordion title="插件损坏">打开插件设置并记录错误，再对可选插件执行升级、恢复或卸载；必需内部插件会在启动时恢复。</Accordion>
+</AccordionGroup>
+
+{/* <!-- [故障排除日志与错误详情](/images/zh-CN/troubleshooting.webp) --> */}
+
+## 获取帮助
+
+在[桌面端仓库](https://github.com/dsh-tauri-desk/deepseek-harness-desktop/issues)搜索或提交 Issue。
+先从日志中移除令牌、隐私路径、仓库内容和个人数据，并提供复现步骤及最小相关日志片段。
+
+

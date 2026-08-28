@@ -1,0 +1,45 @@
+---
+title: 构建与发布
+description: 构建平台安装包并理解自动化发布流水线。
+---
+
+Tauri 将 React 前端、Rust 后端和内置资源打包成平台原生安装程序。正式版本由 GitHub Actions 构建以确保可复现性。
+
+## 本地构建
+
+```bash
+pnpm install --frozen-lockfile
+pnpm typecheck
+pnpm lint
+pnpm test -- --run
+pnpm tauri build
+```
+
+`pnpm tauri build` 会先执行配置的前端构建，再编译并打包 Rust 应用。平台包只能在兼容系统上构建，并需要对应签名工具。
+
+## CI 产物
+
+| Runner | 产物 |
+| --- | --- |
+| Windows | NSIS `.exe` 与本地化 WiX `.msi` |
+| macOS Apple Silicon | 已签名、公证并 stapled 的 arm64 `.dmg` |
+| macOS Intel | 已签名、公证并 stapled 的 x64 `.dmg` |
+| Ubuntu 22.04 | x64 AppImage 与 `.deb` |
+
+{/* <!-- [GitHub Actions 发布流水线](/images/zh-CN/release-pipeline.webp) --> */}
+
+## 发布流程
+
+<Steps>
+  <Step title="准备版本">对齐 package 与 Tauri 元数据、发布说明和用户文档。</Step>
+  <Step title="运行质量门禁">完成前端类型检查、lint、Vitest 与跨平台 Rust 矩阵。</Step>
+  <Step title="构建平台产物">发布工作流并行构建 Windows、两种 macOS 架构和 Ubuntu 22.04。</Step>
+  <Step title="验证信任元数据">macOS 验证签名、stapling 与 Gatekeeper；其他签名产物执行对应验证。</Step>
+  <Step title="发布 GitHub Release">汇总产物并为 `v*` 版本发布 Release。</Step>
+</Steps>
+
+<Warning>不得在日志、文档、Pull Request 或 fixture 中暴露签名证书、公证凭据或更新密钥。</Warning>
+
+当前公开版本只提供 Linux x64 产物；构建并验证对应产物前，不要声明支持 Linux ARM。
+
+

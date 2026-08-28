@@ -1,0 +1,38 @@
+---
+title: 内置插件概览
+description: 了解 DeepSeek Harness Desktop 随安装包提供的第一方桌面插件及其职责边界。
+---
+
+DeepSeek Harness Desktop 通过少量第一方插件连接 Harness 与 Tauri 桌面壳。这些插件随安装包提供，
+启动前会检查其声明与文件；缺失或不一致时，桌面端会从内置资源恢复。
+
+{/* <!-- [五个内置插件及其依赖关系](/images/zh-CN/built-in-plugins-overview.webp) --> */}
+
+## 插件列表
+
+<CardGroup cols={2}>
+  <Card title="DSH Tauri" icon="arrows-left-right" href="./dsh-tauri">
+    连接原生导航栏和嵌入式 Harness 客户端的消息桥。
+  </Card>
+  <Card title="DSH Tauri UI" icon="sidebar" href="./dsh-tauri-ui">
+    提供桌面化设置侧边栏，并在能力缺失时安全降级。
+  </Card>
+  <Card title="DSH Tauri Worktree" icon="code-branch" href="./dsh-tauri-worktree">
+    为会话创建隔离 Git Worktree，并在用户批准后检出回本地分支。
+  </Card>
+  <Card title="DSH Tauri Panel Extension" icon="puzzle-piece" href="./dsh-tauri-panel-extension">
+    在面板协议上提供 Skills、技能仓库和 MCP 管理。
+  </Card>
+</CardGroup>
+
+## 为什么是内置插件
+
+这些能力需要与桌面窗口、导航、Profile、工作区或宿主文件系统配合，并且必须与桌面端版本共同测试。
+把它们作为插件实现，可以保留 Harness 的 host half/client half 架构，同时让桌面端承担明确的维护和恢复责任。
+
+<Note>
+  “内置”表示随桌面安装包分发并自动确保存在，不表示插件拥有额外的操作系统沙箱。
+  它们仍在 Harness 与桌面端允许的权限范围内运行。
+</Note>
+
+源码位于 [`dsh-tauri-plugins`](https://github.com/dsh-tauri-desk/dsh-tauri-plugins)。

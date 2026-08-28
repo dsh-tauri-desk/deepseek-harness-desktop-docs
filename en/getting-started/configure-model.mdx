@@ -1,0 +1,56 @@
+---
+title: Configure a model
+description: Add a DeepSeek or compatible model provider before starting your first task.
+---
+
+Harness needs at least one model provider before it can answer in a session. The fastest
+path is to add a DeepSeek API key from the embedded Harness settings.
+
+{/* <!-- [Harness model settings with the DeepSeek provider card](/images/en/model-settings.webp) --> */}
+
+## Add DeepSeek
+
+<Steps>
+  <Step title="Open model settings">
+    In the Harness sidebar, open **Settings → Models**. This page belongs to the embedded
+    Harness interface, not the desktop shell's **Configuration** dialog.
+  </Step>
+  <Step title="Enter your API key">
+    Find the DeepSeek provider card, enter a key from the
+    [DeepSeek Platform](https://platform.deepseek.com/), and save it.
+  </Step>
+  <Step title="Select a model">
+    Return to the session composer and choose an available model. The selection becomes
+    the default for new sessions.
+  </Step>
+  <Step title="Send a small test task">
+    Select a workspace and ask Harness to summarize the repository. Model changes apply
+    to the next request; the Harness service does not need to restart.
+  </Step>
+</Steps>
+
+<Warning>
+  Never paste an API key into a chat message, repository file, screenshot, or issue.
+  Harness stores provider credentials separately and returns only a redacted descriptor
+  to the browser UI.
+</Warning>
+
+## Other providers
+
+Choose **Add provider** for an installed provider such as Anthropic or OpenAI. Choose
+**Add custom provider** for an OpenAI-compatible company gateway or self-hosted endpoint.
+Custom providers require a stable lowercase provider ID, base URL, protocol, credential,
+and at least one model.
+
+<Note>
+  Provider setup is a Harness feature and can evolve independently from the desktop
+  shell. For advanced routing, image input, and compatibility options, consult the
+  [upstream model guide](https://deepseek-harness.github.io/deepseek-harness/user/guide/providers).
+</Note>
+
+Next, learn the [desktop and Harness interface](../guides/interface).
+
+
+
+
+

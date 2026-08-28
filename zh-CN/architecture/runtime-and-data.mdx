@@ -1,0 +1,53 @@
+---
+title: 运行时与数据
+description: 了解桌面端如何选择运行时、启动 Harness，并隔离正式版与 Debug 数据。
+---
+
+桌面壳将托管应用依赖与 Harness 用户数据分开，以支持内核更新和开发构建而不混用 Profile 状态。
+
+## 运行时选择
+
+当前正式版托管 Node.js `v22.22.0` 与 pnpm `11.7.0`。CLI 启动时，shim 优先兼容的用户运行时和命令，
+随后回退到托管副本。托管 Harness 内核由 `deepseek-harness-pkg` 提供，优先 GitHub 官方资源，必要时使用支持的镜像。
+
+## 目录模型
+
+```text
+<app-data>/
+├── runtime/
+├── dependencies/
+│   ├── dsh/
+│   ├── pnpm/
+│   └── git/          # Windows 需要托管 Git 时
+├── logs/
+│   └── dsh-web.log
+└── .store.dat
+
+~/.dsh/
+└── profiles/
+    └── <id>/
+```
+
+非空 `DSH_HOME` 优先于默认数据根目录。正式版默认 `~/.dsh`，Debug 默认 `~/.dsh.dev`。
+
+## 正式版与 Debug 隔离
+
+| 内容 | 正式版 | Debug |
+| --- | --- | --- |
+| 默认端口 | `3080` | `3081` |
+| Harness 主目录 | `~/.dsh` | `~/.dsh.dev` |
+| 设置存储 | `.store.dat` | `.store.dev.dat` |
+| 服务日志 | `logs/dsh-web.log` | `logs/dsh-web.dev.log` |
+| 托管依赖 | 共享 | 共享 |
+| CLI PATH 修改 | 由用户设置启用 | 明确禁用 |
+
+{/* <!-- [运行时与数据目录边界](/images/zh-CN/runtime-data.webp) --> */}
+
+## 端口行为
+
+服务绑定 `127.0.0.1`。首选端口被占用时可选择更高的空闲端口，并把最终 URL 返回桌面客户端；
+端口恢复空闲后，后续启动可回到首选值。
+
+<Warning>共享依赖可减少重复下载，但 Profile 与 Debug 数据隔离不等于操作系统沙箱。</Warning>
+
+

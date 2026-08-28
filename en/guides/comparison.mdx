@@ -1,0 +1,184 @@
+---
+title: Desktop client comparison
+description: Compare four DeepSeek Harness desktop projects by positioning, platforms, runtime, plugins, and recovery.
+---
+
+DeepSeek Harness has more than one desktop client. They all reduce the setup required to run
+Harness locally, but make different choices about desktop technology, platform coverage,
+plugin strategy, and extensions.
+
+<Note>
+  This comparison uses public READMEs, repository manifests, and latest releases as of
+  2026-08-28. “Not confirmed” means the public material makes no clear promise; it does not
+  prove that a feature is absent. Check the relevant repository before choosing.
+</Note>
+
+## Project positioning
+
+### DeepSeek Harness Desktop (this project)
+
+A ready-to-use desktop client that runs DeepSeek Harness with no environment setup, focused
+on a lightweight native experience, no commercial bundling, and a restrained codebase. It
+uses Tauri 2 and React; the desktop manages runtimes and plugin health while models, sessions,
+and Agent workflows track the latest Harness core directly. It covers Windows, macOS, and
+Linux, prioritizes reliable first-party capabilities, and treats Codex-level feature
+completeness as an explicit goal.
+
+### anywhere-labs/dsh-desktop
+
+[anywhere-labs/dsh-desktop](https://github.com/anywhere-labs/dsh-desktop) implements the
+desktop shell itself as a DSH/Cordis plugin so desktop capabilities and Harness plugins use
+the same composition model. It uses Electron, pins an upstream version, includes a community
+plugin market, and provides a per-profile setup wizard, window materials, browser opening,
+and optional LAN access. Current releases target Windows x64 and macOS Universal.
+
+### dataelement/dsh-desktop
+
+[dataelement/dsh-desktop](https://github.com/dataelement/dsh-desktop) is a local-first
+Electron client for macOS and Windows with portable Agent presets, model providers, plugin
+diagnostics, and non-destructive Safe Mode. Phone access uses a separately paired bridge
+that requires desktop approval and can continue sessions over a LAN or optional temporary
+tunnel. Current releases cover Windows x64 and both macOS architectures, not Linux.
+
+### Deepseek Harness EAC
+
+[Deepseek Harness EAC](https://github.com/zouyuxuan122/Deepseek-Harness-EAC) is positioned as
+an integrated, ready-to-use enhanced distribution. Its current main line uses Tauri 2 and
+bundles themes, a file tree, file changes, terminals, a plugin market, automatic compaction,
+and plugin protection. It ships Windows installer and portable packages, macOS Apple Silicon
+packages, and maintains Linux x64 through an older separate release line.
+
+## Feature matrix
+
+**Legend:** ✅ documented support; ◐ partial, plugin-provided, or a separate release line;
+— explicitly unsupported; “Not confirmed” means no clear statement was found.
+
+### Platforms and installation
+
+| Feature | This project | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| Desktop stack | Tauri 2 | Electron 43 | Electron 43 | Tauri 2 |
+| Windows x64 | ✅ EXE / MSI | ✅ NSIS | ✅ NSIS | ✅ Setup |
+| Portable Windows package | — | — | — | ✅ ZIP |
+| macOS Apple Silicon | ✅ DMG | ✅ Universal DMG | ✅ DMG / ZIP | ✅ DMG / app ZIP |
+| macOS Intel | ✅ DMG | ✅ Universal DMG | ✅ DMG / ZIP | — in current v5.1.0 |
+| Linux x64 | ✅ DEB / AppImage | — | — | ◐ older separate line |
+| No user-installed Node.js required | ✅ | ✅ | ✅ | ✅ |
+| Homebrew installation | ✅ | — | — | — |
+
+### Harness and desktop management
+
+| Feature | This project | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| Profile creation and switching | ✅ native panel | ✅ wizard/config | ◐ preserves profile data | ◐ separate desktop profile |
+| Download and switch multiple cores | ✅ | — | — | ◐ independent update/rollback |
+| Reuse an existing user `dsh` | ✅ | — | — | ◐ shared CLI data, isolated plugins |
+| Register the `dsh` CLI automatically | ✅ | — | — | — |
+| Separate desktop/core updates | ✅ | — | — | ✅ |
+| Separate release/debug data | ✅ | Not confirmed | Not confirmed | Not confirmed |
+
+### Workspaces, sessions, and development
+
+| Feature | This project | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| Workspaces | ✅ core capability | ✅ core capability | ✅ core capability | ✅ core capability |
+| Per-session Git worktree | ✅ bundled `dsh-tauri-worktree` | Not confirmed | Not confirmed | Not confirmed |
+| Check worktree back to local branch | ✅ explicit approval required | Not confirmed | Not confirmed | Not confirmed |
+| File changes and diff | ✅ Harness capability | ✅ Harness/plugin | ✅ Harness | ✅ bundled line diff/restore |
+| Session terminal | ✅ Harness capability | ✅ Harness/plugin | ✅ Harness | ✅ bundled persistent terminal |
+| Preserve official workspace/settings slots | ✅ `sidebar.workspaces` / `sidebar.settings` | Not confirmed | Not confirmed | Not confirmed |
+| Native navigation bridge | ✅ sidebar, back, forward | ✅ desktop plugin | ✅ native menu/window | ✅ enhanced bridge |
+
+### Built-in UI plugins and extension protocol
+
+| Feature | This project | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| Extensible sidebar panel protocol | ✅ `sidebar.panel.action` | — | — | — |
+| Skills management panel | ✅ list, search, filter, enable, edit | — | — | ◐ bundled plugin |
+| Skill repository import | ✅ GitHub repositories | — | Not confirmed | ◐ migration/plugin |
+| MCP management panel | ✅ CRUD, enable, JSON/form editor | — | — | ✅ visual MCP |
+| External MCP import | ✅ Claude/Codex | Not confirmed | Not confirmed | ✅ config migration |
+
+### Plugins, recovery, and distribution
+
+| Feature | This project | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| Bundling strategy | First-party desktop plugins | Desktop as plugin/built-in market | Pinned Harness + desktop integration | Many bundled community enhancements |
+| Plugin market | ◐ preset plugin | ✅ built-in community market | ◐ market installer | ✅ unified market |
+| Guided startup recovery | ✅ identify/remove plugin | ✅ recovery assistant | ✅ diagnostics/Safe Mode | ✅ snapshots/checks/rollback |
+| Multi-device session continuation | ◐ Roadmap | ◐ marked forthcoming | ✅ | — |
+
+## This project's roadmap
+
+The following comes from the public [dsh-tauri-desk Roadmap](https://github.com/orgs/dsh-tauri-desk/projects/3/views/2).
+It is strictly separate from shipped capabilities: **Planned does not mean available and
+does not guarantee a release date.**
+
+| Planned capability | Status | Priority / timing | Relationship to current capabilities |
+| --- | --- | --- | --- |
+| Remote connection plugin | Planned | P2 · 2026-Q4 | Explore optional access beyond loopback |
+| Scheduled task plugin | Planned | P2 · 2026-Q4 | Add scheduling to the plugin model |
+| Pull Request support | Planned | P2 | Connect worktrees, branch handback, and collaboration |
+| Plugin/UI UX improvements | Planned | P2 · 2026-Q4 | Improve `dsh-tauri-plugins` and `dsh-tauri-ui` |
+| v1.0 release | Planned | P1 · 2026-Q4 | Feature freeze, alpha, beta, then stable |
+| Mint bilingual docs | In Progress | P1 · 2026-Q4 | Documentation work, not runtime functionality |
+
+The roadmap also includes **Idea**-stage candidates such as plugin signature verification,
+more update delivery, more preset plugins, a website redesign, and low-priority built-in
+plugin management. Idea means research direction; this page does not call them “coming soon.”
+
+<Warning>
+  Roadmaps change. Use the latest Status, Priority, and Quarter in GitHub Projects. Anything
+  not marked Shipped must not appear as an available capability.
+</Warning>
+
+## Understanding the differences
+
+### Close to upstream does not mean featureless
+
+This project preserves Harness workspaces, file tree, file changes, diff, and terminal while
+adding a small first-party desktop set. `dsh-tauri-worktree` provides per-session Git
+isolation; `dsh-tauri-panel` provides a stable sidebar/panel protocol; and
+`dsh-tauri-panel-extension` provides Skills, skill repositories, and MCP management.
+
+The difference is explicit boundaries, protocols, and maintenance ownership rather than
+installing many unrelated community plugins for every user. EAC favors a broad bundled
+enhancement suite; this project favors a smaller, verifiable default set.
+
+### Why the panel protocol matters
+
+`sidebar.panel.action` lets plugins register entries in one sidebar area, while
+`panel.protocol` standardizes opening, replacing, and closing panel content. Extensions do
+not need to copy the whole sidebar or depend on unstable DOM/CSS details. The Skills/MCP
+panel is both a user feature and the first complete consumer of this protocol.
+
+### Tauri or Electron
+
+Tauri uses the system WebView and a Rust native layer, which can keep the shell smaller.
+Electron ships a consistent Chromium/Node environment. Total package size and memory also
+depend on Harness, Node, and plugins, so the framework name alone is not a benchmark.
+
+### Loopback or remote access
+
+This project binds to `127.0.0.1` by default. dataelement uses a separate phone bridge with
+desktop approval. anywhere-labs offers optional LAN exposure and warns that it has no
+authentication. These designs have different trust boundaries.
+
+### Recovery strategy
+
+This project identifies a plugin implicated in startup failure and guides removal.
+dataelement provides Safe Mode; EAC emphasizes snapshots, checks, repair, and rollback.
+Users who experiment with community plugins should compare recovery, not only plugin counts.
+
+## Sources
+
+- [This project](https://github.com/dsh-tauri-desk/deepseek-harness-desktop) and [releases](https://github.com/dsh-tauri-desk/deepseek-harness-desktop/releases)
+- [anywhere-labs/dsh-desktop](https://github.com/anywhere-labs/dsh-desktop) and [v2.0.3](https://github.com/anywhere-labs/dsh-desktop/releases/tag/v2.0.3)
+- [dataelement/dsh-desktop](https://github.com/dataelement/dsh-desktop) and [v0.6.3](https://github.com/dataelement/dsh-desktop/releases/tag/v0.6.3)
+- [Deepseek Harness EAC](https://github.com/zouyuxuan122/Deepseek-Harness-EAC) and [v5.1.0](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/tag/v5.1.0)
+
+<Warning>
+  All four projects run Harness and plugins that can execute local code. Verify installers,
+  review plugins, understand network exposure and data paths, and use OS-level isolation for
+  untrusted work regardless of the client.
+</Warning>

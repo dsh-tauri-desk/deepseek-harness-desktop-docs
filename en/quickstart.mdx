@@ -1,0 +1,52 @@
+---
+title: Quickstart
+description: Run DeepSeek Harness locally in a lightweight, zero-setup desktop app.
+---
+
+DeepSeek Harness Desktop packages the local runtime, Harness core, plugin management,
+and updates behind a native Tauri shell. Install it and start working—without setting
+up Node.js, pnpm, or Docker yourself.
+
+{/* <!-- [DeepSeek Harness Desktop overview](/images/en/home-overview.webp) --> */}
+
+<CardGroup cols={3}>
+  <Card title="Install" icon="download" href="./getting-started/installation">
+    Choose the right installer for Windows, macOS, or Linux.
+  </Card>
+  <Card title="First run" icon="play" href="./getting-started/first-run">
+    Let the app prepare its local runtime and open Harness.
+  </Card>
+  <Card title="Understand the architecture" icon="diagram-project" href="./architecture/overview">
+    Learn how the Tauri shell, Harness service, and plugins fit together.
+  </Card>
+</CardGroup>
+
+## What the desktop app adds
+
+- A native, lightweight Tauri 2 shell around the local Harness web interface.
+- Guided runtime and Harness core installation with regional download fallbacks.
+- Profile, core, and plugin controls in one bilingual interface.
+- A registered `dsh` command for new terminal sessions.
+- Built-in first-party desktop integrations and optional preset plugins.
+- Desktop and Harness core updates without rebuilding your environment.
+
+<Warning>
+  Harness can execute code on your computer. Use trusted repositories and plugins,
+  review requested permissions, and prefer isolated workspaces for untrusted code.
+</Warning>
+
+## Choose your path
+
+<CardGroup cols={2}>
+  <Card title="I want to use the app" icon="desktop" href="./guides/workspaces-and-sessions">
+    Learn the everyday workflow for sessions, profiles, cores, and plugins.
+  </Card>
+  <Card title="I want to contribute" icon="code-pull-request" href="./development/setup">
+    Set up the React 19 and Rust/Tauri development environment.
+  </Card>
+</CardGroup>
+
+
+
+
+

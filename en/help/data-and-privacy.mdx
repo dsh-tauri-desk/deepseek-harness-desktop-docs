@@ -1,0 +1,37 @@
+---
+title: Data, privacy, and security
+description: Understand DeepSeek Harness Desktop data locations and network boundaries.
+---
+
+The Harness service listens on the loopback address `127.0.0.1`, and the desktop app embeds
+that local Web interface. Sessions and profiles stay on your computer, but model providers
+and installed plugins may have their own network behavior.
+
+## Data boundaries
+
+| Data | Release location or boundary |
+| --- | --- |
+| Harness user data | `~/.dsh` (`DSH_HOME`) |
+| Profiles | `~/.dsh/profiles/<id>` |
+| Managed runtime and core | Operating system application data directory |
+| Desktop settings | `.store.dat` in application data |
+| Harness service log | `logs/dsh-web.log` in application data |
+| Service address | `http://127.0.0.1:3080` by default |
+
+## Network use
+
+The application needs network access to download Node.js, pnpm, supporting tools, or the
+core; check for desktop and core updates; install plugins from npm or GitHub; call a model
+provider; or run a plugin or tool that accesses a remote service.
+
+<Warning>
+  Harness executes tools and code. An application profile is not a sandbox. Use operating
+  system isolation, least-privilege credentials, reviewed plugins, and trusted workspaces
+  according to the risk.
+</Warning>
+
+## Back up or reset
+
+Back up `~/.dsh` before moving a profile or attempting destructive repair. Remove API keys,
+user names, local paths, prompts, and repository content before publishing logs. Development
+builds use separate `~/.dsh.dev`, `.store.dev.dat`, and `logs/dsh-web.dev.log` data.

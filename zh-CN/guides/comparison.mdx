@@ -1,0 +1,164 @@
+---
+title: 桌面客户端对比
+description: 对比四个 DeepSeek Harness 桌面项目的定位、平台覆盖、运行时、插件与恢复能力。
+---
+
+DeepSeek Harness 的桌面客户端不止一种。它们都希望降低本地 Harness 的安装和使用门槛，
+但在桌面技术、平台覆盖、插件策略和扩展功能上采用了不同取舍。
+
+<Note>
+  对比基于各项目截至 2026-08-28 的公开 README、仓库清单和最新 Release。
+  “未确认”表示公开材料没有明确承诺，不代表项目一定不具备该能力。功能会快速变化，选择前请核对对应仓库。
+</Note>
+
+## 项目定位
+
+### DeepSeek Harness Desktop（本项目）
+
+一键运行 DeepSeek Harness，无需配置环境的开箱即用桌面客户端，注重原生轻量、非商业捆绑与代码库克制。
+采用 Tauri 2 + React 架构，由桌面端托管运行时与插件健康，底层模型、会话与 Agent 工作流直接接轨 Harness 最新内核。
+全面覆盖双端桌面与 Linux，优先巩固第一方高可用能力，将 Codex 功能完成度作为明确目标。
+
+### anywhere-labs/dsh-desktop
+
+[anywhere-labs/dsh-desktop](https://github.com/anywhere-labs/dsh-desktop) 把桌面壳本身实现为 DSH/Cordis 插件，
+强调桌面能力与 Harness 插件生态使用同一种组合方式。它使用 Electron、固定运行特定上游版本，内置社区插件市场，
+并提供 Profile 级首次设置向导、窗口材质、浏览器打开和可选局域网访问。当前 Release 面向 Windows x64 与 macOS Universal。
+
+### dataelement/dsh-desktop
+
+[dataelement/dsh-desktop](https://github.com/dataelement/dsh-desktop) 定位为 local-first 的 macOS/Windows Electron 客户端，
+可移植 Agent preset、模型供应商、插件故障诊断和非破坏性 Safe Mode。手机访问使用独立配对桥，需桌面明确批准，
+可在局域网或可选临时隧道中续接会话。当前 Release 覆盖 Windows x64、macOS Intel 与 Apple Silicon，不支持 Linux。
+
+### Deepseek Harness EAC
+
+[Deepseek Harness EAC](https://github.com/zouyuxuan122/Deepseek-Harness-EAC) 定位为开箱即用的一体化增强发行版。
+当前主线使用 Tauri 2，并在 Harness 上预装主题、文件树、文件变更、终端、插件市场、自动压缩和插件保护等较多能力。
+它提供 Windows 安装版与便携版、macOS Apple Silicon 版本，并通过较早的独立版本线维护 Linux x64 包。
+
+## 功能对照表
+
+**图例：** ✅ 公开材料明确支持；◐ 部分支持、由插件提供或使用独立版本线；— 公开材料明确不支持；
+“未确认”表示未找到明确说明。
+
+### 平台与安装
+
+| 功能 | 本项目 | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| 桌面技术 | Tauri 2 | Electron 43 | Electron 43 | Tauri 2 |
+| Windows x64 | ✅ EXE / MSI | ✅ NSIS | ✅ NSIS | ✅ Setup |
+| Windows 便携版 | — | — | — | ✅ ZIP |
+| macOS Apple Silicon | ✅ DMG | ✅ Universal DMG | ✅ DMG / ZIP | ✅ DMG / APP ZIP |
+| macOS Intel | ✅ DMG | ✅ Universal DMG | ✅ DMG / ZIP | —（当前 v5.1.0） |
+| Linux x64 | ✅ DEB / AppImage | — | — | ◐ 独立旧版本线 |
+| 无需用户预装 Node.js | ✅ | ✅ | ✅ | ✅ |
+| Homebrew 安装 | ✅ | — | — | — |
+
+### Harness 与桌面管理
+
+| 功能 | 本项目 | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| Profile 创建与切换 | ✅ 原生配置面板 | ✅ 向导与配置 | ◐ 保留 Profile 数据 | ◐ 独立桌面 Profile |
+| 多内核下载与切换 | ✅ | — | — | ◐ 内核独立更新与回退 |
+| 复用用户本地 `dsh` | ✅ | — | — | ◐ 与 CLI 共享数据、插件隔离 |
+| 自动注册 `dsh` CLI | ✅ | — | — | — |
+| 桌面端/Harness内核分别更新 | ✅ | — | — | ✅ |
+| 正式版与 Debug 数据隔离 | ✅ | 未确认 | 未确认 | 未确认 |
+
+### 工作区、会话与开发体验
+
+| 功能 | 本项目 | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| 工作区 | ✅ 内核支持 | ✅ 内核支持 | ✅ 内核支持 | ✅ 内核支持 |
+| 会话级 Git Worktree 隔离 | ✅ 内置 `dsh-tauri-worktree` | 未确认 | 未确认 | 未确认 |
+| Worktree 检出回本地分支 | ✅，需用户明确批准 | 未确认 | 未确认 | 未确认 |
+| 文件改动与 Diff | ✅ Harness 内置能力 | ✅ Harness/插件能力 | ✅ Harness 能力 | ✅ 预装行级 Diff 与还原 |
+| 会话终端 | ✅ Harness 内置能力 | ✅ Harness/插件能力 | ✅ Harness 能力 | ✅ 预装持久终端 |
+| 侧栏保留官方工作区与设置槽 | ✅ `sidebar.workspaces` / `sidebar.settings` | 未确认 | 未确认 | 未确认 |
+| 桌面原生导航桥 | ✅ 侧栏、后退、前进 | ✅ 桌面插件集成 | ✅ 原生菜单/窗口集成 | ✅ 桌面桥增强 |
+
+### 内置 UI 插件与扩展协议
+
+| 功能 | 本项目 | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| 可扩展侧栏面板协议 | ✅ `sidebar.panel.action` | — | — | — |
+| Skills 管理面板 | ✅ 列表、搜索、筛选、启停、编辑 | — | — | ◐ 预装相关插件 |
+| 技能仓库导入 | ✅ GitHub 仓库导入 | — | 未确认 | ◐ 配置迁移/插件能力 |
+| MCP 管理面板 | ✅ 增删改、启停、JSON/表单编辑 | — | — | ✅ 可视化 MCP |
+| 外部导入 MCP | ✅ 从 Claude/Codex 导入 | 未确认 | 未确认 | ✅ 配置迁移 |
+
+### 插件、恢复与分发
+
+| 功能 | 本项目 | anywhere-labs | dataelement | EAC |
+| --- | --- | --- | --- | --- |
+| 内置插件策略 | 第一方桌面插件 | 桌面是插件/内置市场 | 固定 Harness 依赖 + 桌面集成 | 大量预装社区增强 |
+| 插件市场 | ◐ 预设插件 | ✅ 内置社区市场 | ◐ 提供市场安装集成 | ✅ 内置统一市场 |
+| 启动故障引导恢复 | ✅ 定位/移除插件 | ✅ 恢复助手 | ✅ 故障诊断与 Safe Mode | ✅ 快照、体检、回滚 |
+| 多设备续接会话 | ◐ Roadmap | ◐ 标记即将推出 | ✅ | — |
+
+## 本项目 Roadmap
+
+以下内容来自公开的 [dsh-tauri-desk Roadmap](https://github.com/orgs/dsh-tauri-desk/projects/3/views/2)。
+它们与上面的已交付能力严格分开：**Planned 表示计划，不表示已经可用，也不承诺具体发布日期。**
+
+| 计划能力 | 当前状态 | 优先级 / 时间 | 与现有能力的关系 |
+| --- | --- | --- | --- |
+| 远程连接插件 | Planned | P2 · 2026-Q4 | 在默认仅回环访问之外，探索可选远程连接 |
+| 定时任务插件 | Planned | P2 · 2026-Q4 | 为插件体系增加调度能力 |
+| Pull Request 支持 | Planned | P2 | 衔接现有 Worktree、分支检出与代码协作流程 |
+| 插件与 UI 系统性 UX/UI 优化 | Planned | P2 · 2026-Q4 | 改进 `dsh-tauri-plugins` 与 `dsh-tauri-ui` 的完成度 |
+| v1.0 发布 | Planned | P1 · 2026-Q4 | 依次经过功能冻结、alpha、beta 与 stable |
+| Mint 双语文档仓库 | In Progress | P1 · 2026-Q4 | 当前文档工作，不是桌面运行时功能 |
+
+Roadmap 还包含处于 **Idea** 阶段的候选项，例如插件签名校验、更多自动更新推送、更多预设插件、官网重构，
+以及低优先级的内置插件管理。Idea 仅表示调研方向，本页不把它们列为“即将支持”。
+
+<Warning>
+  Roadmap 会变化。请以 GitHub Project 中最新的 Status、Priority 和 Quarter 为准；任何未进入 Shipped 的项目都不应出现在已交付功能对照中。
+</Warning>
+
+## 如何理解这些差异
+
+### 保持接近上游，不等于没有产品能力
+
+本项目保留 Harness 的工作区、文件树、文件改动、Diff 和终端能力，同时用少量第一方插件补充桌面体验：
+`dsh-tauri-worktree` 提供会话级 Git 隔离；`dsh-tauri-panel` 提供稳定侧栏与面板协议；
+`dsh-tauri-panel-extension` 在该协议上提供 Skills、技能仓库和 MCP 管理。
+
+区别在于这些能力具有明确边界、协议和维护责任，而不是把大量互不相关的社区插件默认装给所有用户。
+EAC 更倾向于预装完整增强工具集；本项目更倾向于维护较小、可验证的默认集合。
+
+### 面板协议为什么重要
+
+`sidebar.panel.action` 允许插件在统一侧栏区域注册入口，`panel.protocol` 则统一面板内容的打开、替换和关闭。
+扩展插件无需复制整个侧栏或依赖易变的 DOM/CSS 结构，宿主仍负责折叠态、选中态和恢复官方会话视图。
+当前 Skills/MCP 面板既是用户功能，也是该协议的第一个完整消费者。
+
+### Tauri，还是 Electron
+
+Tauri 项目使用系统 WebView 和 Rust 原生层，通常能获得更小的桌面壳；Electron 项目携带一致的 Chromium/Node
+运行环境，更容易提供跨平台一致的浏览器能力。实际安装体积和内存还取决于捆绑的 Harness、Node 和插件，
+不能仅根据框架名称判断。
+
+### 本机回环，还是远程访问
+
+本项目默认只监听 `127.0.0.1`。dataelement 使用独立、需桌面批准的手机配对桥；anywhere-labs 提供可选局域网暴露，
+并明确警告该模式没有鉴权。这些方案的便利性与信任边界不同，不应只用“是否支持远程”一个勾选项判断。
+
+### 恢复策略
+
+本项目重点识别导致启动失败的插件并引导移除。dataelement 提供隔离第三方插件的 Safe Mode；EAC 强调安装前快照、
+体检、修复和回滚。频繁试用社区插件的用户应优先比较恢复流程，而不只是插件数量。
+
+## 信息来源
+
+- [本项目仓库](https://github.com/dsh-tauri-desk/deepseek-harness-desktop)与[发布页](https://github.com/dsh-tauri-desk/deepseek-harness-desktop/releases)
+- [anywhere-labs/dsh-desktop](https://github.com/anywhere-labs/dsh-desktop)与 [v2.0.3](https://github.com/anywhere-labs/dsh-desktop/releases/tag/v2.0.3)
+- [dataelement/dsh-desktop](https://github.com/dataelement/dsh-desktop)与 [v0.6.3](https://github.com/dataelement/dsh-desktop/releases/tag/v0.6.3)
+- [Deepseek Harness EAC](https://github.com/zouyuxuan122/Deepseek-Harness-EAC)与 [v5.1.0](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/tag/v5.1.0)
+
+<Warning>
+  四个项目都能运行具有本地代码执行能力的 Harness 与插件。无论选择哪一个，都应审查安装包来源、插件代码、
+  网络暴露方式和数据目录，并在不可信任务中使用系统级隔离。
+</Warning>

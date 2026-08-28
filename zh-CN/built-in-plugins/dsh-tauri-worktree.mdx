@@ -1,0 +1,32 @@
+---
+title: DSH Tauri Worktree
+description: 使用会话级 Git Worktree 隔离修改，并在授权后检出回本地分支。
+---
+
+`dsh-tauri-worktree` 为每个工作树会话创建独立 Git 目录，使 Agent 修改不会直接影响本地主工作区。
+
+{/* <!-- [从主工作区创建 Worktree 并检出回本地分支的流程](/images/zh-CN/dsh-tauri-worktree.webp) --> */}
+
+## 工作流
+
+<Steps>
+  <Step title="明确使用 Worktree">用户要求隔离工作后，Agent 才能调用 `create_worktree`。</Step>
+  <Step title="创建隔离会话">插件在 `~/.dsh/worktrees/[hash]/[dirname]` 创建工作树，并把会话交接过去。</Step>
+  <Step title="完成修改与验证">Agent 在隔离目录中修改、测试和提交代码。</Step>
+  <Step title="检出或放弃">用户明确批准后检出到本地分支；不保留时可以放弃工作树。</Step>
+</Steps>
+
+## 暂存改动
+
+`create_worktree` 与 `checkout_worktree` 支持 `carry_staged`，默认 `false`。启用后只携带 Git index 中已暂存的修改，
+不会移动未暂存或未跟踪文件。实现使用二进制 diff/apply，不使用仓库共享的 stash。
+
+## 授权边界
+
+<Warning>
+  `checkout_worktree` 是用户授权操作。任务完成、PR 合并或 Agent 认为方便，都不能替代用户明确请求或批准。
+</Warning>
+
+项目必须是 Git 仓库，宿主必须可以执行 `git`。携带或检出失败时，插件优先保留工作树和恢复信息，避免静默丢失修改。
+
+[查看源码](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-worktree)

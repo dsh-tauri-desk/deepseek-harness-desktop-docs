@@ -1,0 +1,55 @@
+---
+title: Architecture overview
+description: Understand how the Tauri shell, local Harness service, and embedded web UI work together.
+---
+
+DeepSeek Harness Desktop is a Tauri 2 application that manages a local Harness service
+and displays its web interface inside a native window.
+
+{/* <!-- [Desktop architecture and process boundaries](/images/en/architecture-overview.webp) --> */}
+
+## Main layers
+
+| Layer | Technology | Responsibility |
+| --- | --- | --- |
+| Desktop UI | React 19, TypeScript, Vite, Tailwind CSS 4 | Setup, settings, profiles, plugins, updates, and native window states |
+| Native backend | Rust and Tauri 2 | Runtime discovery, downloads, service lifecycle, files, CLI integration, and OS APIs |
+| Harness service | Managed or compatible local `dsh` core | Sessions, tools, profiles, plugins, and the local web application |
+| Embedded client | Harness web UI at a loopback URL | The primary session experience inside the desktop window |
+
+## Startup flow
+
+<Steps>
+  <Step title="Resolve configuration">
+    Rust derives release or debug paths, the active profile, preferred core, and port.
+  </Step>
+  <Step title="Prepare dependencies">
+    The workflow reuses compatible system tools where appropriate and otherwise prepares
+    the managed Node.js, pnpm, and prebuilt Harness core.
+  </Step>
+  <Step title="Ensure plugins">
+    Required internal plugins are checked and restored before the service starts.
+  </Step>
+  <Step title="Launch and probe Harness">
+    The backend starts a loopback-only process conceptually equivalent to
+    `dsh --profile <profile> --host 127.0.0.1 --port 3080`, then waits for health.
+  </Step>
+  <Step title="Load the client">
+    The native window switches from setup or loading state to the local Harness UI.
+  </Step>
+</Steps>
+
+## Trust boundaries
+
+The web client, Rust backend, Harness process, plugins, model providers, and opened
+workspace are separate components but not separate security sandboxes. Tauri commands
+narrow native capabilities; Harness tools and plugins can still execute local code with
+the user's permissions.
+
+Next, inspect [Runtime and data](./runtime-and-data) or the
+[Plugin system](./plugin-system).
+
+
+
+
+

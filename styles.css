@@ -1,0 +1,11 @@
+:root {
+  --dsh-blue: #4d6bfe;
+}
+
+.hero-title {
+  letter-spacing: -0.03em;
+}
+
+code {
+  font-variant-ligatures: none;
+}

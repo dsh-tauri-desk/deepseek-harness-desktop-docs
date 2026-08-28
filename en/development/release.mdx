@@ -1,0 +1,64 @@
+---
+title: Build and release
+description: Build platform installers and understand the automated release pipeline.
+---
+
+Tauri packages the compiled React frontend, Rust backend, and bundled resources into
+platform-native installers. Releases are produced by GitHub Actions for reproducibility.
+
+## Local build
+
+```bash
+pnpm install --frozen-lockfile
+pnpm typecheck
+pnpm lint
+pnpm test -- --run
+pnpm tauri build
+```
+
+`pnpm tauri build` invokes the configured frontend build before compiling and bundling
+the Rust application. Platform bundles can only be built on compatible operating
+systems and require their native signing tools.
+
+## CI artifacts
+
+| Runner | Output |
+| --- | --- |
+| Windows | NSIS `.exe` and localized WiX `.msi` installers |
+| macOS Apple Silicon | Signed, notarized, and stapled arm64 `.dmg` |
+| macOS Intel | Signed, notarized, and stapled x64 `.dmg` |
+| Ubuntu 22.04 | x64 AppImage and `.deb` |
+
+{/* <!-- [GitHub Actions release pipeline](/images/en/release-pipeline.webp) --> */}
+
+## Release flow
+
+<Steps>
+  <Step title="Prepare the version">
+    Align package and Tauri metadata, release notes, and user-facing documentation.
+  </Step>
+  <Step title="Run quality gates">
+    Complete frontend type checking, linting, Vitest, and the cross-platform Rust matrix.
+  </Step>
+  <Step title="Build platform artifacts">
+    The release workflow fans out to Windows, macOS architectures, and Ubuntu 22.04.
+  </Step>
+  <Step title="Verify trust metadata">
+    macOS jobs validate signing, stapling, and Gatekeeper assessment. Apply equivalent
+    verification for other signed artifacts.
+  </Step>
+  <Step title="Publish the GitHub release">
+    Finalization gathers artifacts and publishes the release for a `v*` version.
+  </Step>
+</Steps>
+
+<Warning>
+  Never expose signing certificates, notarization credentials, or update keys in logs,
+  documentation, pull requests, or local fixtures. Use repository secrets and the
+  established release workflow.
+</Warning>
+
+The current public release provides Linux x64 artifacts only; do not label Linux ARM as
+supported until matching artifacts are built and verified.
+
+

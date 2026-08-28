@@ -1,0 +1,39 @@
+---
+title: Profile 与内核
+description: 使用 Profile 隔离 Harness 配置，并选择活动内核。
+---
+
+Profile 用于隔离 Harness 配置、插件、补丁和行为；内核决定桌面服务运行哪个 Harness 发行版。
+
+## Profile
+
+默认桌面 Profile 为 `web`。其他 Profile 位于 `$DSH_HOME/profiles/<id>`，可拥有不同的插件和补丁配置。
+切换活动 Profile 后，服务会重启或重新配置，使桌面控制和插件操作指向新 Profile。
+
+{/* <!-- [Profile 与内核设置](/images/zh-CN/profiles-cores.webp) --> */}
+
+## 内核来源
+
+| 来源 | 含义 | 适用场景 |
+| --- | --- | --- |
+| 自动 | 优先兼容的本地 CLI 内核，否则使用应用托管内核 | 大多数用户 |
+| Local | 使用 CLI 已安装的 Harness 内核 | 以 CLI 开发为主 |
+| App | 使用桌面端下载的预构建发行版 | 可复现的桌面环境 |
+
+托管内核可独立于桌面壳更新。GitHub 不可用时，应用保留已有本地安装，不会删除可用内核。
+
+<Warning>Profile 只隔离 Harness 数据，不是操作系统安全边界，仍以应用和工具获得的权限运行。</Warning>
+
+## 切换前
+
+1. 完成或暂停活动工具任务。
+2. 记录工作区未提交的修改。
+3. 在设置中切换 Profile 或内核。
+4. 确认服务重新连接且目标插件可用。
+
+继续了解[插件](./plugins)。
+
+
+
+
+

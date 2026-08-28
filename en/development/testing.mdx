@@ -1,0 +1,65 @@
+---
+title: Testing and quality checks
+description: Run frontend, Rust, and cross-platform checks before submitting a change.
+---
+
+Run the fastest relevant checks while developing, then complete the full frontend and
+Rust suites before submitting a pull request.
+
+## Frontend checks
+
+```bash
+pnpm typecheck
+pnpm lint
+pnpm test -- --run
+```
+
+Vitest covers frontend logic and components. Keep tests deterministic and avoid relying
+on a running release service unless the test explicitly owns that lifecycle.
+
+## Rust checks
+
+From `src-tauri/`:
+
+```bash
+cargo check
+cargo test
+```
+
+CI runs the stricter matrix command on Ubuntu 22.04, macOS 14, and Windows:
+
+```bash
+cargo test --all-features --locked
+```
+
+## Manual scenarios
+
+<AccordionGroup>
+  <Accordion title="Installation and recovery">
+    Exercise first install, interrupted or failed downloads, retry, existing-core reuse,
+    and retention of a working core when an update cannot be fetched.
+  </Accordion>
+  <Accordion title="Service lifecycle">
+    Test startup, health checks, occupied preferred port, restart, shutdown, and log
+    capture with release/debug ports kept separate.
+  </Accordion>
+  <Accordion title="Profiles and plugins">
+    Switch profiles, verify isolation, install and remove optional plugins, and confirm
+    internal plugin recovery.
+  </Accordion>
+  <Accordion title="Platform packaging">
+    Verify Windows installers, signed and notarized macOS DMGs, and Linux `.deb` and
+    AppImage behavior, including a Wayland smoke test.
+  </Accordion>
+</AccordionGroup>
+
+{/* <!-- [CI checks and cross-platform test matrix](/images/en/testing.webp) --> */}
+
+## Before opening a pull request
+
+- Add or update tests for behavior changes.
+- Confirm no secrets, local paths, or generated application data are committed.
+- Test both release-sensitive and debug-sensitive path or port changes.
+- Document user-visible changes in both documentation languages.
+
+

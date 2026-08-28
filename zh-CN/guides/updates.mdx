@@ -1,0 +1,33 @@
+---
+title: 更新
+description: 在不丢失本地工作的情况下更新桌面壳和 Harness 内核。
+---
+
+DeepSeek Harness Desktop 独立更新两个组件：原生桌面应用和应用托管的 Harness 内核。
+
+## 桌面端更新
+
+新的签名版本可用时，更新器会下载对应平台安装包并引导重启。安装更新前请保存工作区修改。
+
+## Harness 内核更新
+
+启动时，应用会比较托管内核与最新 `deepseek-harness-pkg` 版本。无需新桌面安装包即可下载新内核；
+网络或 GitHub 不可用时，现有内核保持可用。
+
+{/* <!-- [桌面端与 Harness 更新对话框](/images/zh-CN/updates.webp) --> */}
+
+## 安全更新
+
+<Steps>
+  <Step title="结束活动操作">等待命令和写文件完成，并提交或暂存重要修改。</Step>
+  <Step title="阅读发布说明">上游 Harness 演进较快，可能包含破坏性行为。</Step>
+  <Step title="应用更新">从对应提示更新桌面壳或托管内核。</Step>
+  <Step title="验证 Profile">重新打开应用，检查活动 Profile、插件和测试会话。</Step>
+</Steps>
+
+<Warning>
+  不要把删除应用数据作为常规更新步骤，否则会移除托管运行时和设置并增加恢复难度。
+  执行破坏性排障前请备份 `$DSH_HOME`。
+</Warning>
+
+

@@ -1,0 +1,47 @@
+---
+title: Updates
+description: Update the desktop shell and Harness core without losing local work.
+---
+
+DeepSeek Harness Desktop updates two related components independently: the native
+desktop application and the app-managed Harness core.
+
+## Desktop update
+
+When a new signed desktop release is available, the updater can download the platform
+installer and guide the application restart. Save active workspace changes before
+installing an update.
+
+## Harness core update
+
+At startup, the app compares the managed core with the latest
+`deepseek-harness-pkg` release. It can download a newer package without requiring a new
+desktop installer. If the network or GitHub is unavailable, the current core remains
+installed and usable.
+
+{/* <!-- [Desktop and Harness update dialogs](/images/en/updates.webp) --> */}
+
+## Update safely
+
+<Steps>
+  <Step title="Finish active operations">
+    Wait for commands and file writes to stop. Commit or stash important changes.
+  </Step>
+  <Step title="Read the release notes">
+    Upstream Harness evolves quickly and may contain breaking behavior.
+  </Step>
+  <Step title="Apply the update">
+    Update the desktop shell or managed core from its corresponding prompt.
+  </Step>
+  <Step title="Verify your profile">
+    Reopen the app and confirm the active profile, plugins, and a test session work.
+  </Step>
+</Steps>
+
+<Warning>
+  Do not delete application data as a routine update step. It removes managed runtimes
+  and settings and can complicate recovery. Back up `$DSH_HOME` before destructive
+  troubleshooting.
+</Warning>
+
+

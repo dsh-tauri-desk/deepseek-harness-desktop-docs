@@ -1,0 +1,91 @@
+---
+title: Why?
+description: Explain why we are building DeepSeek Harness Desktop even though community desktop implementations already exist.
+---
+
+Several community desktop clients for DeepSeek Harness already exist. We are not building
+another implementation because those projects are absent, and we do not believe every user
+should choose this project. We are building DeepSeek Harness Desktop because we make a
+different set of choices about project ownership, software quality, performance, and public claims.
+
+{/* <!-- [DeepSeek Harness Desktop product principles and boundaries](/images/en/why.webp) --> */}
+
+<Note>
+  This page states our project position; it is not a ranking of community projects. Other
+  desktop clients may better serve different user needs.
+
+  See the [desktop client comparison](./guides/comparison) for the complete comparison.
+</Note>
+
+## An open-source organization without commercial bundling
+
+We want this software to be maintained by an open, transparent, and sustainable open-source
+organization rather than becoming a bundle for commercial services, model channels,
+sponsorship promotion, or traffic acquisition.
+
+That means we aim to:
+
+- make product decisions for the software itself rather than conversion, promotion, or commercial partnerships;
+- avoid presenting model gateways, paid services, or sponsorships as required product capabilities;
+- state our relationship with DeepSeek, upstream Harness, and other community projects clearly;
+- keep source, issue discussions, build processes, and release artifacts verifiable where possible;
+- record any future change to the project boundary explicitly instead of silently changing the promise.
+
+“No commercial bundling” does not reject participation by individuals or organizations,
+and it does not reject every commercial open-source model. It means this project does not
+want to use the desktop client as a gateway that forces unrelated commercial products into Harness.
+
+## Quality before a community plugin bundle
+
+Harness provides strong composition through “everything is a plugin,” but community plugins
+currently vary in maintenance, interaction design, compatibility, error handling, and security
+boundaries. Preinstalling many plugins can increase the feature count quickly, but it also
+distributes their quality and supply-chain risks to every user.
+
+We choose a restrained default:
+
+- bundle only the features and first-party integrations required for the desktop runtime that we can continuously validate and recover;
+- keep optional plugins visibly optional instead of treating preinstalled quantity as software quality;
+- prioritize installation, startup, updates, profiles, cores, logs, and failure recovery;
+- explain plugin failures and offer recovery instead of exposing users directly to dependencies;
+- consider uninstall, upgrade, rollback, cross-platform behavior, and long-term maintenance before adding a capability.
+
+## Stay light and pursue Codex-level responsiveness
+
+Our goal is not only to open a window quickly. We want the desktop client to progressively
+reach the product standard demonstrated by Codex across **feature completeness, interaction
+responsiveness, stability, detail consistency, and recovery**.
+
+Tauri 2 is a means toward that goal, but not the only reason for the project:
+
+- reuse the system WebView instead of bundling another complete Chromium runtime;
+- manage processes, downloads, updates, PATH, and OS integration in Rust;
+- keep Harness as an independent local service while the desktop adds only necessary host capabilities;
+- update the desktop and Harness core separately to avoid unnecessary replacement.
+
+<Info>
+  “Lightweight” is not only installer size. The Harness core, Node.js, pnpm, plugins,
+  startup time, memory, input latency, and recovery all affect the experience. We will
+  improve from measured results rather than claim performance leadership merely because we use Tauri.
+</Info>
+
+## Stay restrained and objective
+
+DeepSeek Harness and its ecosystem are changing quickly. We cannot guarantee that every
+plan will ship, and we cannot promise upstream stability. We therefore want to promise
+only what we can verify and maintain within our current ability.
+
+Our principles include:
+
+- do not present planned features as current delivery commitments;
+- do not substitute stars, plugin counts, or a feature checklist for reliability and user experience;
+- do not state unmeasured “faster,” “safer,” or “lighter” claims as absolute facts;
+- document unsupported platforms, known limitations, and failure modes clearly;
+- describe other projects from source, releases, and test results without guessing their motives;
+- reduce scope when our ability is insufficient and finish existing workflows first.
+
+<Warning>
+  Harness and plugins can execute local code. Reducing default bundles does not remove the
+  risks of third-party plugins, untrusted repositories, or authorized tools. Software quality
+  requires ongoing review, testing, and explicit trust boundaries—not only the words “open source” or “lightweight.”
+</Warning>

@@ -1,0 +1,201 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "DeepSeek Harness Desktop",
+  "description": "Install, use, understand, and contribute to DeepSeek Harness Desktop.",
+  "colors": {
+    "primary": "#3954D9",
+    "light": "#6F86FF",
+    "dark": "#3954D9"
+  },
+  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo.svg",
+    "dark": "/logo.svg"
+  },
+  "css": "/styles.css",
+  "navigation": {
+    "languages": [
+      {
+        "language": "zh-CN",
+        "default": true,
+        "navbar": {
+          "links": [
+            {
+              "label": "下载版本",
+              "href": "https://github.com/dsh-tauri-desk/deepseek-harness-desktop/releases"
+            }
+          ],
+          "primary": {
+            "type": "github",
+            "href": "https://github.com/dsh-tauri-desk/deepseek-harness-desktop",
+            "label": "GitHub"
+          }
+        },
+        "groups": [
+          {
+            "group": "简介",
+            "icon": "rocket",
+            "pages": [
+              "zh-CN/why",
+              "zh-CN/quickstart",
+              "zh-CN/getting-started/installation",
+              "zh-CN/getting-started/first-run",
+              "zh-CN/getting-started/configure-model"
+            ]
+          },
+          {
+            "group": "使用 Harness",
+            "icon": "desktop",
+            "pages": [
+              "zh-CN/guides/interface",
+              "zh-CN/guides/workspaces-and-sessions",
+              "zh-CN/guides/settings",
+              "zh-CN/guides/profiles-and-cores",
+              "zh-CN/guides/plugins",
+              "zh-CN/guides/cli-integration",
+              "zh-CN/guides/updates",
+              "zh-CN/guides/comparison"
+            ]
+          },
+          {
+            "group": "内置插件",
+            "icon": "puzzle-piece",
+            "pages": [
+              "zh-CN/built-in-plugins/overview",
+              "zh-CN/built-in-plugins/dsh-tauri",
+              "zh-CN/built-in-plugins/dsh-tauri-ui",
+              "zh-CN/built-in-plugins/dsh-tauri-worktree",
+              "zh-CN/built-in-plugins/dsh-tauri-panel",
+              "zh-CN/built-in-plugins/dsh-tauri-panel-extension"
+            ]
+          },
+          {
+            "group": "故障排除与数据",
+            "icon": "life-ring",
+            "pages": [
+              "zh-CN/help/troubleshooting",
+              "zh-CN/help/data-and-privacy"
+            ]
+          },
+          {
+            "group": "架构",
+            "icon": "diagram-project",
+            "pages": [
+              "zh-CN/architecture/overview",
+              "zh-CN/architecture/runtime-and-data",
+              "zh-CN/architecture/plugin-system"
+            ]
+          },
+          {
+            "group": "开发",
+            "icon": "code",
+            "pages": [
+              "zh-CN/development/setup",
+              "zh-CN/development/project-structure",
+              "zh-CN/development/testing",
+              "zh-CN/development/release"
+            ]
+          }
+        ]
+      },
+      {
+        "language": "en",
+        "navbar": {
+          "links": [
+            {
+              "label": "Releases",
+              "href": "https://github.com/dsh-tauri-desk/deepseek-harness-desktop/releases"
+            }
+          ],
+          "primary": {
+            "type": "github",
+            "href": "https://github.com/dsh-tauri-desk/deepseek-harness-desktop",
+            "label": "GitHub"
+          }
+        },
+        "groups": [
+          {
+            "group": "Introduction",
+            "icon": "rocket",
+            "pages": [
+              "en/why",
+              "en/quickstart",
+              "en/getting-started/installation",
+              "en/getting-started/first-run",
+              "en/getting-started/configure-model"
+            ]
+          },
+          {
+            "group": "Use Harness",
+            "icon": "desktop",
+            "pages": [
+              "en/guides/interface",
+              "en/guides/workspaces-and-sessions",
+              "en/guides/settings",
+              "en/guides/profiles-and-cores",
+              "en/guides/plugins",
+              "en/guides/cli-integration",
+              "en/guides/updates",
+              "en/guides/comparison"
+            ]
+          },
+          {
+            "group": "Built-in plugins",
+            "icon": "puzzle-piece",
+            "pages": [
+              "en/built-in-plugins/overview",
+              "en/built-in-plugins/dsh-tauri",
+              "en/built-in-plugins/dsh-tauri-ui",
+              "en/built-in-plugins/dsh-tauri-worktree",
+              "en/built-in-plugins/dsh-tauri-panel",
+              "en/built-in-plugins/dsh-tauri-panel-extension"
+            ]
+          },
+          {
+            "group": "Troubleshooting and data",
+            "icon": "life-ring",
+            "pages": [
+              "en/help/troubleshooting",
+              "en/help/data-and-privacy"
+            ]
+          },
+          {
+            "group": "Architecture",
+            "icon": "diagram-project",
+            "pages": [
+              "en/architecture/overview",
+              "en/architecture/runtime-and-data",
+              "en/architecture/plugin-system"
+            ]
+          },
+          {
+            "group": "Development",
+            "icon": "code",
+            "pages": [
+              "en/development/setup",
+              "en/development/project-structure",
+              "en/development/testing",
+              "en/development/release"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "cursor",
+      "vscode"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/dsh-tauri-desk/deepseek-harness-desktop"
+    }
+  }
+}

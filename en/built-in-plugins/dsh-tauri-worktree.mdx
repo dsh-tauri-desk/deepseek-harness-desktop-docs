@@ -1,0 +1,37 @@
+---
+title: DSH Tauri Worktree
+description: Isolate changes in per-session Git worktrees and check them back to local branches after approval.
+---
+
+`dsh-tauri-worktree` creates a separate Git directory for each worktree session so Agent
+changes do not directly affect the local main workspace.
+
+{/* <!-- [Flow from the main workspace into a worktree and back to a local branch](/images/en/dsh-tauri-worktree.webp) --> */}
+
+## Workflow
+
+<Steps>
+  <Step title="Request a worktree">The Agent may call `create_worktree` only after the user requests isolated work.</Step>
+  <Step title="Create an isolated session">The plugin creates `~/.dsh/worktrees/[hash]/[dirname]` and hands the session to it.</Step>
+  <Step title="Change and verify">The Agent edits, tests, and commits inside the isolated directory.</Step>
+  <Step title="Check out or discard">After explicit approval, check the work back to a local branch, or discard it when it is not needed.</Step>
+</Steps>
+
+## Staged changes
+
+`create_worktree` and `checkout_worktree` support `carry_staged`, default `false`. When enabled,
+only changes staged in the Git index move across. Unstaged and untracked files do not. The
+implementation uses binary diff/apply and does not use the repository's shared stash.
+
+## Authorization boundary
+
+<Warning>
+  `checkout_worktree` is a user-authorized operation. Task completion, a merged PR, or Agent
+  convenience does not replace an explicit user request or approval.
+</Warning>
+
+The project must be a Git repository and the host must be able to run `git`. If carrying or
+checking out changes fails, the plugin prefers preserving the worktree and recovery context
+over silently losing changes.
+
+[View source](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-worktree)

@@ -1,0 +1,36 @@
+---
+title: DSH Tauri Panel Extension
+description: Manage Skills, skill repositories, and MCP servers in the desktop Extensions panel.
+---
+
+`dsh-tauri-panel-extension` adds the Extensions entry through `sidebar.panel.action` and
+`panel.protocol`, then presents Skills and MCP tabs in the conversation content area.
+
+{/* <!-- [Skills and MCP tabs in the Extensions panel](/images/en/dsh-tauri-panel-extension.webp) --> */}
+
+## Skills management
+
+- List, search, and filter skills by source.
+- Enable or disable skills, view or edit them, and open their directories.
+- Import skill repositories from GitHub using `owner/repo`, full URLs, `.git`, `#ref`, or `/tree/<ref>`.
+- Detect single-skill, flat, and nested repository layouts.
+- New skill closes the panel, opens a blank session in the current workspace, and prefills `/skill-creator ` without submitting it.
+
+## MCP management
+
+- Add, edit, delete, enable, or disable MCP servers.
+- Edit with either JSON or a structured form.
+- Import MCP configuration from Claude Code and Codex.
+- Show a restart notice when a configuration change requires it.
+
+## Data and source
+
+Plugin state lives in `$DSH_HOME/dsh-tauri-panel-extension`, and host APIs use
+`/dsh-tauri-panel-extension/*` to avoid route and state-directory collisions with other
+capability plugins.
+
+The implementation adapts a pinned commit of `qinyre/dsh-plugin-capabilities` and preserves
+third-party notices in the repository. The desktop variant removes the market module and
+focuses on Skills and MCP management.
+
+[View source](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-panel-extension)

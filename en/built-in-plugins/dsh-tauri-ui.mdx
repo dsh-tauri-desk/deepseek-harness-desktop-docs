@@ -1,0 +1,30 @@
+---
+title: DSH Tauri UI
+description: Understand the desktop settings sidebar and its compatibility fallback.
+---
+
+`dsh-tauri-ui` adapts Harness settings to a desktop sidebar while continuing to render the
+official settings sections.
+
+{/* <!-- [Desktop settings sidebar](/images/en/dsh-tauri-ui-settings.webp) --> */}
+
+## Capabilities
+
+- Registers the settings trigger in `sidebar.settings`.
+- Renders the desktop settings sidebar in `shell.overlay`.
+- Presents official settings content through `settings.section` instead of duplicating its data model.
+- Hides and disables the host content column and asynchronously mounted Better Sidebar while settings are open, then restores their exact state.
+- Provides localized search, return-to-app, and related desktop labels.
+
+## Safe fallback
+
+The sidebar requires the renderer's general `SlotOutlet`. On an older core or a renderer
+without the patch, the plugin does not force the replacement. It preserves the official
+settings dialog to avoid disabling settings or producing a blank page.
+
+## Boundary
+
+The plugin changes settings presentation, not Harness setting fields, model configuration,
+or profile persistence semantics.
+
+[View source](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-ui)

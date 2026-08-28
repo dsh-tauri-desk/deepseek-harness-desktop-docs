@@ -1,0 +1,27 @@
+---
+title: DSH Tauri UI
+description: 了解桌面化设置侧边栏及其兼容性降级机制。
+---
+
+`dsh-tauri-ui` 将 Harness 设置体验适配为桌面侧边栏，同时继续使用官方设置分区。
+
+{/* <!-- [桌面化设置侧边栏](/images/zh-CN/dsh-tauri-ui-settings.webp) --> */}
+
+## 功能
+
+- 在 `sidebar.settings` 注册设置入口。
+- 在 `shell.overlay` 渲染桌面化设置侧边栏。
+- 通过 `settings.section` 呈现官方设置内容，不复制设置数据模型。
+- 设置打开时隐藏并禁用宿主内容列及异步挂载的 Better Sidebar；关闭时恢复原状态。
+- 提供中英文搜索设置、返回应用等桌面文案。
+
+## 安全降级
+
+设置侧边栏依赖 renderer 的通用 `SlotOutlet`。旧版内核或缺少 renderer patch 时，插件不会强行替换界面，
+而是保留官方设置对话框，避免设置功能不可用或页面白屏。
+
+## 边界
+
+该插件改变设置的呈现方式，不改变 Harness 设置字段、模型配置或 Profile 的持久化语义。
+
+[查看源码](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-ui)

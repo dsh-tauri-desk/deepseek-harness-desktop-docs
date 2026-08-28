@@ -1,0 +1,28 @@
+---
+title: DSH Tauri
+description: 了解原生桌面导航栏与嵌入式 Harness 客户端之间的消息桥。
+---
+
+`dsh-tauri` 是桌面壳的基础桥接插件。它的 host half 不添加业务行为；client half 运行在 Harness iframe 中，
+把原生窗口导航转换为 Harness 布局与浏览器历史操作。
+
+{/* <!-- [原生导航栏与 Harness iframe 消息桥](/images/zh-CN/dsh-tauri-navigation.webp) --> */}
+
+## 用户可见能力
+
+- 原生顶部栏可以展开或收起 Harness 侧边栏。
+- 后退与前进按钮控制嵌入页面的浏览历史。
+- 按钮会根据历史边界自动禁用。
+- 官方重复的折叠控件会隐藏，避免两个入口表达同一操作。
+
+## 状态同步
+
+插件向桌面宿主回报侧边栏折叠状态、是否可以后退和是否可以前进。插件自身发生异常时也会报告宿主，
+避免原生按钮保留在界面中却静默失效。
+
+## 边界
+
+`dsh-tauri` 只负责导航消息与状态，不管理 Profile、内核、插件安装或文件系统。
+缺少该插件时，Harness 本身仍可运行，但桌面顶部栏不会显示依赖消息桥的导航按钮。
+
+[查看源码](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri)

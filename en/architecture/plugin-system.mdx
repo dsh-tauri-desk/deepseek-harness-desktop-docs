@@ -1,0 +1,50 @@
+---
+title: Plugin system
+description: Understand plugin delivery, profile scope, desktop integration, and recovery.
+---
+
+Harness plugins can extend the host runtime, contribute tools, and add UI integrations.
+The desktop app adds lifecycle management and a controlled bridge to native features.
+
+{/* <!-- [Plugin host, client, and Tauri bridge](/images/en/plugin-architecture.webp) --> */}
+
+## Responsibilities
+
+| Component | Responsibility |
+| --- | --- |
+| Harness host plugin | Registers tools, routes, system context, and lifecycle hooks |
+| Client plugin | Adds panels or UI behavior to the Harness web application |
+| Tauri bridge plugin | Exposes approved desktop commands and events to the embedded client |
+| Desktop manager | Installs, upgrades, removes, repairs, and reports plugin state |
+| Profile | Owns its plugin declarations and configuration |
+
+## Internal plugin lifecycle
+
+Before Harness starts, the desktop workflow ensures required first-party integrations
+exist in the active profile. Missing or inconsistent declarations are restored from the
+copies bundled with the application. This makes native settings and panel features
+available even after an interrupted update.
+
+Optional preset and community plugins follow normal install, upgrade, and uninstall
+flows. The Windows Minimal repair plugin is fetched from GitHub when selected; it is not
+bundled source.
+
+## Communication path
+
+1. The embedded Harness client invokes an integration exposed by its client plugin.
+2. The plugin sends a structured request through the desktop bridge.
+3. Tauri command handlers validate the operation and call the responsible Rust service.
+4. Results or lifecycle events return to the client and update its panel state.
+
+<Warning>
+  Plugin installation is code installation. Profile scoping prevents configuration
+  collisions, not malicious filesystem, process, credential, or network access. Review
+  third-party source and pin trusted versions where possible.
+</Warning>
+
+For user-facing operations, see [Plugins](../guides/plugins).
+
+
+
+
+

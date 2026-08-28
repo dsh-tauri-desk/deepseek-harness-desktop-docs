@@ -1,0 +1,39 @@
+---
+title: 架构概览
+description: 理解 Tauri 桌面壳、本地 Harness 服务与嵌入式 Web UI 如何协作。
+---
+
+DeepSeek Harness Desktop 是 Tauri 2 应用，负责管理本地 Harness 服务，并在原生窗口中显示其 Web 界面。
+
+{/* <!-- [桌面端架构与进程边界](/images/zh-CN/architecture-overview.webp) --> */}
+
+## 主要层次
+
+| 层 | 技术 | 职责 |
+| --- | --- | --- |
+| 桌面 UI | React 19、TypeScript、Vite、Tailwind CSS 4 | 设置、Profile、插件、更新与窗口状态 |
+| 原生后端 | Rust 与 Tauri 2 | 运行时发现、下载、服务生命周期、文件、CLI 与系统 API |
+| Harness 服务 | 托管或兼容的本地 `dsh` 内核 | 会话、工具、Profile、插件与本地 Web 应用 |
+| 嵌入客户端 | 回环 URL 上的 Harness Web UI | 桌面窗口内的主要会话体验 |
+
+## 启动流程
+
+<Steps>
+  <Step title="解析配置">Rust 确定正式版或 Debug 路径、活动 Profile、首选内核与端口。</Step>
+  <Step title="准备依赖">适当时复用兼容系统工具，否则准备托管 Node.js、pnpm 与预构建内核。</Step>
+  <Step title="确保插件">启动服务前检查并恢复必需的内部插件。</Step>
+  <Step title="启动并探测 Harness">后端启动概念上等价于 `dsh --profile <profile> --host 127.0.0.1 --port 3080` 的进程，然后等待健康检查。</Step>
+  <Step title="加载客户端">原生窗口从设置或加载状态切换到本地 Harness UI。</Step>
+</Steps>
+
+## 信任边界
+
+Web 客户端、Rust 后端、Harness 进程、插件、模型供应商和工作区是不同组件，但并非独立安全沙箱。
+Tauri command 缩小原生能力范围；Harness 工具和插件仍可使用用户权限执行本地代码。
+
+继续阅读[运行时与数据](./runtime-and-data)或[插件系统](./plugin-system)。
+
+
+
+
+

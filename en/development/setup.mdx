@@ -1,0 +1,72 @@
+---
+title: Development setup
+description: Prepare a local environment and run DeepSeek Harness Desktop from source.
+---
+
+Development requires both the JavaScript frontend toolchain and the Rust/Tauri platform
+toolchain. The released app does not require these tools.
+
+## Prerequisites
+
+- Node.js 20 or later.
+- Rust 1.77.2 or later with Cargo.
+- Corepack and the repository-pinned pnpm `10.28.2`.
+- Git and platform-specific Tauri dependencies.
+
+<Tabs>
+  <Tab title="Windows">
+    Install Microsoft C++ Build Tools with the MSVC workload and WebView2.
+  </Tab>
+  <Tab title="macOS">
+    Install Xcode Command Line Tools:
+    ```bash
+    xcode-select --install
+    ```
+  </Tab>
+  <Tab title="Ubuntu / Debian">
+    Install WebKit2GTK and Tauri build packages:
+    ```bash
+    sudo apt update
+    sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+    ```
+  </Tab>
+</Tabs>
+
+## Run from source
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/dsh-tauri-desk/deepseek-harness-desktop.git
+    cd deepseek-harness-desktop
+    ```
+  </Step>
+  <Step title="Activate pinned pnpm">
+    ```bash
+    corepack enable
+    corepack install
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    ```bash
+    pnpm install --frozen-lockfile
+    ```
+  </Step>
+  <Step title="Start Tauri development">
+    ```bash
+    pnpm tauri dev
+    ```
+  </Step>
+</Steps>
+
+{/* <!-- [Development build with desktop and terminal logs](/images/en/development-setup.webp) --> */}
+
+The frontend development server runs at `http://localhost:1420`; the debug Harness
+service defaults to `127.0.0.1:3081`. Debug data is isolated from the release app.
+
+<Note>
+  `pnpm dev` starts only Vite. Use `pnpm tauri dev` when testing native commands,
+  runtime installation, service lifecycle, windows, or updater behavior.
+</Note>
+
+

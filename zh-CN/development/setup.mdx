@@ -1,0 +1,64 @@
+---
+title: 开发环境
+description: 准备本地环境并从源码运行 DeepSeek Harness Desktop。
+---
+
+开发需要 JavaScript 前端工具链和 Rust/Tauri 平台工具链；正式版用户不需要这些工具。
+
+## 前置条件
+
+- Node.js 20 或更高版本。
+- Rust 1.77.2 或更高版本及 Cargo。
+- Corepack 与仓库固定的 pnpm `10.28.2`。
+- Git 和对应平台的 Tauri 依赖。
+
+<Tabs>
+  <Tab title="Windows">安装带 MSVC 工作负载的 Microsoft C++ Build Tools 和 WebView2。</Tab>
+  <Tab title="macOS">
+    安装 Xcode Command Line Tools：
+    ```bash
+    xcode-select --install
+    ```
+  </Tab>
+  <Tab title="Ubuntu / Debian">
+    ```bash
+    sudo apt update
+    sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+    ```
+  </Tab>
+</Tabs>
+
+## 从源码运行
+
+<Steps>
+  <Step title="克隆仓库">
+    ```bash
+    git clone https://github.com/dsh-tauri-desk/deepseek-harness-desktop.git
+    cd deepseek-harness-desktop
+    ```
+  </Step>
+  <Step title="启用固定 pnpm">
+    ```bash
+    corepack enable
+    corepack install
+    ```
+  </Step>
+  <Step title="安装依赖">
+    ```bash
+    pnpm install --frozen-lockfile
+    ```
+  </Step>
+  <Step title="启动 Tauri 开发模式">
+    ```bash
+    pnpm tauri dev
+    ```
+  </Step>
+</Steps>
+
+{/* <!-- [桌面开发构建与终端日志](/images/zh-CN/development-setup.webp) --> */}
+
+前端开发服务器位于 `http://localhost:1420`；Debug Harness 服务默认 `127.0.0.1:3081`，数据与正式版隔离。
+
+<Note>`pnpm dev` 只启动 Vite；测试原生命令、安装、服务、窗口或更新器时使用 `pnpm tauri dev`。</Note>
+
+

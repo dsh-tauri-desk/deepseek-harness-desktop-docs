@@ -1,0 +1,57 @@
+---
+title: Project structure
+description: Navigate the frontend, Rust backend, services, tasks, tests, and release automation.
+---
+
+The repository keeps the React frontend and Rust backend in one Tauri application while
+separating platform services by responsibility.
+
+```text
+deepseek-harness-desktop/
+├── src/                    # React frontend
+├── src-tauri/
+│   ├── src/
+│   │   ├── bridge/         # Tauri command boundary
+│   │   ├── config/         # Paths, constants, and settings
+│   │   ├── desktop/        # Native windows and webviews
+│   │   ├── service/        # Runtime and desktop services
+│   │   └── task/           # Long-running task orchestration
+│   ├── resources/          # Bundled runtime-facing resources
+│   └── tauri.conf.json
+├── scripts/                # Build and maintenance scripts
+├── test/                   # Frontend tests and fixtures
+├── docs/                   # In-repository engineering notes
+└── .github/workflows/      # CI and release pipelines
+```
+
+## Frontend
+
+`src/` contains components, configuration, hooks, internationalization, layouts,
+stores, styles, and utilities. It renders installation and loading states, desktop
+settings, and UI surrounding the embedded Harness client.
+
+## Rust backend
+
+The `src-tauri/src/service/` modules are organized around capabilities such as
+downloads, core selection, profiles, plugins, CLI integration, updates, workflows, and
+scheduling. `bridge/` exposes selected capabilities as Tauri commands; UI code should
+not bypass that boundary.
+
+{/* <!-- [Source tree and major module ownership](/images/en/project-structure.webp) --> */}
+
+## Where to make a change
+
+| Change | Start here |
+| --- | --- |
+| React view or state | `src/` |
+| Native command contract | `src-tauri/src/bridge/` |
+| Paths or persisted settings | `src-tauri/src/config/` |
+| Window or webview behavior | `src-tauri/src/desktop/` |
+| Core, profile, plugin, CLI, or update behavior | `src-tauri/src/service/` |
+| Long-running orchestration | `src-tauri/src/task/` |
+| CI or packaging | `.github/workflows/`, `src-tauri/tauri.conf.json` |
+
+Keep operating-system differences behind focused Rust services and preserve the release
+and debug isolation model when adding paths, ports, or stores.
+
+
