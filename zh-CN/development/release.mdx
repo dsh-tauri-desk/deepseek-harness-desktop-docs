@@ -19,12 +19,16 @@ pnpm tauri build
 
 ## CI 产物
 
-| Runner | 产物 |
+当前公开版本为 `v0.9.2`（2026-08-28）。Release 页面实际提供以下文件：
+
+| 平台 | 产物 |
 | --- | --- |
-| Windows | NSIS `.exe` 与本地化 WiX `.msi` |
-| macOS Apple Silicon | 已签名、公证并 stapled 的 arm64 `.dmg` |
-| macOS Intel | 已签名、公证并 stapled 的 x64 `.dmg` |
-| Ubuntu 22.04 | x64 AppImage 与 `.deb` |
+| Windows x64 | `x64-setup.exe`、英文与简体中文 `.msi` |
+| macOS Apple Silicon | `aarch64.dmg` |
+| macOS Intel | `x64.dmg` |
+| Linux x64 | `amd64.AppImage`、`amd64.deb` |
+
+这些文件证明当前 Release 的分发覆盖范围；不要据此推断未列出的架构。
 
 {/* <!-- [GitHub Actions 发布流水线](/images/zh-CN/release-pipeline.webp) --> */}
 

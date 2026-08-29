@@ -1,0 +1,21 @@
+---
+title: DSH Tauri Session
+description: 管理已归档的聊天，并从工作区操作中归档会话。
+---
+
+`dsh-tauri-session` 为桌面端提供归档聊天设置页，并把工作区菜单中的“删除工作区”改为归档操作。它直接使用宿主 `WorkspaceRegistry` 的归档集合，不再维护独立的 `archive.json`。
+
+## 用户可见功能
+
+- 在设置中搜索、排序、分组和筛选已归档聊天。
+- 取消归档后将会话恢复到原来的工作区分组。
+- 通过二次确认彻底删除单个或全部已归档聊天。
+- 从工作区菜单归档该工作区中的会话，而不是直接删除工作区。
+
+## 数据与边界
+
+插件通过 `/api/dsh-session/*` 宿主路由读取和更新归档状态。彻底删除会移除归档集合中的记录，并删除对应的会话持久化目录；这是破坏性操作，桌面端会先要求确认。
+
+v1 版本遗留的 `~/.dsh/dsh-tauri-session/archive.json` 只在迁移时读取一次。插件不提供操作系统沙箱，仍在 Harness 与桌面端允许的权限范围内运行。
+
+源码与实现细节见 [`dsh-tauri-plugins`](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-session)。

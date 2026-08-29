@@ -1,0 +1,21 @@
+---
+title: DSH Tauri Session
+description: Manage archived chats and archive sessions from workspace actions.
+---
+
+`dsh-tauri-session` adds an archived-chat settings page and changes “Delete workspace” in the workspace menu into an archive action. It uses the host `WorkspaceRegistry` archive set directly instead of maintaining a separate `archive.json`.
+
+## User-visible features
+
+- Search, sort, group, and filter archived chats in Settings.
+- Restore an archived session to its original workspace group.
+- Permanently delete one or all archived chats after confirmation.
+- Archive a workspace’s sessions from the workspace menu instead of deleting the workspace.
+
+## Data and boundaries
+
+The plugin reads and updates archive state through `/api/dsh-session/*` host routes. Permanent deletion removes records from the archive set and deletes the corresponding persisted session directory; the desktop asks for confirmation first because this is destructive.
+
+The v1 legacy file `~/.dsh/dsh-tauri-session/archive.json` is read once during migration only. The plugin does not add an operating-system sandbox and runs within the capabilities allowed by Harness and the desktop.
+
+See the source and implementation details in [`dsh-tauri-plugins`](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-session).
