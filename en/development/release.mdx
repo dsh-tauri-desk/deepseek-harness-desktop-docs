@@ -22,12 +22,16 @@ systems and require their native signing tools.
 
 ## CI artifacts
 
-| Runner | Output |
+The current public release is `v0.9.2` (2026-08-28). Its Release page provides these actual files:
+
+| Platform | Output |
 | --- | --- |
-| Windows | NSIS `.exe` and localized WiX `.msi` installers |
-| macOS Apple Silicon | Signed, notarized, and stapled arm64 `.dmg` |
-| macOS Intel | Signed, notarized, and stapled x64 `.dmg` |
-| Ubuntu 22.04 | x64 AppImage and `.deb` |
+| Windows x64 | `x64-setup.exe`, plus English and Simplified Chinese `.msi` installers |
+| macOS Apple Silicon | `aarch64.dmg` |
+| macOS Intel | `x64.dmg` |
+| Linux x64 | `amd64.AppImage`, `amd64.deb` |
+
+These files establish the distribution coverage of the current release; do not infer support for architectures that are not listed.
 
 {/* <!-- [GitHub Actions release pipeline](/images/en/release-pipeline.webp) --> */}
 

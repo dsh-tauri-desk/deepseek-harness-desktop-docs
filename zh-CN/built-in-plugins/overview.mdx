@@ -6,7 +6,7 @@ description: 了解 DeepSeek Harness Desktop 随安装包提供的第一方桌�
 DeepSeek Harness Desktop 通过少量第一方插件连接 Harness 与 Tauri 桌面壳。这些插件随安装包提供，
 启动前会检查其声明与文件；缺失或不一致时，桌面端会从内置资源恢复。
 
-{/* <!-- [五个内置插件及其依赖关系](/images/zh-CN/built-in-plugins-overview.webp) --> */}
+{/* <!-- [当前内置插件及其依赖关系](/images/zh-CN/built-in-plugins-overview.webp) --> */}
 
 ## 插件列表
 
@@ -20,8 +20,17 @@ DeepSeek Harness Desktop 通过少量第一方插件连接 Harness 与 Tauri 桌
   <Card title="DSH Tauri Worktree" icon="code-branch" href="./dsh-tauri-worktree">
     为会话创建隔离 Git Worktree，并在用户批准后检出回本地分支。
   </Card>
+  <Card title="DSH Tauri Panel" icon="columns-3" href="./dsh-tauri-panel">
+    提供桌面侧栏、新会话入口和面板扩展协议。
+  </Card>
   <Card title="DSH Tauri Panel Extension" icon="puzzle-piece" href="./dsh-tauri-panel-extension">
     在面板协议上提供 Skills、技能仓库和 MCP 管理。
+  </Card>
+  <Card title="DSH Tauri Session" icon="archive" href="./dsh-tauri-session">
+    管理已归档聊天，并将工作区删除操作改为归档。
+  </Card>
+  <Card title="DSH Tauri Rightclick Menu" icon="ellipsis" href="./dsh-tauri-rightclick">
+    为桌面封装端提供会话、工作区、文本和链接的右键操作。
   </Card>
 </CardGroup>
 

@@ -1,0 +1,21 @@
+---
+title: DSH Tauri Rightclick Menu
+description: Provide native-style context menus for sessions, workspaces, text, links, and inputs.
+---
+
+`dsh-tauri-rightclick` targets Tauri, Electron, WebView2, CEF, and Qt WebEngine wrappers that host the DeepSeek Harness Web UI. It does not target `dsh web` opened in an ordinary browser.
+
+## Menu coverage
+
+- Sessions: rename, fork, archive, open the directory, and copy the directory or session ID.
+- Workspaces: start a session, open or rename the directory, copy its path, archive sessions, and safely remove the workspace.
+- Text, links, and inputs: copy or select text, open or copy links, and undo, redo, cut, copy, paste, or select all in inputs.
+- Plugin menus: refresh the current Harness page.
+
+Existing session actions continue to use Harness public services. When the target cannot be confirmed, the plugin keeps the browser default menu; uninstalling it leaves no patch behind.
+
+## Security boundaries
+
+Opening a directory uses the host `host.openPath` route and the system file manager. External links are limited to `http` and `https` and are handed to the system default browser. The plugin does not modify `@deepseek-ai/*`, the Tauri shell, or other plugins, and it does not simulate a pinned-session state that Harness does not currently expose.
+
+See the source and extension protocol in [`dsh-tauri-plugins`](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-rightclick).

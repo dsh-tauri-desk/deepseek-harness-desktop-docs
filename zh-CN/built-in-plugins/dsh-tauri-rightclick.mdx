@@ -1,0 +1,21 @@
+---
+title: DSH Tauri Rightclick Menu
+description: 为会话、工作区、文本、链接和输入框提供原生风格的右键菜单。
+---
+
+`dsh-tauri-rightclick` 面向承载 DeepSeek Harness Web UI 的 Tauri、Electron、WebView2、CEF 或 Qt WebEngine 封装端，不面向普通浏览器中的 `dsh web`。
+
+## 菜单范围
+
+- 会话：重命名、分叉、归档、打开目录、复制目录和会话 ID。
+- 工作区：新建会话、打开目录、重命名、复制路径、归档会话和安全移除工作区。
+- 文本、链接和输入框：复制或全选文本、打开或复制链接，以及撤销、重做、剪切、复制、粘贴。
+- 插件菜单：刷新当前 Harness 页面。
+
+官方已有的会话操作继续使用 Harness 公开服务。无法确认目标时，插件保留浏览器默认菜单；卸载后不留下补丁。
+
+## 安全边界
+
+打开目录通过宿主 `host.openPath` 路由交给系统文件管理器，外链仅接受 `http` 和 `https` 并交给系统默认浏览器。插件不修改 `@deepseek-ai/*`、Tauri 壳或其他插件，也不模拟 Harness 当前未提供的置顶会话状态。
+
+源码与扩展协议见 [`dsh-tauri-plugins`](https://github.com/dsh-tauri-desk/dsh-tauri-plugins/tree/main/packages/dsh-tauri-rightclick)。
