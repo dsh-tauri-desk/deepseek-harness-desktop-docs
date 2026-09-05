@@ -1,0 +1,33 @@
+---
+title: DSH Tauri Pet
+description: 管理 Chat 与 Codex 桌宠、预设资源和会话活动状态。
+---
+
+`dsh-tauri-pet` 在设置页提供 Pets 与 Codex 两个标签页，并通过 `dsh-tauri` 的 Tauri invoke 桥控制独立的透明、置顶、无边框桌宠窗口。
+
+{/* <!-- [Pets 与 Codex 桌宠设置页和透明桌宠窗口](/images/zh-CN/dsh-tauri-pet.webp) --> */}
+
+## 用户可见功能
+
+- **Pets**：查看 Chat 来源的宠物和预设宠物清单。
+- **Codex**：查看 `$HOME/.codex/pets` 中的 Codex 宠物，并导入 `.zip` 资源包。
+- 下载预设宠物到 `$DSH_HOME/pets/<id>`，下载完成后即可启用。
+- 创建标准会话并预填 `/hatch-dsh-pet`，不会自动提交。
+- 显示宠物大小（50–200%）以及会话活动状态、气泡和移动方向。
+- 侧栏状态点反映窗口当前是否可见；隐藏窗口不会关闭持久化启用状态。
+
+## 资源与数据边界
+
+预设宠物由 `src-tauri/resources/preset-pets.json` 登记远端仓库、固定 commit 和资源目录。媒体资源不随插件包内置，用户从设置页主动下载；安装后只保留登记资源目录下的文件。
+
+Chat 宠物使用 `${DSH_HOME:-$HOME/.dsh}/pets`，Codex 宠物使用 `$HOME/.codex/pets`，两个来源通过 `list_pets({ source: 'chat' | 'codex' })` 严格分开。插件提供 `hatch-dsh-pet` skill，并使用独立的 `providerName: dsh-tauri-pet`，避免覆盖其他 skill provider 或默认根目录。
+
+<Warning>
+  宠物资源来自远程仓库，下载前请确认来源可信。桌面端与插件仍具有 Harness 允许的本地代码和文件访问能力；Profiles 不是操作系统沙箱。
+</Warning>
+
+## 相关命令
+
+`get_pet_status`、`show_pet`、`hide_pet`、`set_active_pet`、`set_pet_size`、`list_pets`、`list_preset_pets`、`download_preset_pet` 和 `import_pet` 由客户端桥封装。完整实现见插件源码。
+
+[查看源码](https://github.com/dsh-tauri-desk/deepseek-harness-desktop/tree/main/packages/dsh-tauri-pet)

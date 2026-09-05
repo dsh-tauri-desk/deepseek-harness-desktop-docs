@@ -1,0 +1,33 @@
+---
+title: DSH Tauri Pet
+description: Manage Chat and Codex pets, preset assets, and conversation activity states.
+---
+
+`dsh-tauri-pet` provides Pets and Codex tabs in Settings and controls a separate transparent, always-on-top, frameless pet window through the `dsh-tauri` Tauri invoke bridge.
+
+{/* <!-- [Pets and Codex pet settings with the transparent pet window](/images/en/dsh-tauri-pet.webp) --> */}
+
+## User-visible features
+
+- **Pets**: view Chat-source pets and the preset pet catalog.
+- **Codex**: view Codex pets in `$HOME/.codex/pets` and import `.zip` resource packs.
+- Download preset pets to `$DSH_HOME/pets/<id>` and enable them after installation.
+- Create a standard session with `/hatch-dsh-pet` prefilled; the command is not submitted automatically.
+- Adjust pet size from 50–200% and display conversation activity, bubbles, and movement states.
+- The sidebar status dot reflects current window visibility; hiding the window does not disable it persistently.
+
+## Resource and data boundaries
+
+Preset pets are declared in `src-tauri/resources/preset-pets.json` with a remote repository, pinned commit, and asset directory. Media is not bundled with the plugin; users download it from Settings, and installation keeps only files under the declared asset prefix.
+
+Chat pets use `${DSH_HOME:-$HOME/.dsh}/pets`, while Codex pets use `$HOME/.codex/pets`. The two sources remain separate through `list_pets({ source: 'chat' | 'codex' })`. The plugin provides the `hatch-dsh-pet` skill under its own `providerName: dsh-tauri-pet`, without replacing other skill providers or default roots.
+
+<Warning>
+  Pet assets come from remote repositories; verify the source before downloading. The desktop and plugins still have the local code and file access allowed by Harness. Profiles are not operating-system sandboxes.
+</Warning>
+
+## Related commands
+
+The client bridge wraps `get_pet_status`, `show_pet`, `hide_pet`, `set_active_pet`, `set_pet_size`, `list_pets`, `list_preset_pets`, `download_preset_pet`, and `import_pet`. See the plugin source for the complete implementation.
+
+[View source](https://github.com/dsh-tauri-desk/deepseek-harness-desktop/tree/main/packages/dsh-tauri-pet)
