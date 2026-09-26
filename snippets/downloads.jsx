@@ -44,6 +44,26 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
           "name": "Deepseek.Harness.Desktop_0.18.0_x64_zh-CN.msi",
           "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.18.0/Deepseek.Harness.Desktop_0.18.0_x64_zh-CN.msi",
           "size": "11.3 MB"
+        },
+        {
+          "name": "Deepseek.Harness.Desktop_Bundle_0.18.0.deb",
+          "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.18.0/Deepseek.Harness.Desktop_Bundle_0.18.0.deb",
+          "size": "183 MB"
+        },
+        {
+          "name": "Deepseek.Harness.Desktop_Bundle_0.18.0.exe",
+          "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.18.0/Deepseek.Harness.Desktop_Bundle_0.18.0.exe",
+          "size": "116 MB"
+        },
+        {
+          "name": "Deepseek.Harness.Desktop_Bundle_0.18.0_aarch64.dmg",
+          "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.18.0/Deepseek.Harness.Desktop_Bundle_0.18.0_aarch64.dmg",
+          "size": "185 MB"
+        },
+        {
+          "name": "Deepseek.Harness.Desktop_Bundle_0.18.0_x64.dmg",
+          "url": "https://github.com/dsh-tauri/deepseek-harness-desktop/releases/download/v0.18.0/Deepseek.Harness.Desktop_Bundle_0.18.0_x64.dmg",
+          "size": "192 MB"
         }
       ]
     },
