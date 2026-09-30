@@ -1,0 +1,52 @@
+---
+title: DSH Tauri Scheduler
+description: 创建定时任务并查看独立 Agent 会话的执行记录。
+---
+
+在侧栏打开**定时任务**。`dsh-tauri-scheduler` 为每次执行创建独立 Agent 会话。
+
+<Tabs>
+  <Tab title="任务列表">
+    <Frame>
+      <img src="/images/zh-CN/dsh-tauri-panel-scheduler.png" alt="侧栏中的定时任务页与推荐任务" />
+    </Frame>
+  </Tab>
+  <Tab title="新建任务">
+    <Frame>
+      <img src="/images/zh-CN/dsh-tauri-panel-scheduler-new.png" alt="新建定时任务对话框：名称、计划与任务指令" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## 创建与管理
+
+1. 设置名称、指令、计划和目标工作区。
+2. 检查权限；默认 `read-only`。可指定提供商、模型与推理档位。
+3. 保存后查看下次执行时间；可暂停、恢复、立即运行或删除。
+4. 在**执行记录**查看结果，或打开对应会话。
+
+| 计划 | 主要字段 |
+| --- | --- |
+| 单次 `once` | ISO 时间 `at` |
+| 每小时 `hourly` | 分钟 `minute` |
+| 每天 `daily` | `HH:mm` 格式的 `time` |
+| 固定间隔 `interval` | `everyMinutes`，可设 `anchor` |
+| 工作日 `workdays` | `time`，周一至周五 |
+| 每周 `weekly` | `weekdays` 与 `time` |
+| 每月 `monthly` | `day` 与 `time` |
+| 自定义 `custom` | `everyDays` 与 `time`，可设 `anchor` |
+
+Chat 工具：`scheduler_create`、`scheduler_list`、`scheduler_update`、`scheduler_delete`。使用 `scheduler_update` 的 `enabled` 暂停或恢复，`run_now` 立即运行。
+
+## 运行边界
+
+- 使用电脑本地时区；电脑须保持唤醒且宿主服务运行。
+- 最多同时运行 4 个任务；单次最长运行 30 分钟。
+- 任务与记录位于 `$DSH_HOME/crons/`，保留最近 200 条运行记录。
+- 宿主路由前缀为 `/api/desktop/dsh-tauri-scheduler`。
+
+<Warning>
+  任务能够执行 Agent 指令与本地工具。保存前检查工作区和权限；休眠或服务停止期间不会执行。
+</Warning>
+
+[源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-scheduler)

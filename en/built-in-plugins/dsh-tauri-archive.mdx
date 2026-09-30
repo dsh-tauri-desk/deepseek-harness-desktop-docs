@@ -1,0 +1,37 @@
+---
+title: DSH Tauri Archive
+description: Find, restore, or delete archived chats.
+---
+
+`dsh-tauri-archive` adds **Settings → Archived chats** and replaces workspace deletion in the workspace menu with archiving.
+
+<Tabs>
+  <Tab title="Archived chats">
+    <Frame>
+      <img src="/images/en/dsh-tauri-session.png" alt="Archived chats page in Settings with search, sorting, project filter, and unarchive" />
+    </Frame>
+  </Tab>
+  <Tab title="Workspace menu">
+    <Frame>
+      <img src="/images/en/dsh-tauri-session-workspace-menu.png" alt="Archive workspace entry added to the workspace menu" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Actions
+
+- Search, sort, group, or filter archived chats by project.
+- Unarchive a session to restore its original workspace group.
+- Archive a workspace's sessions from its menu.
+- Permanently delete one or all archived chats after confirmation.
+
+## Data and boundaries
+
+- The host `WorkspaceRegistry` owns archive state; the plugin keeps no separate archive ledger.
+- Host routes use `/api/desktop/dsh-tauri-archive/session`.
+
+<Warning>
+  Permanent deletion removes archive records and persisted session directories. Unarchiving cannot recover them. Back up chats you need before deleting.
+</Warning>
+
+[Source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-archive)

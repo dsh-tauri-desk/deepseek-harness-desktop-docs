@@ -8,23 +8,18 @@ toolchain. The released app does not require these tools.
 
 ## Prerequisites
 
-- Node.js 20 or later.
-- Rust 1.77.2 or later with Cargo.
-- Corepack and the repository-pinned pnpm `10.28.2`.
+- Node.js 22; use `22.22.0` to match the managed environment.
+- Rust `1.93+` with Cargo, required by the [patched notification dependency](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/vendor/tauri-plugin-notifications/Cargo.toml).
+- Corepack and the desktop repository's pinned pnpm `11.7.0`, not the separate documentation repository's version.
 - Git and platform-specific Tauri dependencies.
 
 <Tabs>
   <Tab title="Windows">
     Install Microsoft C++ Build Tools with the MSVC workload and WebView2.
   </Tab>
-  <Tab title="macOS">
-    Install Xcode Command Line Tools:
-    ```bash
-    xcode-select --install
-    ```
-  </Tab>
+  <Tab title="macOS">Install and select Xcode `16+` with Swift `6`. The notification backend uses Swift 6 typed throws; older Command Line Tools alone are insufficient.</Tab>
   <Tab title="Ubuntu / Debian">
-    Install WebKit2GTK and Tauri build packages:
+    WebKitGTK `4.1` and Tauri native build packages are required:
     ```bash
     sudo apt update
     sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
@@ -50,6 +45,7 @@ toolchain. The released app does not require these tools.
   <Step title="Install dependencies">
     ```bash
     pnpm install --frozen-lockfile
+    pnpm build:plugins
     ```
   </Step>
   <Step title="Start Tauri development">
@@ -61,12 +57,11 @@ toolchain. The released app does not require these tools.
 
 {/* <!-- [Development build with desktop and terminal logs](/images/en/development-setup.webp) --> */}
 
-The frontend development server runs at `http://localhost:1420`; the debug Harness
-service defaults to `127.0.0.1:3081`. Debug data is isolated from the release app.
+- Vite development server: `http://localhost:1420`.
+- Debug Harness: `127.0.0.1:3081` by default, with port fallback.
+- Managed dependencies: `<AppData>/dev`; data: `~/.dsh.dev`, ignoring inherited `DSH_HOME`.
+- See [Runtime and data](../architecture/runtime-and-data) for the complete paths.
 
-<Note>
-  `pnpm dev` starts only Vite. Use `pnpm tauri dev` when testing native commands,
-  runtime installation, service lifecycle, windows, or updater behavior.
-</Note>
+<Note>`pnpm dev` starts only Vite; use `pnpm tauri dev` for native features. When editing `packages/`, run `pnpm dev:plugins` in another terminal, or use `pnpm dev:desktop` to start both the plugin watcher and desktop development mode.</Note>
 
 

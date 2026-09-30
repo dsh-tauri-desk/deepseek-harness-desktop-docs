@@ -3,63 +3,47 @@ title: Plugins
 description: Install, update, recover, and understand plugins in DeepSeek Harness Desktop.
 ---
 
-Plugins extend Harness with tools, UI panels, notifications, and desktop integrations.
-The desktop app distinguishes required internal plugins from optional preset and
-community plugins.
+Plugins add tools, panels, and system integrations. Distinguish built-in plugins from optional community plugins before choosing how to install or recover them.
 
 ## Plugin types
 
-| Type | Delivery | User control |
-| --- | --- | --- |
-| Internal | Bundled in the desktop installer and ensured at startup | Automatically restored when missing |
-| Preset | Offered during first-run guidance, installed from npm or GitHub | Optional; update or remove later |
-| Community | Installed manually or through a marketplace plugin | Review source and permissions first |
+| Type | Source and control |
+| --- | --- |
+| Built-in | 11 first-party desktop integrations ensured by the desktop; not a community plugin bundle |
+| Preset | Six optional community plugins offered by the guide; downloaded after approval and can be updated or removed |
+| Other community plugins | Installed manually or through a marketplace; check sources, compatibility, and execution capabilities first |
 
-Internal plugins currently provide the Tauri bridge, settings UI, the model config page,
-worktree support, panel entry, Skills/MCP management, scheduled tasks, turn change
-tracking, desktop pets, and context menus. Scheduled tasks run in independent Agent
-sessions; turn change tracking records per-turn private Git snapshots without changing the
-user's repository history, and file restore is delegated to the recommended dsh-rewind
-preset plugin. The Windows Minimal-mode repair is downloaded from its GitHub repository
-when selected; its source is **not** embedded in the app.
-
-<Note>
-  Internal plugins require Harness core **0.1.5-rc.1** or later; they do not load on earlier cores.
-</Note>
+- See the [built-in plugin overview](../built-in-plugins/overview) for the current inventory and instructions.
+- `dsh-tauri-experimental` is an optional experimental package, disabled by default and not counted among these 11 plugins.
 
 <Frame>
   <img src="/images/en/plugins.png" alt="Plugin manager with status and recovery actions" />
 </Frame>
 
-## Manage a plugin
+## Optional presets
 
-<Steps>
-  <Step title="Open plugin settings">
-    Review the plugin name, source, installed state, and any reported error.
-  </Step>
-  <Step title="Choose an action">
-    Install a trusted plugin, upgrade an outdated one, or remove an optional plugin you
-    no longer use.
-  </Step>
-  <Step title="Restart if requested">
-    Some host or UI integrations become active only after the Harness service reloads.
-  </Step>
-</Steps>
+| Display name | Package ID | Initial selection |
+| --- | --- | --- |
+| DSH Market | `dshmarket` | Recommended, selected |
+| DSH Better Sidebar | `dsh-better-sidebar` | Recommended, selected |
+| DSH Rewind | `dsh-rewind-plugin` | Recommended, selected |
+| DSH Bridge | `@wenbin_wb/dsh-bridge` | Recommended, not selected |
+| DSH IM | `@xmanrui/dsh-im` | Recommended, not selected |
+| Billion Context | `billion-context` | Optional, not selected |
 
-## Recovery
+Presets do not count as built-ins or suit every task. Check maintenance, network dependencies, and data handling before installing. Presets such as DSH Market use the dedicated installation flow in the first-run guide or plugin management—not a chat request to the agent.
 
-If a plugin operation is interrupted, use the recovery action shown by the desktop
-panel. Internal plugins are checked before service startup and re-linked to the bundled
-copy when their dependency declaration or files are missing.
+## Install, update, and recover
+
+1. Open desktop **Configuration → Plugins** and check the active profile, sources, versions, and errors.
+2. Install trusted plugins, or upgrade and remove optional plugins as needed.
+3. Restart Harness when prompted and confirm plugins load.
+4. If an operation is interrupted, use the recovery entry point shown in the panel; the desktop repairs missing built-ins.
+
+Harness `0.2.0-rc.2` is recommended; `0.1.5-rc.1` is the minimum accepted version. Compatibility rules still restrict available core and plugin versions. Preserve logs after startup failures, then use an explicit recovery action; see [Troubleshooting](../help/troubleshooting).
 
 <Warning>
-  A Harness plugin can execute local code. Check the repository owner, release history,
-  package contents, and requested capabilities before installation.
+  Installing a plugin installs executable local code. Profiles are not operating system sandboxes. “Built-in,” “recommended,” and “open source” do not mean risk-free.
 </Warning>
 
-Developers can continue with [Plugin system architecture](../architecture/plugin-system).
-
-
-
-
-
+Developers can read [Plugin system architecture](../architecture/plugin-system).

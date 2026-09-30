@@ -4,11 +4,10 @@ Thank you for improving DeepSeek Harness Desktop documentation.
 
 ## Content workflow
 
-1. Update the English source page in `en/`.
-2. Apply the equivalent change to the mirrored page in `zh-CN/`.
-3. Keep page paths and section coverage aligned across languages.
-4. Use Mint site routes without locale prefixes or file extensions, for example
-   `/guides/plugins`. `navigation.languages` resolves the matching locale page.
+1. Verify current source and release assets before changing feature claims.
+2. Update the Chinese source page in `zh-CN/`, then its English mirror in `en/`.
+3. Keep page paths, navigation, sections, versions, and examples aligned.
+4. Use relative same-locale links without extensions, such as `../guides/plugins`.
 5. Run `pnpm check` before opening a pull request.
 
 ## Writing style

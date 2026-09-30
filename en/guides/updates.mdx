@@ -1,47 +1,37 @@
 ---
 title: Updates
-description: Update the desktop shell and Harness core without losing local work.
+description: Update the desktop and Harness core separately, preserving local work and checking recovery scope.
 ---
 
-DeepSeek Harness Desktop updates two related components independently: the native
-desktop application and the app-managed Harness core.
+The desktop and Harness core update independently. Save active tasks and repository changes before choosing the corresponding entry point.
 
-## Desktop update
+## Choose an update entry point
 
-When a new signed desktop release is available, the updater can download the platform
-installer and guide the application restart. Save active workspace changes before
-installing an update.
+| Component | Entry point | What to check |
+| --- | --- | --- |
+| Desktop app | **Help → Check for updates** | Download and restart when prompted; use the official Release's platform assets |
+| Managed Harness core | Update prompt or **Configuration → Core Engine** | Choose compatible versions only; no desktop reinstall is needed |
+| Optional plugins | **Configuration → Plugins** | Check sources, versions, and errors; restart the service when prompted |
 
-## Harness core update
-
-At startup, the app compares the managed core with the latest
-`deepseek-harness-pkg` release. It can download a newer package without requiring a new
-desktop installer. If the network or GitHub is unavailable, the current core remains
-installed and usable.
+The desktop checks for managed-core updates. Network failures do not cause it to delete installed cores, but missing components on first installation still need downloading. The recommended core is `0.2.0-rc.2`; the minimum accepted version is `0.1.5-rc.1`, subject to compatibility rules.
 
 {/* <!-- [Desktop and Harness update dialogs](/images/en/updates.webp) --> */}
 
 ## Update safely
 
 <Steps>
-  <Step title="Finish active operations">
-    Wait for commands and file writes to stop. Commit or stash important changes.
-  </Step>
-  <Step title="Read the release notes">
-    Upstream Harness evolves quickly and may contain breaking behavior.
-  </Step>
-  <Step title="Apply the update">
-    Update the desktop shell or managed core from its corresponding prompt.
-  </Step>
-  <Step title="Verify your profile">
-    Reopen the app and confirm the active profile, plugins, and a test session work.
-  </Step>
+  <Step title="Save your work">Wait for commands and file writes to finish, then commit or separately back up important changes. Profile backups do not include workspaces or complete session history.</Step>
+  <Step title="Read release notes">Check versions, platforms, and compatibility requirements; upstream and plugin updates can change behavior.</Step>
+  <Step title="Apply the update">Use the corresponding entry point, keep the app and network available, and wait for the restart.</Step>
+  <Step title="Verify recovery">Check the active profile, core source, models, and plugins, then send a small test task.</Step>
 </Steps>
 
+## Problems after updating
+
+Copy runtime logs first, then try an installed compatible core or a plugin recovery entry point. Avoid repeated resets or deletion of profiles and application data. Check and back up the relevant directories before destructive repairs.
+
 <Warning>
-  Do not delete application data as a routine update step. It removes managed runtimes
-  and settings and can complicate recovery. Back up `$DSH_HOME` before destructive
-  troubleshooting.
+  Built-in backups cover only the active profile directory and exclude credentials by default. They do not back up all of `$DSH_HOME`, workspaces, or every session. See [Data, privacy, and security](../help/data-and-privacy) for the full scope.
 </Warning>
 
-
+See [Troubleshooting](../help/troubleshooting) for startup problems or [Profiles and cores](./profiles-and-cores) for version selection.

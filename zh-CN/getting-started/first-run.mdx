@@ -3,20 +3,20 @@ title: 首次运行
 description: 准备本地运行时、选择插件并首次打开 Harness。
 ---
 
-首次设置会准备本地 Harness 服务，并在桌面窗口中加载其 Web 界面。
+首次启动需要准备本地 Harness 服务，再把它的 Web 界面加载到桌面窗口。保持网络连接，不要在下载或校验期间关闭应用。
 
 <Steps>
-  <Step title="启动应用">
-    桌面端检查兼容的本地 Node.js 和 Harness 内核；不可用时下载托管运行时和预构建内核。
+  <Step title="准备依赖">
+    桌面端检查兼容的运行时；需要时下载托管 Node.js、pnpm 和预构建 Harness 内核。受支持的下载可使用区域回退来源。
   </Step>
-  <Step title="等待设置完成">
-    下载和校验期间保持应用开启。应用优先使用 GitHub 官方资源，受支持的下载可回退到镜像。
-  </Step>
-  <Step title="选择预设插件">
-    从向导中选择可选集成，也可以跳过并稍后在插件管理中配置。
+  <Step title="选择可选预设">
+    向导提供 6 个社区预设。DSH Market、DSH Better Sidebar、DSH Rewind 默认选中；可取消或跳过，稍后在插件管理中安装。完整列表见[插件管理](../guides/plugins)。
   </Step>
   <Step title="打开 Harness">
-    应用启动仅监听回环地址的服务，通常为 `http://127.0.0.1:3080`，并嵌入桌面窗口。
+    首次安装创建并使用 `tauri` 档案。服务默认仅监听本机，首选地址为 `http://127.0.0.1:3080`；端口占用时会使用其他可用端口。
+  </Step>
+  <Step title="配置模型">
+    在 Harness **设置 → 模型**中添加供应商凭据，回到会话选择模型并发送小型测试任务。
   </Step>
 </Steps>
 
@@ -28,32 +28,26 @@ description: 准备本地运行时、选择插件并首次打开 Harness。
   <img src="/images/zh-CN/first-run-plugins.png" alt="首次运行时选择推荐插件" />
 </Frame>
 
-## 安装的内容
+## 当前托管组件
 
-- 没有兼容系统运行时时安装的托管 Node.js。
-- 由 `deepseek-harness-pkg` 发布的预构建 `dsh`。
-- pnpm 及必要的辅助命令行工具。
-- 必需的第一方内部插件。
-- 你选择的可选预设插件。
-- 启用 CLI 集成时创建的 `dsh` 命令 shim。
+| 组件 | 当前版本或作用 |
+| --- | --- |
+| 桌面端 | `0.20.0-beta.1` |
+| Harness 内核 | 推荐 `0.2.0-rc.2`；最低接受 `0.1.5-rc.1`，仍受兼容规则限制 |
+| Node.js / pnpm | `22.22.0` / `11.7.0` |
+| 内置插件 | 11 个第一方桌面集成 |
+| 可选预设 | 仅安装你确认选择的社区插件，不计入内置插件数量 |
 
 ## 验证设置
 
-设置完成后打开一个**新终端**并运行：
+窗口应显示 Harness 会话界面。正式版默认启用 [CLI 集成](../guides/cli-integration)；打开一个**新终端**运行：
 
 ```bash
 dsh --help
 ```
 
-必须重新打开终端才能读取更新后的 `PATH`。桌面窗口应显示 Harness 会话界面。
-
 <Note>
-  如果首选端口被占用，服务可以选择更高的可用端口；端口空闲后，后续启动会尝试恢复首选值。
+  桌面端没有 LAN 开关。打包内核的局域网监听需通过 `DSH_PKG_ALLOW_LAN=1` 主动放行，不能绕过认证或工具权限。远程使用优先选择 [SSH 隧道](../built-in-plugins/dsh-tauri-ssh)，不要把服务直接暴露到公网。
 </Note>
 
-若设置无法完成，请阅读[故障排除](../help/troubleshooting)；设置成功后继续[配置模型](./configure-model)。
-
-
-
-
-
+下载或启动失败时阅读[故障排除](../help/troubleshooting)；模型配置步骤见[配置模型](./configure-model)。

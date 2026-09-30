@@ -1,0 +1,37 @@
+---
+title: DSH Tauri Archive
+description: 搜索、恢复或删除已归档聊天。
+---
+
+`dsh-tauri-archive` 提供**设置 → 已归档的聊天**，并将工作区菜单中的删除操作改为归档。
+
+<Tabs>
+  <Tab title="已归档的聊天">
+    <Frame>
+      <img src="/images/zh-CN/dsh-tauri-session.png" alt="设置中的「已归档的聊天」页：搜索、排序、项目筛选与取消归档" />
+    </Frame>
+  </Tab>
+  <Tab title="工作区菜单">
+    <Frame>
+      <img src="/images/zh-CN/dsh-tauri-session-workspace-menu.png" alt="工作区菜单中新增的「归档工作区」入口" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## 操作
+
+- 搜索、排序、分组或按项目筛选归档聊天。
+- 取消归档，将会话恢复到原工作区分组。
+- 在工作区菜单归档该工作区的会话。
+- 确认后彻底删除单个或全部归档聊天。
+
+## 数据与边界
+
+- 归档状态由宿主 `WorkspaceRegistry` 管理，不维护独立归档账本。
+- 宿主路由前缀为 `/api/desktop/dsh-tauri-archive/session`。
+
+<Warning>
+  彻底删除会移除归档记录与会话持久化目录，不能通过取消归档恢复。删除前备份需要保留的聊天。
+</Warning>
+
+[源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-archive)

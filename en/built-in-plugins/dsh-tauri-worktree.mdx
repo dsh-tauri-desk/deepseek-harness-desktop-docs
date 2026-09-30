@@ -3,37 +3,57 @@ title: DSH Tauri Worktree
 description: Isolate changes in per-session Git worktrees and check them back to local branches after approval.
 ---
 
-`dsh-tauri-worktree` creates a separate Git directory for each worktree session so Agent
-changes do not directly affect the local main workspace.
+`dsh-tauri-worktree` creates an isolated Git worktree for a session. Make changes there, then choose whether to check the work back to a local branch or discard it.
 
 <Frame>
   <img src="/images/en/dsh-tauri-worktree.png" alt="Flow from the main workspace into a worktree and back to a local branch" />
 </Frame>
 
-## Workflow
+## Start isolated work
+
+- The current session is in a local Git repository, and the host can run `git`.
+- A local `main` branch must exist. New worktrees start from `refs/heads/main`, not the current branch.
+- The composer shows the mode picker only for a confirmed Git repository outside a worktree.
 
 <Steps>
-  <Step title="Request a worktree">The Agent may call `create_worktree` only after the user requests isolated work.</Step>
-  <Step title="Create an isolated session">The plugin creates `~/.dsh/worktrees/[hash]/[dirname]` and hands the session to it.</Step>
-  <Step title="Change and verify">The Agent edits, tests, and commits inside the isolated directory.</Step>
-  <Step title="Check out or discard">After explicit approval, check the work back to a local branch, or discard it when it is not needed.</Step>
+  <Step title="Explicitly choose Worktree">Select Worktree in the composer and send your request, or explicitly ask the Agent to use a worktree. `create_worktree` is for local sessions only; do not call it from an existing worktree session.</Step>
+  <Step title="Create the worktree and session">The default directory is `~/.dsh/worktrees/[hash]/[dirname]`; with `DSH_HOME` set, its `worktrees` subdirectory is used. The tool hands off context after the current turn. Composer-based switching transfers the draft and attachments.</Step>
+  <Step title="Change, verify, and commit">Continue in the new directory. The composer status bar provides creation progress, logs, checkout, and discard actions.</Step>
 </Steps>
 
-## Staged changes
-
-`create_worktree` and `checkout_worktree` support `carry_staged`, default `false`. When enabled,
-only changes staged in the Git index move across. Unstaged and untracked files do not. The
-implementation uses binary diff/apply and does not use the repository's shared stash.
-
-## Authorization boundary
+## Check out or discard
 
 <Warning>
-  `checkout_worktree` is a user-authorized operation. Task completion, a merged PR, or Agent
-  convenience does not replace an explicit user request or approval.
+  Call `checkout_worktree` only after a direct human user explicitly requests or approves it. Task completion, commits, a merged PR, or Agent convenience are not authorization. Ask first when needed, then wait for approval.
 </Warning>
 
-The project must be a Git repository and the host must be able to run `git`. If carrying or
-checking out changes fails, the plugin prefers preserving the worktree and recovery context
-over silently losing changes.
+| Action | Result |
+| --- | --- |
+| Check out | Preserves committed work, switches to your requested local branch, and removes the isolated worktree on success. It does not automatically merge into the main branch. UI checkout creates a local session with inherited context and archives the worktree session. |
+| Discard | Deletes the isolated directory and archives the session after confirmation. Save any code you need first: archiving a session does not preserve uncommitted files. |
+
+Before checkout:
+
+- The local main workspace must have no uncommitted changes and must not be in detached HEAD.
+- The isolated worktree must have no unstaged or untracked changes; commit anything you need to retain.
+- If staged changes remain in the worktree, enable `carry_staged` or commit them first. Otherwise checkout is rejected.
+- An existing target branch must not be occupied by another worktree or contain commits absent from the isolated worktree. Matching branches can be reused; lagging branches can fast-forward.
+
+## Staged changes and tool parameters
+
+`carry_staged` defaults to `false` and handles only changes in the Git index. Committed work does not depend on this switch.
+
+| Tool | Branch and directory parameters | With `carry_staged: true` |
+| --- | --- | --- |
+| `create_worktree` | Adds the `dsh/` prefix when `branch_name` omits it. | Carries source-repository staged changes into the new worktree. Unstaged and untracked content stays in the source repository. |
+| `checkout_worktree` | Uses `[hash]/[dirname]` for `worktree_hash_dirname`; uses `branch_name` exactly as the local branch name. | Carries the worktree's staged changes into the local target branch before removing the worktree. |
+
+The transfer uses Git binary diff/apply, not the repository's shared stash. UI checkout has no `carry_staged` option: commit staged changes first, or explicitly authorize the Agent to use the tool with that parameter.
+
+## Failures and boundaries
+
+If creation or checkout fails, inspect the status bar and logs, follow the error message, and retry. Do not manually delete a worktree directory that is still bound to a session. A failed checkout may retain the worktree, binding, and recovery information; it does not mean the session has returned to the local workspace.
+
+Git worktrees isolate working directories, not local execution permissions. Harness and plugins can still execute local code; profiles are not operating-system sandboxes.
 
 [View source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-worktree)

@@ -3,52 +3,39 @@ title: Workspaces and sessions
 description: Start Harness sessions in the right workspace and keep code changes isolated.
 ---
 
-A session combines a conversation with a workspace where Harness tools can read and
-change files. Select the workspace deliberately: it defines the boundary of the task.
+A workspace is the directory where a task operates; a session records the conversation and tool activity. Check the path and branch before sending a task, and state which changes you authorize.
 
 ## Start a session
 
 <Steps>
-  <Step title="Choose a workspace">
-    Open or select the repository or folder you want the agent to work in. Check the
-    displayed path before authorizing file operations.
-  </Step>
-  <Step title="Create a session">
-    Start a new session and state the outcome, constraints, and validation you expect.
-  </Step>
-  <Step title="Review tool activity">
-    Follow commands and file changes in the session. Inspect diffs before committing or
-    publishing work.
-  </Step>
+  <Step title="Choose a workspace">Open the target repository or directory and confirm the displayed path. Git features require Git installed on your system.</Step>
+  <Step title="Create a session">Choose a model and describe the expected result, prohibited operations, and verification. Keep each session focused on one clear objective.</Step>
+  <Step title="Review results">Inspect tool activity, file diffs, and test results before deciding whether to commit, publish, or keep changes.</Step>
 </Steps>
 
 <Frame>
   <img src="/images/en/workspaces-sessions.png" alt="Workspace selector and session list" />
 </Frame>
 
-## Isolate changes with worktrees
+## Separate concurrent changes with worktrees
 
-The bundled worktree integration can create a Git worktree per session. This keeps
-concurrent tasks on separate branches and protects the repository's main checkout.
-When the work is ready, check it out to a local branch; when it is disposable, archive
-or abandon the isolated worktree.
+The built-in [worktree integration](../built-in-plugins/dsh-tauri-worktree) can create a separate Git worktree and branch for a task, rather than writing directly in the main checkout.
 
-<Tip>
-  Use one session for one concrete objective. Separate sessions reduce accidental
-  context mixing and make branches easier to review.
-</Tip>
+1. Explicitly request that the task run in a worktree.
+2. Review diffs, verification results, and uncommitted changes in the isolated session.
+3. To bring the work back to the local repository, explicitly approve checkout and name the target branch.
 
-## Safe operating habits
+<Warning>
+  A completed task or merged PR is not checkout authorization. Checkout removes the isolated worktree. Commit work you need to preserve, and choose to carry staged changes when needed. Do not assume unstaged or untracked files will be brought back automatically.
+</Warning>
 
-- Confirm the current workspace and branch before accepting changes.
-- Keep secrets outside prompts, source files, and command output.
-- Review third-party plugin permissions and source.
-- Commit meaningful checkpoints before broad refactors.
-- Treat generated commands as code review material, not as inherently trusted output.
+Use [session archives](../built-in-plugins/dsh-tauri-archive) to organize history; archiving does not save every uncommitted worktree change.
 
-For runtime data boundaries, see [Data and privacy](../help/data-and-privacy).
+## Safety boundaries
 
+- A workspace path is not a permission sandbox; actual tool permissions and approvals apply.
+- Git worktrees separate branches and files, not processes, networks, or credentials.
+- Profiles separate configuration and plugin environments, not all session data.
+- Keep secrets out of prompts, source, and public logs; review generated commands as code.
 
-
-
-
+Use real operating system isolation for untrusted repositories. See [Data, privacy, and security](../help/data-and-privacy) for storage and backup scope.

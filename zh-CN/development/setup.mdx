@@ -7,20 +7,16 @@ description: 准备本地环境并从源码运行 DeepSeek Harness Desktop。
 
 ## 前置条件
 
-- Node.js 20 或更高版本。
-- Rust 1.77.2 或更高版本及 Cargo。
-- Corepack 与仓库固定的 pnpm `10.28.2`。
+- Node.js 22，建议 `22.22.0`，与托管环境一致。
+- Rust `1.93+` 与 Cargo：[修补后的通知依赖](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/vendor/tauri-plugin-notifications/Cargo.toml)要求此版本。
+- Corepack 与桌面仓库固定的 pnpm `11.7.0`；不要套用独立文档仓库的 pnpm 版本。
 - Git 和对应平台的 Tauri 依赖。
 
 <Tabs>
   <Tab title="Windows">安装带 MSVC 工作负载的 Microsoft C++ Build Tools 和 WebView2。</Tab>
-  <Tab title="macOS">
-    安装 Xcode Command Line Tools：
-    ```bash
-    xcode-select --install
-    ```
-  </Tab>
+  <Tab title="macOS">安装并选用 Xcode `16+`，确保 Swift `6` 可用；通知后端使用 Swift 6 typed throws，仅旧版 Command Line Tools 不够。</Tab>
   <Tab title="Ubuntu / Debian">
+    需要 WebKitGTK `4.1` 和 Tauri 原生构建依赖：
     ```bash
     sudo apt update
     sudo apt install libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
@@ -46,6 +42,7 @@ description: 准备本地环境并从源码运行 DeepSeek Harness Desktop。
   <Step title="安装依赖">
     ```bash
     pnpm install --frozen-lockfile
+    pnpm build:plugins
     ```
   </Step>
   <Step title="启动 Tauri 开发模式">
@@ -57,8 +54,11 @@ description: 准备本地环境并从源码运行 DeepSeek Harness Desktop。
 
 {/* <!-- [桌面开发构建与终端日志](/images/zh-CN/development-setup.webp) --> */}
 
-前端开发服务器位于 `http://localhost:1420`；Debug Harness 服务默认 `127.0.0.1:3081`，数据与正式版隔离。
+- Vite 开发服务器：`http://localhost:1420`。
+- Debug Harness：默认 `127.0.0.1:3081`，端口占用时可避让。
+- 托管依赖：`<AppData>/dev`；数据：`~/.dsh.dev`，忽略继承的 `DSH_HOME`。
+- 完整路径见[运行时与数据](../architecture/runtime-and-data)。
 
-<Note>`pnpm dev` 只启动 Vite；测试原生命令、安装、服务、窗口或更新器时使用 `pnpm tauri dev`。</Note>
+<Note>`pnpm dev` 只启动 Vite；原生功能使用 `pnpm tauri dev`。修改 `packages/` 时另开终端运行 `pnpm dev:plugins`，或使用 `pnpm dev:desktop` 同时启动插件 watcher 与桌面开发模式。</Note>
 
 

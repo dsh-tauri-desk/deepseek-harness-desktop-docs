@@ -3,8 +3,7 @@ title: Configure a model
 description: Add a DeepSeek or compatible model provider before starting your first task.
 ---
 
-Harness needs at least one model provider before it can answer in a session. The fastest
-path is to add a DeepSeek API key from the embedded Harness settings.
+Configure at least one model provider before starting a task. Model settings belong to the embedded Harness interface, not the desktop **Configuration** dialog.
 
 <Frame>
   <img src="/images/en/model-settings.png" alt="Harness model settings with the DeepSeek provider card" />
@@ -14,49 +13,27 @@ path is to add a DeepSeek API key from the embedded Harness settings.
 
 <Steps>
   <Step title="Open model settings">
-    In the Harness sidebar, open **Settings → Models**. This page belongs to the embedded
-    Harness interface, not the desktop shell's **Configuration** dialog. The desktop provides
-    it through the built-in [DSH Tauri Model Config](../built-in-plugins/dsh-tauri-model-config) plugin.
+    Open **Settings → Models** in the Harness sidebar. The desktop extends this page through the built-in [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) plugin.
   </Step>
-  <Step title="Enter your API key">
-    Find the DeepSeek provider card, enter a key from the
-    [DeepSeek Platform](https://platform.deepseek.com/), and save it.
+  <Step title="Save credentials">
+    Enter an API key from the [DeepSeek Platform](https://platform.deepseek.com/) in the DeepSeek card and save it.
   </Step>
-  <Step title="Select a model">
-    Return to the session composer and choose an available model. The selection becomes
-    the default for new sessions.
-  </Step>
-  <Step title="Send a small test task">
-    Select a workspace and ask Harness to summarize the repository. Model changes apply
-    to the next request; the Harness service does not need to restart.
+  <Step title="Select a model and test">
+    Return to the session composer, choose an available model and workspace, and send a small task such as summarizing the repository. If it fails, check credentials, balance, endpoint, and model name first.
   </Step>
 </Steps>
 
 <Warning>
-  Never paste an API key into a chat message, repository file, screenshot, or issue.
-  Harness stores provider credentials separately and returns only a redacted descriptor
-  to the browser UI.
+  Never put API keys in chat messages, repositories, screenshots, or issues. Model requests send the necessary context to your chosen provider; check its privacy policy and data scope before processing sensitive code.
 </Warning>
 
-## Other providers
+## Other providers and custom endpoints
 
-Choose **Add provider** for an installed provider such as Anthropic or OpenAI. Choose
-**Add custom provider** for an OpenAI-compatible company gateway or self-hosted endpoint.
-Custom providers require a stable lowercase provider ID, base URL, protocol, credential,
-and at least one model.
+| Entry point | What you need |
+| --- | --- |
+| **Add provider** | An installed provider plugin, credentials, and available models |
+| **Add custom provider** | A stable lowercase Provider ID, base URL, protocol, credentials, and at least one model |
 
-<Note>
-  Provider setup is a Harness feature and can evolve independently from the desktop
-  shell. The desktop adds context and output limits, image input, thinking modes, and
-  local-endpoint compatibility options on top of the official page — see
-  [DSH Tauri Model Config](../built-in-plugins/dsh-tauri-model-config). For upstream routing and
-  provider semantics, consult the
-  [upstream model guide](https://deepseek-harness.github.io/deepseek-harness/guide/providers).
-</Note>
+Configure context length, output limits, image input, and thinking modes only when the endpoint supports them. See [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) for local or company gateway compatibility options.
 
-Next, learn the [desktop and Harness interface](../guides/interface).
-
-
-
-
-
+For upstream provider semantics, see the [model configuration guide](https://deepseek-harness.github.io/deepseek-harness/guide/providers). Next, explore the [desktop and Harness interface](../guides/interface).

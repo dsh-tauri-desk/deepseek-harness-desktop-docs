@@ -3,25 +3,20 @@ title: First run
 description: Prepare the local runtime, choose plugins, and open Harness for the first time.
 ---
 
-The initial setup prepares a local Harness service and then loads its web interface
-inside the desktop window.
+First launch prepares the local Harness service, then loads its Web interface in the desktop window. Stay online and keep the app open during downloads and verification.
 
 <Steps>
-  <Step title="Start the application">
-    The desktop app checks for a compatible local Node.js and Harness core. When one is
-    unavailable, it downloads the managed runtime and prebuilt core.
+  <Step title="Prepare dependencies">
+    The desktop checks for compatible runtimes and downloads managed Node.js, pnpm, and a prebuilt Harness core when needed. Supported downloads can use regional fallback sources.
   </Step>
-  <Step title="Wait for setup to finish">
-    Keep the app open while it downloads and verifies the required files. An official
-    GitHub asset is tried first; supported downloads can fall back to a mirror.
-  </Step>
-  <Step title="Choose preset plugins">
-    Select optional integrations from the guided list. You can skip them and revisit
-    plugin management later.
+  <Step title="Choose optional presets">
+    The guide offers six community presets. DSH Market, DSH Better Sidebar, and DSH Rewind are selected by default; deselect or skip them and install later through plugin management. See [Plugins](../guides/plugins) for the full list.
   </Step>
   <Step title="Open Harness">
-    The app starts a loopback-only service, normally at `http://127.0.0.1:3080`, and
-    embeds it in the desktop window.
+    First installation creates and uses the `tauri` profile. The service listens locally by default, with `http://127.0.0.1:3080` as its preferred address; it can use another available port if needed.
+  </Step>
+  <Step title="Configure a model">
+    Add provider credentials in Harness **Settings → Models**, then select a model in the session and send a small test task.
   </Step>
 </Steps>
 
@@ -33,35 +28,26 @@ inside the desktop window.
   <img src="/images/en/first-run-plugins.png" alt="Selecting recommended plugins during first run" />
 </Frame>
 
-## What is installed
+## Current managed components
 
-- A managed Node.js runtime when no compatible system runtime is available.
-- A prebuilt `dsh` distribution published by `deepseek-harness-pkg`.
-- pnpm and, where needed, supporting command-line tools.
-- Required first-party internal plugins.
-- Optional preset plugins you selected.
-- A `dsh` command shim when CLI integration is enabled.
+| Component | Current version or purpose |
+| --- | --- |
+| Desktop | `0.20.0-beta.1` |
+| Harness core | Recommended `0.2.0-rc.2`; minimum accepted `0.1.5-rc.1`, still subject to compatibility rules |
+| Node.js / pnpm | `22.22.0` / `11.7.0` |
+| Built-in plugins | 11 first-party desktop integrations |
+| Optional presets | Only community plugins you approve are installed; they do not count as built-ins |
 
-## Verify the setup
+## Verify setup
 
-Open a **new** terminal after setup and run:
+The window should show the Harness session interface. Release builds enable [CLI integration](../guides/cli-integration) by default; open a **new terminal** and run:
 
 ```bash
 dsh --help
 ```
 
-The terminal must be reopened so it can read the updated `PATH`. The desktop window
-should show the Harness session interface rather than the installer screen.
-
 <Note>
-  If the configured port is busy, the service can choose a higher available port. The
-  app returns to your preferred port on a later launch when it becomes available.
+  The desktop has no LAN toggle. LAN listening in the packaged core requires explicit opt-in with `DSH_PKG_ALLOW_LAN=1`; it does not bypass authentication or tool permissions. Prefer an [SSH tunnel](../built-in-plugins/dsh-tauri-ssh) for remote use, and do not expose the service directly to the public internet.
 </Note>
 
-If setup does not complete, see [Troubleshooting](../help/troubleshooting). Otherwise,
-continue with [Configure a model](./configure-model).
-
-
-
-
-
+See [Troubleshooting](../help/troubleshooting) if downloads or startup fail, or [Configure a model](./configure-model) for model setup.

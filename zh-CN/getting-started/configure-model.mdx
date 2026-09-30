@@ -3,8 +3,7 @@ title: 配置模型
 description: 开始第一个任务前添加 DeepSeek 或兼容的模型供应商。
 ---
 
-Harness 至少需要一个模型供应商才能在会话中响应。最短路径是在嵌入的 Harness 设置中添加
-DeepSeek API 密钥。
+开始任务前，先配置至少一个模型供应商。模型设置位于嵌入的 Harness 界面，不是桌面端的**配置**对话框。
 
 <Frame>
   <img src="/images/zh-CN/model-settings.png" alt="包含 DeepSeek 供应商卡片的 Harness 模型设置" />
@@ -14,40 +13,27 @@ DeepSeek API 密钥。
 
 <Steps>
   <Step title="打开模型设置">
-    在 Harness 侧边栏打开**设置 → 模型**。这是嵌入式 Harness 界面，而不是桌面壳的**配置**对话框。
-    桌面端这一页由内置插件 [DSH Tauri Model Config](../built-in-plugins/dsh-tauri-model-config) 提供。
+    在 Harness 侧边栏打开**设置 → 模型**。桌面端通过内置 [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) 扩展这一页面。
   </Step>
-  <Step title="输入 API 密钥">
-    找到 DeepSeek 卡片，输入来自 [DeepSeek 开放平台](https://platform.deepseek.com/) 的密钥并保存。
+  <Step title="保存凭据">
+    在 DeepSeek 卡片输入来自 [DeepSeek 开放平台](https://platform.deepseek.com/) 的 API 密钥并保存。
   </Step>
-  <Step title="选择模型">
-    返回会话输入区并选择可用模型。该选择会成为新会话的默认模型。
-  </Step>
-  <Step title="发送小型测试任务">
-    选择工作区，让 Harness 概括仓库。模型变化从下一次请求生效，无需重启 Harness 服务。
+  <Step title="选择模型并测试">
+    回到会话输入区，选择可用模型和工作区，发送一个小型任务，例如概括仓库结构。若失败，先检查凭据、余额、端点和模型名称。
   </Step>
 </Steps>
 
 <Warning>
-  不要把 API 密钥粘贴到聊天消息、仓库文件、截图或 Issue 中。Harness 单独存储供应商凭据，
-  浏览器界面只会收到脱敏描述。
+  不要把 API 密钥放入聊天消息、仓库、截图或 Issue。模型请求会把所需上下文发送给你选择的供应商；处理敏感代码前确认其隐私政策与数据范围。
 </Warning>
 
-## 其他供应商
+## 其他供应商与自定义端点
 
-通过**添加供应商**配置 Anthropic、OpenAI 等已安装供应商；通过**添加自定义供应商**配置公司网关或
-自建 OpenAI 兼容端点。自定义供应商需要稳定的小写 Provider ID、基础 URL、协议、凭据和至少一个模型。
+| 入口 | 需要准备 |
+| --- | --- |
+| **添加供应商** | 已安装的供应商插件、对应凭据和可用模型 |
+| **添加自定义供应商** | 稳定的小写 Provider ID、基础 URL、协议、凭据和至少一个模型 |
 
-<Note>
-  供应商配置属于 Harness 功能，可以独立于桌面壳演进。桌面端在官方页面之上补了上下文与输出上限、
-  图片输入、思考模式和本地端点兼容选项，见 [DSH Tauri Model Config](../built-in-plugins/dsh-tauri-model-config)；
-  更上游的路由与供应商语义请参阅
-  [上游模型配置指南](https://deepseek-harness.github.io/deepseek-harness/guide/providers)。
-</Note>
+按端点支持情况配置上下文长度、输出上限、图片输入和思考模式；不要给不支持的模型启用这些能力。本地或公司网关的兼容选项见 [DSH Tauri Model](../built-in-plugins/dsh-tauri-model)。
 
-接下来了解[桌面端与 Harness 界面](../guides/interface)。
-
-
-
-
-
+上游供应商语义见[模型配置指南](https://deepseek-harness.github.io/deepseek-harness/guide/providers)。接下来了解[桌面端与 Harness 界面](../guides/interface)。

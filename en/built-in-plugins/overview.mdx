@@ -3,13 +3,10 @@ title: Built-in plugins overview
 description: Understand the first-party desktop plugins shipped with DeepSeek Harness Desktop and their boundaries.
 ---
 
-DeepSeek Harness Desktop uses a small set of first-party plugins to connect Harness with the
-Tauri shell. They ship with the installer. Before startup, the desktop checks their declarations
-and files and restores inconsistent or missing copies from bundled resources.
+The desktop currently ships 11 first-party plugins as resources. Startup checks restore missing or inconsistent copies.
 
 <Note>
-  Built-in plugins require Harness core **0.1.5-rc.1** or later. Earlier cores do not provide the
-  client API these plugins rely on, so panel plugins will not load.
+  The recommended core is **0.2.0-rc.2**; the desktop's declared compatibility minimum remains **0.1.5-rc.1**. Passing the minimum check does not guarantee every plugin works on an older core.
 </Note>
 
 {/* <!-- [The current built-in plugins and their relationships](/images/en/built-in-plugins-overview.webp) --> */}
@@ -18,49 +15,44 @@ and files and restores inconsistent or missing copies from bundled resources.
 
 <CardGroup cols={2}>
   <Card title="DSH Tauri" icon="arrows-left-right" href="./dsh-tauri">
-    The message bridge between the native navigation bar and embedded Harness client, plus the
-    desktop sidebar panel entry.
+    Desktop bridge, navigation, and panel entries.
   </Card>
   <Card title="DSH Tauri UI" icon="sidebar" href="./dsh-tauri-ui">
-    A desktop settings sidebar with safe fallback when required renderer capabilities are unavailable.
+    Desktop settings with capability-based fallback.
   </Card>
   <Card title="DSH Tauri Worktree" icon="code-branch" href="./dsh-tauri-worktree">
-    Isolates sessions in Git worktrees and checks them back to local branches after user approval.
+    Isolated Git worktrees; checkout needs explicit user approval.
   </Card>
-  <Card title="DSH Tauri Panel Extension" icon="puzzle-piece" href="./dsh-tauri-panel-extension">
-    Provides Skills, skill repository, and MCP management on the `dsh-tauri` panel entry.
+  <Card title="DSH Tauri Extension" icon="puzzle-piece" href="./dsh-tauri-extension">
+    Skills, skill sources, and MCP management.
   </Card>
-  <Card title="DSH Tauri Panel Scheduler" icon="calendar" href="./dsh-tauri-panel-scheduler">
-    Creates scheduled tasks, runs them in independent Agent sessions, and retains run history.
+  <Card title="DSH Tauri Scheduler" icon="calendar" href="./dsh-tauri-scheduler">
+    Scheduled tasks, independent sessions, and run history.
   </Card>
-  <Card title="DSH Tauri Running Changes" icon="file-pen" href="./dsh-tauri-running-changes">
-    Shows the files and `+N -M` line counts changed while an Agent turn runs.
-  </Card>
-  <Card title="DSH Tauri Session" icon="archive" href="./dsh-tauri-session">
-    Manages archived chats and turns workspace deletion into archiving.
+  <Card title="DSH Tauri Archive" icon="archive" href="./dsh-tauri-archive">
+    Chat archiving, restoration, and confirmed deletion.
   </Card>
   <Card title="DSH Tauri Pet" icon="cat" href="./dsh-tauri-pet">
-    Manages Chat / Codex pets, preset downloads, and conversation activity states.
+    Pet resources and session activity states.
   </Card>
   <Card title="DSH Tauri Rightclick Menu" icon="ellipsis" href="./dsh-tauri-rightclick">
-    Adds desktop-wrapper context actions for sessions, workspaces, text, and links.
+    Context actions for sessions, workspaces, text, and links.
   </Card>
-  <Card title="DSH Tauri Model Config" icon="sliders" href="./dsh-tauri-model-config">
-    Provides model parameter settings and endpoint compatibility options.
+  <Card title="DSH Tauri Model" icon="sliders" href="./dsh-tauri-model">
+    Providers, models, and endpoint compatibility settings.
+  </Card>
+  <Card title="DSH Tauri SSH" icon="server" href="./dsh-tauri-ssh">
+    SSH connections, remote installation, and plugin/Skills sync.
+  </Card>
+  <Card title="DSH Tauri Notification" icon="bell" href="./dsh-tauri-notification">
+    Turn completion, approval, and question notifications.
   </Card>
 </CardGroup>
 
-## Why these plugins are built in
+## Distribution and permissions
 
-These capabilities coordinate with desktop windows, navigation, profiles, workspaces, or the
-host filesystem and must be tested with the desktop release. Implementing them as plugins
-preserves Harness's host-half/client-half architecture while giving the desktop project clear
-maintenance and recovery ownership.
+- The current desktop `plugins.built-in` manifest is authoritative. Running Changes is no longer in the built-in set.
+- Community presets are installed separately; the Extensions Skills/MCP panel has no marketplace.
+- “Built in” adds no OS sandbox. Harness and plugins can still execute local code.
 
-<Note>
-  “Built in” means distributed with the desktop installer and ensured at startup. It does
-  not create an additional operating-system sandbox. The plugins still run with capabilities
-  allowed by Harness and the desktop application.
-</Note>
-
-Source is available in the [`packages/`](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages) directory of the desktop repository.
+[Plugin management](../guides/plugins) · [Current source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages)

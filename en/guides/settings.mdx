@@ -3,64 +3,45 @@ title: Desktop settings
 description: Configure the local service, zoom, CLI integration, profiles, plugins, and core engine.
 ---
 
-Open **Configuration** from the desktop title bar. These settings control the native
-shell and local Harness service; model providers and agent behavior remain in the
-embedded Harness **Settings**.
+Open **Configuration** in the desktop title bar. Model providers, tools, and agent behavior remain in the embedded Harness **Settings**.
 
 <Frame>
   <img src="/images/en/desktop-settings.png" alt="Desktop Configuration dialog open on Debug" />
 </Frame>
 
-## Debug panel
+## Application
 
-| Setting or status | What it means | Restart required |
-| --- | --- | --- |
-| Service URL | The loopback URL currently loaded by the desktop window | No |
-| Port | Preferred Harness service port; release default is `3080` | Yes |
-| Interface zoom | Scale of the desktop and embedded interface | No |
-| CLI integration | Add or remove the desktop `dsh` shim for new terminals | Open a new terminal |
-| Connection status | Whether the desktop shell can reach Harness | No |
-| Versions | Desktop, Harness core, and Node.js runtime versions | No |
-| Data directory | Opens the application data directory | No |
-| Service logs | Shows startup and runtime output for diagnosis | No |
+| Setting or status | Purpose and when it applies |
+| --- | --- |
+| Service address and connection status | View the actual address; local access by default, with preferred port `3080` |
+| Port | Restart Harness when prompted after saving; another available port may be used if it is busy |
+| Memory limit | Use automatic management or set Harness's Node.js heap limit; restart the service after changes |
+| Language and interface zoom | Adjust the desktop interface; zoom range `50%–200%` |
+| CLI integration | Release builds enable the managed `dsh` shim by default; open a new terminal after changes |
+| Launch on login and close behavior | Closing the window hides it to the tray by default; you can change this to quit |
+| Versions, data directory, and logs | View running components, open directories, or copy diagnostic information |
 
-When you save a changed port, the app asks whether to restart Harness immediately. If
-the selected port is unavailable, startup can use another free port.
+The desktop has no LAN setting. Packaged-core LAN opt-in does not replace authentication or permissions; see [Data, privacy, and security](../help/data-and-privacy). See [CLI integration](./cli-integration) for PATH and shell configuration changes.
 
 ## Profiles
 
-Profiles are isolated sets of Harness plugins, patches, and settings. The default desktop
-profile is `web`.
+First installation uses `tauri`; `web` is the built-in fallback profile. Profiles manage configuration, plugins, and patches, not operating system isolation.
 
-<Steps>
-  <Step title="Create a profile">
-    Open **Profiles**, enter a short name, and choose **Create**.
-  </Step>
-  <Step title="Activate it">
-    Select the profile and confirm the switch. Restart Harness when prompted.
-  </Step>
-  <Step title="Delete only when finished">
-    Deleting a profile also deletes its profile-specific plugins and settings and cannot
-    be undone. Workspaces and files outside the profile are not deleted.
-  </Step>
-</Steps>
+1. Create or clone a profile in **Profiles**, using a short ASCII name.
+2. Select it, confirm the switch, and restart the service when prompted.
+3. Back up before modifying or deleting it; prefer **Restore as a new profile** to test recovery.
+
+<Warning>
+  Resetting, deleting, or restoring over a profile changes its data. Back up first and confirm the recovery scope. Profile backups do not replace workspace or complete session-data backups.
+</Warning>
 
 ## Plugins and core engine
 
-The **Plugins** panel is intentionally focused on status and recovery: inspect abnormal
-plugins, upgrade them, or uninstall optional ones. The **Core Engine** panel manages
-local and app-prebuilt Harness versions, including download, switch, update, open folder,
-and uninstall actions.
+| Panel | Common actions |
+| --- | --- |
+| **Plugins** | Inspect sources, versions, and errors; install, upgrade, or remove optional plugins, and use explicit recovery actions |
+| **Core Engine** | Download compatible versions, select a source, and switch; the desktop and Harness core update separately |
 
-<Warning>
-  Do not delete a profile or core as the first troubleshooting step. Copy the run log,
-  identify whether the problem belongs to a plugin or service, and back up important
-  Harness data before destructive actions.
-</Warning>
+Do not delete a profile or core as the first troubleshooting step. Copy logs first and determine whether the issue concerns dependencies, a plugin, the service, or a model.
 
-For exact storage locations, see [Data, privacy, and security](../help/data-and-privacy).
-
-
-
-
-
+See [Profiles and cores](./profiles-and-cores) for version and profile details or [Data, privacy, and security](../help/data-and-privacy) for storage locations.

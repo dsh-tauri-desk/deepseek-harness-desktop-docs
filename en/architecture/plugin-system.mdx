@@ -18,16 +18,21 @@ The desktop app adds lifecycle management and a controlled bridge to native feat
 | Desktop manager | Installs, upgrades, removes, repairs, and reports plugin state |
 | Profile | Owns its plugin declarations and configuration |
 
-## Internal plugin lifecycle
+## Built-in plugins and recovery
 
-Before Harness starts, the desktop workflow ensures required first-party integrations
-exist in the active profile. Missing or inconsistent declarations are restored from the
-copies bundled with the application. This makes native settings and panel features
-available even after an interrupted update.
+Before Harness starts, the desktop checks the active profile and restores missing integrations or outdated paths from bundled copies. Failures are logged.
+The built-in bridge can recover automatically, but first-time preparation of runtimes, the core, and selected community plugins still needs network access.
 
-Optional preset and community plugins follow normal install, upgrade, and uninstall
-flows. The Windows Minimal repair plugin is fetched from GitHub when selected; it is not
-bundled source.
+The current [release manifest](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc) contains 11 built-in packages:
+
+| Role | Built-in packages |
+| --- | --- |
+| Native bridge and UI | `dsh-tauri`, `dsh-tauri-ui` |
+| Workspaces and sessions | `dsh-tauri-worktree`, `dsh-tauri-archive`, `dsh-tauri-rightclick` |
+| Configuration and connections | `dsh-tauri-extension`, `dsh-tauri-model`, `dsh-tauri-ssh` |
+| Background and system features | `dsh-tauri-scheduler`, `dsh-tauri-pet`, `dsh-tauri-notification` |
+
+Preset and community plugins are installed, upgraded, or removed as needed. `running-changes` is not shipped in this release. `dsh-win-terminal-inspector` is deprecated and startup attempts to remove it automatically; it is no longer an optional Minimal repair choice.
 
 ## Communication path
 
@@ -43,8 +48,3 @@ bundled source.
 </Warning>
 
 For user-facing operations, see [Plugins](../guides/plugins).
-
-
-
-
-

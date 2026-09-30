@@ -1,0 +1,33 @@
+---
+title: DSH Tauri Notification
+description: Configure desktop notifications for completed turns, permission approvals, and questions.
+---
+
+`dsh-tauri-notification` sends Harness events through the native desktop notification bridge. Adjust reminders and sounds in **Settings**.
+
+## Notification settings
+
+| Setting | Behavior |
+| --- | --- |
+| Completed turns | Never, only when not focused (default), or always |
+| Permission approvals / questions | Separate switches, on by default; not disabled by “Never” for completed turns |
+| Not focused | The window is in the background, or you are viewing another session |
+| Sound | Default, classic, none, or custom |
+| Custom sound | Audio file up to `512 KB`; removing it restores the default sound |
+
+By default, reminders are suppressed when the window is foregrounded and you are viewing the matching session. “Always” removes this suppression.
+
+## Handle a notification
+
+- Click a notification to return to its session.
+- Where supported, approve, reject, or answer directly; Windows supports text replies inside notifications.
+- If the platform or action does not support this, complete the action in the session UI.
+- Stale approvals and questions do not submit old answers; multi-question forms collect all answers before submission.
+
+## Data and boundaries
+
+- Settings and custom sound data use the current WebView's `dsh-tauri-notification` local storage namespace, not a separate backup file.
+- Clicks and actions depend on the desktop bridge, host service, and session APIs. OS notification policies may still suppress delivery.
+- Notifications may show response summaries, commands, or questions. Consider sensitive content on shared screens and lock screens.
+
+[Settings guide](../guides/settings) · [Source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-notification)

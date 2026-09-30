@@ -3,38 +3,43 @@ title: DSH Tauri
 description: 了解原生桌面导航栏与嵌入式 Harness 客户端之间的消息桥。
 ---
 
-`dsh-tauri` 是桌面壳的基础桥接插件。它的 host half 不添加业务行为；client half 运行在 Harness iframe 中，
-把原生窗口导航转换为 Harness 布局与浏览器历史操作。
+`dsh-tauri` 连接原生桌面壳、Harness 宿主与内嵌客户端。桌面导航、账号授权浏览器和其他插件的原生调用都依赖这层桥接。
 
 <Frame>
   <img src="/images/zh-CN/workspaces-sessions.png" alt="原生导航栏与嵌入式 Harness 工作区" />
 </Frame>
 
-## 用户可见能力
+## 从桌面入口使用 Harness
 
-- 原生顶部栏可以展开或收起 Harness 侧边栏。
-- 后退与前进按钮控制嵌入页面的浏览历史。
-- 按钮会根据历史边界自动禁用。
-- 官方重复的折叠控件会隐藏，避免两个入口表达同一操作。
+| 入口 | 结果 |
+| --- | --- |
+| 顶部栏侧栏开关 | 展开或收起 Harness 侧栏，并回报折叠状态；隐藏重复的客户端折叠控件。 |
+| 文件 → 新聊天 | 调用 Harness 的会话入口。 |
+| 文件 → 打开文件夹 | 选择目录、创建工作区，并在该工作区打开会话。 |
+| 显示键盘快捷键 | 打开官方快捷键弹层；核心提供快捷键目录时，菜单提示会跟随自定义键位更新。 |
+| `Ctrl` / `Cmd` + `+`、`-`、`0` | 即使焦点在 iframe 中，也将缩放操作交给原生窗口处理。 |
+| 账号登录 | 账号能力可用时，在系统默认浏览器打开 `http` / `https` 授权地址。 |
 
-## 状态同步
+## 给插件提供的接口
 
-插件向桌面宿主回报侧边栏折叠状态、是否可以后退和是否可以前进。插件自身发生异常时也会报告宿主，
-避免原生按钮保留在界面中却静默失效。
+| 导入入口 | 提供的能力 |
+| --- | --- |
+| `dsh-tauri` | 宿主运行时、`defineRoutes`、`defineService` 及进程、文件和系统打开工具。宿主侧并非空实现。 |
+| `dsh-tauri/client` | 布局与会话适配器、父窗口消息、Tauri `invoke` / `listen` 和面板注册。 |
 
-## 面板入口
+面板通过 `definePanel(ctx, entry)` 注册。`PanelEntry` 包含 `id`、`label`、`icon`、`render`，可选 `order` 与 `locale`；入口注册到 `sidebar.panellist`，内容注册到 `main`。返回的 `PanelHandle` 提供 `select()`、`close()` 和 `dispose()`。
 
-client half 还提供桌面侧栏的面板入口：插件调用 `definePanel(ctx, entry)` 注册一个 `PanelEntry`
-（`id`、`label`、`icon`、`render`，可选 `order` 与 `locale`）。条目注册进侧栏面板列表槽
-`sidebar.panellist`，`render` 注册进主区域槽 `main`；返回的 `PanelHandle` 提供 `select()`、
-`close()` 和 `dispose()`。`dsh-tauri-panel-extension` 与 `dsh-tauri-panel-scheduler` 都通过该入口注册面板。
+当前的 [`dsh-tauri-extension`](./dsh-tauri-extension) 与 [`dsh-tauri-scheduler`](./dsh-tauri-scheduler) 使用这一入口。已移除的 `dsh-tauri-panel` 的 `panel.protocol` 与 `sidebar.panel.action` 不提供兼容路径。
 
-该入口与其他内置插件共用同一基线，要求 Harness 内核 **0.1.5-rc.1** 或更高版本。旧版 `dsh-tauri-panel` 的 `panel.protocol`
-反射服务与 `sidebar.panel.action` 槽已随包移除，不提供兼容路径。
+## 兼容与安全边界
 
-## 边界
+- 当前桌面推荐 Harness **0.2.0-rc.2**，接受的最低版本为 **0.1.5-rc.1**。最低版本不保证每项 API 都存在；适配取决于实际服务与能力探测。
+- 宿主仅在桌面注入 `DSH_TAURI_EMBEDDED=1` 时启用内嵌载体鉴权适配。独立启动的 `dsh web` 继续使用 browser-session 鉴权。
+- Tauri 调用经父窗口消息转发。桌面壳核对 iframe 来源与 origin，只执行白名单命令；缺少宿主桥时调用会失败，不会自动获得其他原生权限。
+- 客户端桥只在嵌入环境启用。插件缺失或初始化失败时，依赖它的桌面导航与原生调用没有通用替代路径。
 
-`dsh-tauri` 只负责导航消息、面板入口与状态，不管理 Profile、内核、插件安装或文件系统。
-缺少该插件时，Harness 本身仍可运行，但桌面顶部栏不会显示依赖消息桥的导航按钮。
+<Warning>
+  消息校验不是执行沙箱。Harness 和插件可以执行本地代码；Profile 不是操作系统沙箱。
+</Warning>
 
 [查看源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri)

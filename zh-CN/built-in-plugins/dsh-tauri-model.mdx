@@ -1,0 +1,32 @@
+---
+title: DSH Tauri Model
+description: 添加模型提供商并配置模型参数与端点兼容选项。
+---
+
+在**设置 → 模型**使用 `dsh-tauri-model` 管理提供商、凭证与模型；它替代官方模型设置入口。
+
+{/* <!-- [模型设置页中的容量输入、图片输入与思考模式开关](/images/zh-CN/dsh-tauri-model-config.png) --> */}
+
+## 配置模型
+
+1. 选择内置目录中的提供商，或添加自定义模型 API。
+2. 填写 API 密钥；自定义 API 还需设置 Base URL 与至少一个模型 ID。
+3. 手动添加模型或**获取可用模型**，检查上下文、输出上限和能力。
+4. 保存后在会话中选择模型，发送测试消息。
+
+| 选项 | 行为 |
+| --- | --- |
+| 获取配置 | 为单个模型补空缺，不覆盖已填写值 |
+| 自动配置所有模型 | 用端点披露的容量覆盖旧值；未披露字段保持不动 |
+| 图片与思考能力 | 参考在线能力表，离线回退缓存或命名规则；可手动修改 |
+| 关闭 Developer 角色 | 仅显式使用 `openai-completions` 的路由显示 |
+| 打开配置文件 | 打开设置文件；不存在时打开所在目录 |
+
+## 数据与边界
+
+- 配置写入 Harness 设置；能力表缓存位于 `$DSH_HOME/dsh-tauri-model/`。
+- **打开配置文件**使用 `$DSH_HOME/settings.yaml`，未设置时为 `~/.dsh/settings.yaml`；不识别自定义 `settings-file`。
+- 自动配置需要访问提供方端点或在线能力表，不保证结果准确。
+- 不应与官方模型设置入口同时启用；不要在截图或问题报告中公开 API 密钥。
+
+[配置模型教程](../getting-started/configure-model) · [源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-model)

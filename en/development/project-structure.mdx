@@ -9,17 +9,19 @@ separating platform services by responsibility.
 ```text
 deepseek-harness-desktop/
 ├── src/                    # React frontend
+├── packages/               # First-party plugins and shared packages
 ├── src-tauri/
 │   ├── src/
 │   │   ├── bridge/         # Tauri command boundary
 │   │   ├── config/         # Paths, constants, and settings
 │   │   ├── desktop/        # Native windows and webviews
 │   │   ├── service/        # Runtime and desktop services
-│   │   └── task/           # Long-running task orchestration
-│   ├── resources/          # Bundled runtime-facing resources
+│   │   └── task/           # Periodic task entry points
+│   ├── resources/          # Runtime manifest and bundled plugin outputs
+│   ├── vendor/             # Patched native dependencies
 │   └── tauri.conf.json
-├── scripts/                # Build and maintenance scripts
-├── test/                   # Frontend tests and fixtures
+├── scripts/                # Plugin build, maintenance, and release scripts
+├── test/                   # Unit, plugin, and desktop E2E tests
 ├── docs/                   # In-repository engineering notes
 └── .github/workflows/      # CI and release pipelines
 ```
@@ -44,12 +46,14 @@ not bypass that boundary.
 | Change | Start here |
 | --- | --- |
 | React view or state | `src/` |
+| First-party plugins | `packages/` |
 | Native command contract | `src-tauri/src/bridge/` |
 | Paths or persisted settings | `src-tauri/src/config/` |
 | Window or webview behavior | `src-tauri/src/desktop/` |
 | Core, profile, plugin, CLI, or update behavior | `src-tauri/src/service/` |
-| Long-running orchestration | `src-tauri/src/task/` |
-| CI or packaging | `.github/workflows/`, `src-tauri/tauri.conf.json` |
+| Startup, restart, and process orchestration | `src-tauri/src/service/workflow/` |
+| Periodic status checks | `src-tauri/src/task/` |
+| CI or packaging | `.github/workflows/`, [Tauri configuration](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/tauri.conf.json) |
 
 Keep operating-system differences behind focused Rust services and preserve the release
 and debug isolation model when adding paths, ports, or stores.

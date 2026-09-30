@@ -3,75 +3,41 @@ title: Interface tour
 description: Find sessions, model settings, desktop configuration, logs, and window controls.
 ---
 
-DeepSeek Harness Desktop combines two interfaces: the Harness workspace inside the
-window and a thin desktop shell around it. Knowing the boundary makes settings and
-troubleshooting easier to find.
+The **Harness workspace** inside the window handles agent tasks; the native **desktop shell** manages the local service and system integration. Choose the entry point for your task.
 
 <Frame>
   <img src="/images/en/workspaces-sessions.png" alt="Desktop shell and embedded Harness workspace" />
 </Frame>
 
-## Harness workspace
+## Common entry points
 
-The embedded Harness interface owns your everyday agent workflow:
-
-- the sidebar and session history;
-- workspace selection;
-- model selection and **Settings → Models**;
-- the prompt composer, attachments, approvals, tool activity, and results;
-- Harness plugins that contribute panels or actions.
-
-Start here when your task involves a repository, model, conversation, or agent behavior.
-
-## Desktop shell
-
-The native top bar surrounds Harness and provides:
-
-| Control | What it does |
+| Task | Where to go |
 | --- | --- |
-| Sidebar, Back, Forward | Controls the embedded Harness navigation when the Tauri integration is available |
-| **Configuration** | Opens Debug, Profiles, Plugins, and Core Engine panels |
-| **Help → Run logs** | Copies the desktop and service run log for troubleshooting |
-| **Help → Check for updates** | Checks the native desktop application for a newer release |
-| **Help → About Desktop** | Shows desktop version, release date, source, and platform details |
-| Window controls | Minimizes, maximizes, or hides the app to the system tray |
+| Select a workspace, create a session, or send a task | Harness sidebar and composer |
+| Switch models or manage tools, Skills, or MCP | Harness **Settings** |
+| Review tool activity, approvals, and results | Current Harness session |
+| Configure the app, profiles, plugins, or core | **Configuration** in the desktop title bar |
+| Copy runtime logs | **Help → Run logs** |
+| Check desktop updates | **Help → Check for updates** |
+| View desktop version and source | **Help → About Desktop** |
 
-On macOS, related actions are available from the native application menu and the system
-traffic-light controls. Hiding or closing the visible window can leave the local service
-running in the tray.
+The top bar also provides sidebar, back, forward, and window controls. On macOS, use the native menu and traffic-light buttons.
 
-## Configuration panels
+## Desktop configuration
 
 <Frame>
   <img src="/images/en/desktop-settings.png" alt="Desktop Configuration dialog with Debug, Profiles, Plugins, and Core panels" />
 </Frame>
 
-<AccordionGroup>
-  <Accordion title="Debug">
-    View the service URL, connection state, port, zoom, CLI integration, versions, data
-    directory, and service logs. Port changes take effect after a service restart.
-  </Accordion>
-  <Accordion title="Profiles">
-    Create, activate, or delete isolated Harness profiles. Switching changes the profile's
-    plugins and settings and requires a restart.
-  </Accordion>
-  <Accordion title="Plugins">
-    Review installed plugins, inspect abnormal status, and upgrade or uninstall a plugin
-    when troubleshooting. It is primarily a health and recovery panel.
-  </Accordion>
-  <Accordion title="Core Engine">
-    Download, switch, update, open, or remove local and app-managed Harness core versions.
-  </Accordion>
-</AccordionGroup>
+| Panel | Purpose |
+| --- | --- |
+| **Application** | Service address and status, port, memory, zoom, CLI integration, launch on login, close behavior, versions, and data directory |
+| **Profiles** | Create, clone, switch, back up, or delete a Harness configuration environment |
+| **Plugins** | Inspect installed plugins, errors, and recovery actions; manage optional plugins |
+| **Core Engine** | Download, switch, or remove compatible Harness cores |
 
-<Tip>
-  Use **Harness Settings** for models and agent behavior. Use desktop
-  **Configuration** for the local service, profiles, plugin health, and core versions.
-</Tip>
+<Note>
+  Closing the main window hides it to the tray by default, leaving the service running. Change this to quit in **Application**. Profiles separate configuration and plugins; they are not operating system sandboxes.
+</Note>
 
-Continue with [Workspaces and sessions](./workspaces-and-sessions).
-
-
-
-
-
+See [Desktop settings](./settings) for options or [Workspaces and sessions](./workspaces-and-sessions) for the task workflow.

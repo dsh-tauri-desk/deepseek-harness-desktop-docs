@@ -77,7 +77,7 @@ Do not maintain the built-in plugin list from memory.
    - repair all links and comparison claims.
 6. For renamed or merged plugins, migrate both locale paths and verify language page keys remain identical.
 
-Current documentation may cover `dsh-tauri`, `dsh-tauri-ui`, `dsh-tauri-worktree`, `dsh-tauri-panel-extension`, and `dsh-tauri-panel-scheduler`, but this list is not permanent. Re-discover it every time.
+Read `plugins.built-in` for current IDs; do not use renamed or deprecated package names as the inventory.
 
 ### Desktop releases and platform support
 
@@ -96,7 +96,7 @@ The comparison tracks:
 - <https://github.com/dsh-tauri/deepseek-harness-desktop>
 - <https://github.com/anywhere-labs/dsh-desktop>
 - <https://github.com/dataelement/dsh-desktop>
-- <https://github.com/zouyuxuan122/Deepseek-Harness-EAC>
+- <https://github.com/DSH-EAC/DSH-Desktop-EAC>
 
 Every comparison refresh must:
 

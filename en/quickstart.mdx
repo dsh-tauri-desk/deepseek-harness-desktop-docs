@@ -1,54 +1,50 @@
 ---
 title: Quickstart
-description: Run DeepSeek Harness locally in a lightweight, zero-setup desktop app.
+description: Install the desktop app, configure a model, and start your first local task.
 ---
 
-DeepSeek Harness Desktop packages the local runtime, Harness core, plugin management,
-and updates behind a native Tauri shell. Install it and start working—without setting
-up Node.js, pnpm, or Docker yourself.
+DeepSeek Harness Desktop manages the local Harness service, runtimes, profiles, and plugins. You do not need to install Node.js, pnpm, or Docker manually. First launch usually downloads dependencies; configure a model provider before starting a task.
 
 <Frame>
   <img src="/images/en/home-overview.png" alt="DeepSeek Harness Desktop overview" />
 </Frame>
 
+## Start your first task
+
 <CardGroup cols={3}>
   <Card title="Install" icon="download" href="./installation">
-    Choose the right installer for Windows, macOS, or Linux.
+    Choose a release asset for your platform and architecture.
   </Card>
   <Card title="First run" icon="play" href="./getting-started/first-run">
-    Let the app prepare its local runtime and open Harness.
+    Download dependencies, choose optional plugins, and open Harness.
   </Card>
-  <Card title="Understand the architecture" icon="diagram-project" href="./architecture/overview">
-    Learn how the Tauri shell, Harness service, and plugins fit together.
+  <Card title="Configure a model" icon="sliders" href="./getting-started/configure-model">
+    Add provider credentials, select a model, and send a test task.
   </Card>
 </CardGroup>
 
-## What the desktop app adds
+## Know the two settings entry points
 
-- A native, lightweight Tauri 2 shell around the local Harness web interface.
-- Guided runtime and Harness core installation with regional download fallbacks.
-- Profile, core, and plugin controls in one bilingual interface.
-- A registered `dsh` command for new terminal sessions.
-- Built-in first-party desktop integrations and optional preset plugins.
-- Desktop and Harness core updates without rebuilding your environment.
+| Entry point | What it manages |
+| --- | --- |
+| Harness **Settings** | Models, tools, Skills, MCP, and task configuration |
+| Desktop **Configuration** | Application behavior, profiles, plugins, the Harness core, and updates |
+
+First installation uses the `tauri` desktop profile. Release builds enable [CLI integration](./guides/cli-integration) by default; open a new terminal to run `dsh --help`.
 
 <Warning>
-  Harness can execute code on your computer. Use trusted repositories and plugins,
-  review requested permissions, and prefer isolated workspaces for untrusted code.
+  Harness and plugins can execute local code. Use trusted repositories and plugins, and review tool permissions. Profiles and Git worktrees are not operating system sandboxes; use a separate user, container, or virtual machine for untrusted code.
 </Warning>
 
-## Choose your path
+## Next steps
 
 <CardGroup cols={2}>
-  <Card title="I want to use the app" icon="desktop" href="./guides/workspaces-and-sessions">
-    Learn the everyday workflow for sessions, profiles, cores, and plugins.
+  <Card title="Everyday use" icon="desktop" href="./guides/workspaces-and-sessions">
+    Create workspaces and sessions, and choose models and worktrees for each task.
   </Card>
-  <Card title="I want to contribute" icon="code-pull-request" href="./development/setup">
-    Set up the React 19 and Rust/Tauri development environment.
+  <Card title="Contribute" icon="code-pull-request" href="./development/setup">
+    Prepare a desktop source development environment.
   </Card>
 </CardGroup>
 
-
-
-
-
+See [Architecture overview](./architecture/overview) for implementation boundaries or [Troubleshooting](./help/troubleshooting) if startup fails.

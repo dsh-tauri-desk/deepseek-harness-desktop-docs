@@ -3,58 +3,46 @@ title: Build and release
 description: Build platform installers and understand the automated release pipeline.
 ---
 
-Tauri packages the compiled React frontend, Rust backend, and bundled resources into
-platform-native installers. Releases are produced by GitHub Actions for reproducibility.
+Tauri packages the React frontend, Rust backend, and bundled resources into native installers. GitHub Actions runs the release pipeline.
 
 ## Local build
 
+Prepare the toolchain in [Development setup](./setup), then run:
+
 ```bash
 pnpm install --frozen-lockfile
+pnpm build:plugins
 pnpm typecheck
 pnpm lint
-pnpm test -- --run
+node node_modules/vitest/vitest.mjs run --project unit
 pnpm tauri build
 ```
 
-`pnpm tauri build` invokes the configured frontend build before compiling and bundling
-the Rust application. Platform bundles can only be built on compatible operating
-systems and require their native signing tools.
+`pnpm tauri build` uses `pnpm build` to build plugins and the frontend before compiling and bundling Rust. Complete the E2E and Rust checks in [Testing and quality checks](./testing); platform bundles require a compatible OS and its signing tools.
 
-## CI artifacts
+## Current release artifacts
 
-The current public release is `v0.11.3` (2026-09-10). Its Release page provides these actual files:
+The current desktop source is `0.20.0-beta.1`. The [`v0.20.0-beta.1` prerelease](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.20.0-beta.1) provides these installers:
 
-| Platform | Output |
+| Platform | Release assets |
 | --- | --- |
-| Windows x64 | `x64-setup.exe`, plus English and Simplified Chinese `.msi` installers |
+| Windows x64 | `.exe`, plus English and Simplified Chinese `.msi` installers |
 | macOS Apple Silicon | `aarch64.dmg` |
 | macOS Intel | `x64.dmg` |
-| Linux x64 | `amd64.AppImage`, `amd64.deb` |
+| Linux x64 | `.AppImage`, `.deb` |
 
-These files establish the distribution coverage of the current release; do not infer support for architectures that are not listed.
+The separate stable release is [`v0.19.1`](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.19.1). Do not label the prerelease stable or infer unreleased architectures from source code or CI targets.
 
 {/* <!-- [GitHub Actions release pipeline](/images/en/release-pipeline.webp) --> */}
 
 ## Release flow
 
-<Steps>
-  <Step title="Prepare the version">
-    Align package and Tauri metadata, release notes, and user-facing documentation.
-  </Step>
-  <Step title="Run quality gates">
-    Complete frontend type checking, linting, Vitest, and the cross-platform Rust matrix.
-  </Step>
-  <Step title="Build platform artifacts">
-    The release workflow fans out to Windows, macOS architectures, and Ubuntu 22.04.
-  </Step>
-  <Step title="Verify trust metadata">
-    macOS jobs validate signing, stapling, and Gatekeeper assessment. Apply equivalent
-    verification for other signed artifacts.
-  </Step>
-  <Step title="Publish the GitHub release">
-    Finalization gathers artifacts and publishes the release for a `v*` version.
-  </Step>
-</Steps>
+The [release workflow](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/.github/workflows/release.yml) runs for a `v*` tag, a merged `release/*` PR from the same repository, or a manual trigger. Manual runs produce test prereleases.
+
+1. Align package, Cargo, and Tauri versions, release notes, and both documentation languages.
+2. Complete frontend type checking, linting, the three test layers, and cross-platform Rust checks.
+3. Build Windows, both macOS architectures, and Linux x64 artifacts in parallel; verify signing, notarization, and installation behavior.
+4. A single publishing job gathers successful outputs. Prereleases are marked accordingly; only stable releases update latest.
 
 <Warning>
   Never expose signing certificates, notarization credentials, or update keys in logs,

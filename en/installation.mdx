@@ -5,73 +5,56 @@ description: Choose a version and install DeepSeek Harness Desktop on Windows, m
 
 import { ReleaseDownloads } from "/snippets/downloads.jsx"
 
-The desktop installer stays lightweight: on first launch the app downloads a compatible Node.js runtime and a prebuilt Harness core itself. The offline Bundle installers ship both inside the package.
+Download an installer for your platform and architecture. Standard installers download compatible runtimes and a prebuilt Harness core on first launch; you do not need to configure Node.js, pnpm, or Docker yourself.
 
 ## Choose a version and download
 
 <ReleaseDownloads lang="en" />
 
 <Note>
-  Installers come directly from GitHub Releases; this page neither mirrors nor caches files. A scheduled workflow in this repository syncs the version list from the release page, so it can lag by up to an hour; treat the [release page](https://github.com/dsh-tauri/deepseek-harness-desktop/releases) as the source of truth.
+  The current stable version is `0.19.1`; the beta is `0.20.0-beta.1`. Assets come from GitHub Releases, and automatic synchronization can lag. Use the files listed on the [release page](https://github.com/dsh-tauri/deepseek-harness-desktop/releases) as the source of truth. Not every version has a Bundle, and `0.20.0-beta.1` has none; do not assume first launch can finish offline.
 </Note>
 
-## Installer types
+## Systems and installers
 
-| Platform | Installer | When to use it |
+These are the actual `0.20.0-beta.1` release assets and system requirements:
+
+| Platform | Requirements and architecture | Installer |
 | --- | --- | --- |
-| Windows | `*-setup.exe` | Default choice, NSIS installer |
-| Windows | `*_x64_en-US.msi`, `*_x64_zh-CN.msi` | When MSI distribution is required, such as enterprise deployment |
-| macOS | `*_aarch64.dmg` | Apple Silicon (M-series) |
-| macOS | `*_x64.dmg` | Intel |
-| Linux | `*_amd64.deb` | Debian, Ubuntu, and similar distributions with fuller system integration |
-| Linux | `*_amd64.AppImage` | No installation required, runs as a single file |
+| Windows | Windows 10+, WebView2; x64 | `.exe` / `_x64_en-US.msi` / `_x64_zh-CN.msi` |
+| macOS | macOS 12+; the Web interface needs Safari 17.4+ capabilities; Apple Silicon / Intel | `_aarch64.dmg` / `_x64.dmg` |
+| Linux | x64; WebKit2GTK 4.1 runtime | `.deb` / `.AppImage` |
 
-### Offline Bundle installers
+Available architectures and installer types depend on the selected release's actual assets. Git features such as worktrees also require Git installed on your system.
 
-Releases also ship `Deepseek.Harness.Desktop_Bundle_<version>`: Windows `.exe`, macOS `_x64.dmg` / `_aarch64.dmg`, and Linux `.deb`. The Node.js runtime and Harness core travel with the package, so **the first launch after installation needs no network** — useful on intranets and allowlisted networks. Presets and community plugins still need network access, and Git-backed features such as worktrees need Git installed. On Linux the bundled resources live under `/usr/lib` inside the `.deb`; when installed as root, fix that directory's permissions.
-
-You can also install on macOS with Homebrew:
+On macOS, you can also use Homebrew:
 
 ```bash
 brew install dsh-tauri/desktop/deepseek-harness
 ```
 
-## System requirements
-
-| Platform | Requirement |
-| --- | --- |
-| Windows | Windows 10 or later |
-| macOS | macOS 10.15 or later |
-| Linux | Modern 64-bit distribution |
-
-The standard installers require a network connection on first launch; the offline Bundle installers do not. After setup, normal work remains local unless a model provider, plugin, or update needs network access. Built-in plugins require Harness core **0.1.5-rc.1** or later.
-
 ## Install and launch
 
-Run the installer you downloaded, then open **DeepSeek Harness Desktop** from your application menu.
+1. Run the installer; allow file execution first if using AppImage.
+2. Open **DeepSeek Harness Desktop** from the application menu.
+3. Keep the app open and stay online while completing [First run](./getting-started/first-run).
 
-## Platform notes
+Model requests, plugin installation, and updates may still need network access. Local execution does not mean an entirely offline workflow.
+
+## Platform issues
 
 <AccordionGroup>
-  <Accordion title="Windows security prompt">
-    Confirm that the installer came from the official GitHub Release. The application
-    uses WebView2, which is included with supported Windows versions.
+  <Accordion title="Windows security prompt or missing WebView2">
+    Confirm the installer came from the official Release. If WebView2 is missing, install Microsoft's WebView2 Runtime and retry.
   </Accordion>
-  <Accordion title="macOS blocks the first launch">
-    Verify the download source, then allow the application from
-    **System Settings → Privacy & Security**.
+  <Accordion title="macOS blocks first launch">
+    Verify the download source, then allow the app in **System Settings → Privacy & Security**. Even when macOS meets the minimum version, check WebView compatibility too.
   </Accordion>
   <Accordion title="Black window on Linux Wayland">
-    Prefer `.deb`. If the AppImage still shows a black window, try:
+    Try `.deb` first. If AppImage still shows a black window, try:
     ```bash
     WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_DMABUF_RENDERER=1 GDK_BACKEND=x11 ./Deepseek*.AppImage
     ```
+    See [Troubleshooting](./help/troubleshooting) for more startup, permission, and display issues.
   </Accordion>
 </AccordionGroup>
-
-<Note>
-  Released users do not need to install Node.js, pnpm, or Docker. These tools are only
-  required when developing the desktop application from source.
-</Note>
-
-Continue with [First run](./getting-started/first-run).

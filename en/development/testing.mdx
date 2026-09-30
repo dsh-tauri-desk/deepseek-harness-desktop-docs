@@ -3,55 +3,51 @@ title: Testing and quality checks
 description: Run frontend, Rust, and cross-platform checks before submitting a change.
 ---
 
-Run the fastest relevant checks while developing, then complete the full frontend and
-Rust suites before submitting a pull request.
+Run the fastest relevant checks while developing. Before a pull request, add real-process and platform tests for the behavior you changed.
 
-## Frontend checks
+## JavaScript checks
+
+Prepare workspace build outputs on a fresh checkout. See the [CI workflow](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/.github/workflows/ci.yml) for dependency and E2E setup.
 
 ```bash
+pnpm build:plugins
 pnpm typecheck
 pnpm lint
-pnpm test -- --run
+node node_modules/vitest/vitest.mjs run --project unit
 ```
 
-Vitest covers frontend logic and components. Keep tests deterministic and avoid relying
-on a running release service unless the test explicitly owns that lifecycle.
+| Script | Scope | Additional preparation |
+| --- | --- | --- |
+| `test:unit` | Vitest unit and component tests | Shared-package and plugin build outputs |
+| `test:e2e:plugin` | L2: real Harness and Chromium | Plugin outputs, Chromium, isolated Harness runtime |
+| `test:e2e:desktop` | L3: real Tauri window and WebDriver | Debug binary with embedded frontend; current CI runs on Windows |
+
+Use explicit `run` commands as required by the repository's test protocol:
+
+```bash
+node node_modules/vitest/vitest.mjs run --project plugin
+node node_modules/vitest/vitest.mjs run --project desktop
+```
+
+`pnpm test` selects all three projects, not just unit tests. Use isolated test directories and let tests manage their services; never reuse a release service.
 
 ## Rust checks
 
 From `src-tauri/`:
 
 ```bash
-cargo check
-cargo test
-```
-
-CI runs the stricter matrix command on Ubuntu 22.04, macOS 14, and Windows:
-
-```bash
+cargo check --locked
 cargo test --all-features --locked
 ```
 
+The Rust CI matrix covers Ubuntu 22.04, macOS 14, and Windows with the prerequisites in [Development setup](./setup).
+
 ## Manual scenarios
 
-<AccordionGroup>
-  <Accordion title="Installation and recovery">
-    Exercise first install, interrupted or failed downloads, retry, existing-core reuse,
-    and retention of a working core when an update cannot be fetched.
-  </Accordion>
-  <Accordion title="Service lifecycle">
-    Test startup, health checks, occupied preferred port, restart, shutdown, and log
-    capture with release/debug ports kept separate.
-  </Accordion>
-  <Accordion title="Profiles and plugins">
-    Switch profiles, verify isolation, install and remove optional plugins, and confirm
-    internal plugin recovery.
-  </Accordion>
-  <Accordion title="Platform packaging">
-    Verify Windows installers, signed and notarized macOS DMGs, and Linux `.deb` and
-    AppImage behavior, including a Wayland smoke test.
-  </Accordion>
-</AccordionGroup>
+- Installation and recovery: first download, interruption, retry, local-core reuse, and failed updates.
+- Service lifecycle: health, port fallback and return, restart, shutdown, logs, and release/debug isolation.
+- Profiles and plugins: profile switching, preset or community plugin changes, and built-in bridge recovery.
+- Platform packaging: Windows installers, macOS signing/notarization verification, Linux `.deb`, AppImage, and a Wayland smoke test.
 
 {/* <!-- [CI checks and cross-platform test matrix](/images/en/testing.webp) --> */}
 

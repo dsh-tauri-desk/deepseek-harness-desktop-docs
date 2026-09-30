@@ -3,7 +3,7 @@ title: DSH Tauri Pet
 description: 管理 Chat 与 Codex 桌宠、预设资源和会话活动状态。
 ---
 
-`dsh-tauri-pet` 在设置页提供 Pets 与 Codex 两个标签页，并通过 `dsh-tauri` 的 Tauri invoke 桥控制独立的透明、置顶、无边框桌宠窗口。
+`dsh-tauri-pet` 在 Harness 设置中提供 Pets 与 Codex 标签页，并通过 [`dsh-tauri`](./dsh-tauri) 桥控制独立的透明、无边框桌宠窗口。置顶与定位能力受窗口系统限制。
 
 <Tabs>
   <Tab title="Pets">
@@ -18,27 +18,44 @@ description: 管理 Chat 与 Codex 桌宠、预设资源和会话活动状态。
   </Tab>
 </Tabs>
 
-## 用户可见功能
+## 选择与启用桌宠
 
-- **Pets**：查看 Chat 来源的宠物和预设宠物清单。
-- **Codex**：查看 `$HOME/.codex/pets` 中的 Codex 宠物，并导入 `.zip` 资源包。
-- 下载预设宠物到 `$DSH_HOME/pets/<id>`，下载完成后即可启用。
-- 创建标准会话并预填 `/hatch-dsh-pet`，不会自动提交。
-- 显示宠物大小（50–200%）以及会话活动状态、气泡和移动方向。
-- 侧栏状态点反映窗口当前是否可见；隐藏窗口不会关闭持久化启用状态。
+<Steps>
+  <Step title="打开宠物设置">在 Harness 设置中进入宠物分区。Pets 显示预设与本地 Chat 宠物；Codex 显示本地 Codex 宠物和 ZIP 导入入口。</Step>
+  <Step title="选择宠物">预设卡片的启用操作会选中并开启桌宠；本地宠物使用选择操作。取消选择会同时关闭已启用的窗口。</Step>
+  <Step title="调整或关闭">大小范围为 50–200%。Pets 标签页和包含设置入口的菜单提供启用 / 关闭操作；关闭状态会持久化，重启后不会自动重新开启。</Step>
+</Steps>
 
-## 资源与数据边界
+桌宠根据会话活动显示状态、气泡与移动方向，不代替会话中的授权或确认。
 
-预设宠物由 `src-tauri/resources/preset-pets.json` 登记远端仓库、固定 commit 和资源目录。媒体资源不随插件包内置，用户从设置页主动下载；安装后只保留登记资源目录下的文件。
+## 资源来源
 
-Chat 宠物使用 `${DSH_HOME:-$HOME/.dsh}/pets`，Codex 宠物使用 `$HOME/.codex/pets`，两个来源通过 `list_pets({ source: 'chat' | 'codex' })` 严格分开。插件提供 `hatch-dsh-pet` skill，并使用独立的 `providerName: dsh-tauri-pet`，避免覆盖其他 skill provider 或默认根目录。
+| 来源 | 如何载入 | 位置或定义 |
+| --- | --- | --- |
+| 预设 | 直接使用远端配置与媒体，不经过下载、解压或本地安装步骤。 | `src-tauri/resources/manifest.jsonc` 的 `pets.built-in`；条目提供 `config`、`uri`、`ext`、`kind` 和 `size`。 |
+| Chat | 查询时读取本地宠物目录，不是固定的预设名单。 | 当前 DSH 数据目录的 `pets` 子目录，默认 `~/.dsh/pets`。 |
+| Codex | 查询本地目录，或从 Codex 标签页导入 `.zip`。 | `$HOME/.codex/pets`。 |
+
+进入设置会重新读取清单；损坏的单个本地宠物会被跳过。ZIP 导入写入 Codex 目录，以清单中的 ID 识别宠物；重复 ID 会被拒绝，而不是覆盖已有宠物。
+
+## 创建自己的宠物
+
+插件提供 `hatch-dsh-pet` Skill，使用独立的 `providerName: dsh-tauri-pet`，不替换其他 Skill provider。
+
+创建入口需要可用的项目工作区，会打开会话并预填 `/hatch-dsh-pet` 请求，不会自动发送。检查草稿后再提交，让 Agent 创建本地 Chat 宠物。
+
+## 状态与平台限制
+
+- 启用开关保存在桌面设置中；关闭会销毁窗口。`enabled` 与 `visible` 都由这一开关推导，后者不是独立的实时窗口可见性探测。
+- 原生 Wayland 下无法保证桌宠置顶与定位。设置中的 Force XWayland 作用于整个应用，需要重启生效，可能影响缩放与输入法。
+- 预设素材需要网络；本地 Chat / Codex 宠物按本地资源载入。
 
 <Warning>
-  宠物资源来自远程仓库，下载前请确认来源可信。桌面端与插件仍具有 Harness 允许的本地代码和文件访问能力；Profiles 不是操作系统沙箱。
+  只使用可信的远端资源与 ZIP 包。Harness 和插件可以执行本地代码、访问本地文件；Profile 不是操作系统沙箱。
 </Warning>
 
-## 相关命令
+## 客户端桥
 
-`get_pet_status`、`show_pet`、`hide_pet`、`set_active_pet`、`set_pet_size`、`list_pets`、`list_preset_pets`、`download_preset_pet` 和 `import_pet` 由客户端桥封装。完整实现见插件源码。
+状态与选择使用 `get_pet_status`、`set_pet_enabled`、`set_active_pet` 和 `set_pet_size`；资源使用 `list_pets`、`list_preset_pets`、`get_pet_asset` 和 `import_pet`。原生命令经桌面白名单桥执行，不提供普通浏览器的原生窗口保证。
 
 [查看源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-pet)

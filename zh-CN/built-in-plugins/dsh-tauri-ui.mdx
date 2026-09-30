@@ -3,27 +3,44 @@ title: DSH Tauri UI
 description: 了解桌面化设置侧边栏及其兼容性降级机制。
 ---
 
-`dsh-tauri-ui` 将 Harness 设置体验适配为桌面侧边栏，同时继续使用官方设置分区。
+`dsh-tauri-ui` 提供桌面设置侧栏、会话入口适配和共享 UI 组件。设置内容仍由 Harness 与各插件注册，不另建一份设置数据模型。
 
 <Frame>
   <img src="/images/zh-CN/dsh-tauri-ui-settings.png" alt="桌面化设置侧边栏" />
 </Frame>
 
-## 功能
+## 打开设置并返回会话
 
-- 在 `sidebar.settings` 注册设置入口。
-- 在 `shell.overlay` 渲染桌面化设置侧边栏。
-- 通过 `settings.section` 呈现官方设置内容，不复制设置数据模型。
-- 设置打开时隐藏并禁用宿主内容列及异步挂载的 Better Sidebar；关闭时恢复原状态。
-- 提供中英文搜索设置、返回应用等桌面文案。
+<Steps>
+  <Step title="打开设置">从 Harness 的设置入口打开侧栏，使用搜索筛选设置分区。</Step>
+  <Step title="选择分区">侧栏通过 `settings.section` 呈现官方设置与插件设置，并随语言和注册内容更新。</Step>
+  <Step title="返回应用">关闭侧栏后恢复内容列与侧栏交互。设置打开期间，背景内容和 Better Sidebar 不可操作。</Step>
+</Steps>
 
-## 安全降级
+设置入口注册在 `sidebar.settings`，侧栏渲染在 `shell.overlay`。桌面宿主也可用 `dsh://settings:open` 消息直接打开指定分区。
 
-设置侧边栏依赖 renderer 的通用 `SlotOutlet`。旧版内核或缺少 renderer patch 时，插件不会强行替换界面，
-而是保留官方设置对话框，避免设置功能不可用或页面白屏。
+## 会话体验
 
-## 边界
+| 入口 | 行为 |
+| --- | --- |
+| 侧栏新建会话、未分组行的 `+` | 能力可用时创建未分组会话，工作目录由宿主解析为 `$DSH_HOME/ungrouped`，不关联项目工作区。 |
+| 起始页工作区选择 | 可选择工作区，或在支持时选择未分组。 |
+| 输入区继续任务 | 输入为空、会话已停止且上一轮以 `aborted`、`error` 或 `interrupted` 结束时，提供继续按钮。 |
+| IM 面板 | 桌面 iframe 中的 `dsh-im` 提供客户端服务时，显示独立面板并收起重复的设置入口；服务撤下后恢复。 |
 
-该插件改变设置的呈现方式，不改变 Harness 设置字段、模型配置或 Profile 的持久化语义。
+## 按能力降级
+
+降级取决于实际 renderer、适配器和服务能力，不能仅凭内核版本推断所有入口都可用。
+
+| 缺少的能力或条件 | 处理方式 |
+| --- | --- |
+| 通用 `SlotOutlet` 不可用，或被识别为移动设备 | 不注册桌面设置侧栏，保留官方设置对话框。 |
+| `composer.workspace-less` 不可用 | 保留官方工作区选择和按钮行为，不强行创建未分组会话。 |
+| 未分组目录路由不可用 | 回退到核心默认工作目录并告警，不阻止新建会话。 |
+| 快捷键目录、会话事件或 IM 服务不可用 | 不显示对应的快捷键提示、继续按钮或 IM 面板。 |
+
+<Note>
+  这里是嵌入式 Harness 的设置，不是原生桌面 Configuration。Profile、内核和运行时管理仍属于桌面壳；未分组会话也不是文件访问沙箱。
+</Note>
 
 [查看源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-ui)

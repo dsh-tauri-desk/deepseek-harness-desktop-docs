@@ -16,7 +16,6 @@ The preview is available at `http://localhost:3000` by default.
 ## Quality checks
 
 ```bash
-pnpm docs:audit
 pnpm validate
 pnpm links
 pnpm a11y

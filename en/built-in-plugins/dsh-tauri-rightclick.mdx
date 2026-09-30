@@ -3,7 +3,7 @@ title: DSH Tauri Rightclick Menu
 description: Provide native-style context menus for sessions, workspaces, text, links, and inputs.
 ---
 
-`dsh-tauri-rightclick` targets Tauri, Electron, WebView2, CEF, and Qt WebEngine wrappers that host the DeepSeek Harness Web UI. It does not target `dsh web` opened in an ordinary browser.
+`dsh-tauri-rightclick` provides context menus inside the desktop's embedded Harness UI, using Harness session and workspace services and menu components. It is not an operating-system-wide context menu.
 
 <Tabs>
   <Tab title="Sessions">
@@ -23,17 +23,33 @@ description: Provide native-style context menus for sessions, workspaces, text, 
   </Tab>
 </Tabs>
 
-## Menu coverage
+## Where to right-click
 
-- Sessions: rename, fork, archive, open the directory, and copy the directory or session ID.
-- Workspaces: start a session, open or rename the directory, copy its path, archive sessions, and safely remove the workspace.
-- Text, links, and inputs: copy or select text, open or copy links, and undo, redo, cut, copy, paste, or select all in inputs.
-- Plugin menus: refresh the current Harness page.
+| Target | Actions |
+| --- | --- |
+| Existing session row | Rename, fork, archive, copy the directory or session ID, and open the directory. Pin / unpin appears when the core provides it. |
+| Workspace row | Create a session, rename the display label, open the directory, copy its path, archive sessions in bulk, or remove the workspace registration. |
+| Ungrouped heading | Archive ungrouped sessions in bulk, excluding blank and already archived sessions. |
+| Text, links, inputs | Copy or select all text, open or copy links, and undo, redo, cut, copy, or paste in inputs. |
+| Refresh menu item | Reloads the current Harness page without restarting the local Harness service. |
 
-Existing session actions continue to use Harness public services. When the target cannot be confirmed, the plugin keeps the browser default menu; uninstalling it leaves no patch behind.
+Blank new sessions do not get a session menu. Unsupported targets keep the default menu. Session actions prefer the official row menu or public services. Without `pinSession` / `unpinSession`, the plugin omits pinning rather than simulating pinned state.
 
-## Security boundaries
+## Archiving is not permanent deletion
 
-Opening a directory uses the host `host.openPath` route and the system file manager. External links are limited to `http` and `https` and are handed to the system default browser. The plugin does not modify `@deepseek-ai/*`, the Tauri shell, or other plugins, and it does not simulate a pinned-session state that Harness does not currently expose.
+| Action | What is preserved |
+| --- | --- |
+| Archive one or more sessions | Keeps session records, which can be restored in [Archive Management](./dsh-tauri-archive). |
+| Delete workspace | Removes only the workspace registration; keeps the project folder and session records. |
+| Permanently delete sessions | Not performed by archive or workspace-removal actions here. Confirm it separately in Archive Management. |
 
-See the source and extension protocol in [`packages/dsh-tauri-rightclick`](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-rightclick).
+Bulk archiving and workspace deletion show a confirmation first. Renaming a workspace changes its display label, not the directory on disk.
+
+## Host access and compatibility boundaries
+
+- Opening a directory uses `/api/desktop/dsh-tauri-rightclick/open/path` and the system file manager on the machine running the Harness host.
+- Opening an external link uses `/api/desktop/dsh-tauri-rightclick/open/url` and that machine's default browser. Only `http` / `https` URLs are accepted, not arbitrary URL schemes.
+- Loading the Web UI in another wrapper or an ordinary browser does not imply support for every action. Host routes, session services, and clipboard capabilities are still required.
+- Disabling the plugin cleans up listeners and overlays. It does not edit upstream packages, the desktop shell, or other plugins' files.
+
+[View source and extension protocol](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-rightclick)

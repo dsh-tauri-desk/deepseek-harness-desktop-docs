@@ -3,43 +3,43 @@ title: DSH Tauri
 description: Understand the message bridge between native desktop navigation and the embedded Harness client.
 ---
 
-`dsh-tauri` is the base bridge plugin for the desktop shell. Its host half adds no business
-behavior. Its client half runs inside the Harness iframe and translates native navigation
-into Harness layout and browser-history operations.
+`dsh-tauri` connects the native desktop shell, Harness host, and embedded client. Desktop navigation, browser-based account authorization, and native calls from other plugins depend on this bridge.
 
 <Frame>
   <img src="/images/en/workspaces-sessions.png" alt="Native navigation and embedded Harness workspace" />
 </Frame>
 
-## User-visible capabilities
+## Use Harness from desktop menus
 
-- The native top bar expands or collapses the Harness sidebar.
-- Back and forward buttons control embedded page history.
-- Buttons disable automatically at history boundaries.
-- The duplicate official collapse control is hidden so one action has one visible entry point.
+| Entry | Result |
+| --- | --- |
+| Top-bar sidebar toggle | Expands or collapses the Harness sidebar and reports its state; hides the duplicate client control. |
+| File → New Chat | Uses the Harness session entry point. |
+| File → Open Folder | Selects a directory, creates a workspace, and opens a session there. |
+| Show Keyboard Shortcuts | Opens the official shortcut overlay. When the core provides a shortcut catalog, menu hints follow customized bindings. |
+| `Ctrl` / `Cmd` + `+`, `-`, `0` | Sends zoom actions to the native window even when the iframe has focus. |
+| Account sign-in | Opens the `http` / `https` authorization URL in the system default browser when the account service is available. |
 
-## State synchronization
+## Interfaces for plugins
 
-The plugin reports sidebar collapse state and back/forward availability to the desktop host.
-It also reports its own failures so native controls do not remain visible while silently failing.
+| Import | Capabilities |
+| --- | --- |
+| `dsh-tauri` | Host runtime, `defineRoutes`, `defineService`, and process, filesystem, and system-opening utilities. The host half is not an empty implementation. |
+| `dsh-tauri/client` | Layout and session adapters, parent-window messages, Tauri `invoke` / `listen`, and panel registration. |
 
-## Panel entry
+Register panels with `definePanel(ctx, entry)`. A `PanelEntry` contains `id`, `label`, `icon`, and `render`, with optional `order` and `locale`. The entry uses `sidebar.panellist`; its content uses `main`. The returned `PanelHandle` exposes `select()`, `close()`, and `dispose()`.
 
-The client half also provides the desktop sidebar panel entry: a plugin calls
-`definePanel(ctx, entry)` with a `PanelEntry` (`id`, `label`, `icon`, `render`, plus optional
-`order` and `locale`). The entry registers into the `sidebar.panellist` list slot and `render`
-into the `main` slot; the returned `PanelHandle` exposes `select()`, `close()`, and `dispose()`.
-`dsh-tauri-panel-extension` and `dsh-tauri-panel-scheduler` both register panels through this entry.
+The current [`dsh-tauri-extension`](./dsh-tauri-extension) and [`dsh-tauri-scheduler`](./dsh-tauri-scheduler) use this entry point. The retired `dsh-tauri-panel` package's `panel.protocol` and `sidebar.panel.action` have no compatibility path.
 
-This entry shares the same baseline as the other built-in plugins and requires Harness core
-**0.1.5-rc.1** or later. The `panel.protocol` reflection service
-and the `sidebar.panel.action` slot from the retired `dsh-tauri-panel` package were removed with
-the package and have no compatibility path.
+## Compatibility and security boundaries
 
-## Boundary
+- The desktop currently recommends Harness **0.2.0-rc.2** and accepts **0.1.5-rc.1** as its minimum. Acceptance does not guarantee every API; adapters probe actual services and capabilities.
+- Embedded-carrier authentication applies only when the desktop injects `DSH_TAURI_EMBEDDED=1`. Independently launched `dsh web` retains browser-session authentication.
+- Tauri calls pass through parent-window messages. The desktop shell verifies the iframe source and origin and executes only allowlisted commands. Without the host bridge, calls fail rather than gaining other native permissions.
+- The client bridge runs only in an embedded environment. If it is missing or fails to initialize, dependent desktop navigation and native calls have no general fallback.
 
-`dsh-tauri` only handles navigation messages, the panel entry, and state. It does not manage profiles, cores,
-plugin installation, or the filesystem. Harness can still run without it, but the native top
-bar omits navigation buttons that depend on the bridge.
+<Warning>
+  Message validation is not an execution sandbox. Harness and plugins can execute local code; profiles are not operating-system sandboxes.
+</Warning>
 
 [View source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri)
