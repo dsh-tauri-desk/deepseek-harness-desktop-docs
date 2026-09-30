@@ -1,38 +1,56 @@
 ---
 title: 故障排除
-description: 诊断安装、启动、显示、端口、CLI 与插件问题。
+description: 按症状处理下载、启动、插件、显示、模型和 CLI 问题。
 ---
 
-从可见症状开始，保留日志，并且每次只改变一个条件。
+先保留错误和日志，每次只改变一个条件。不要把删除数据作为第一步。
 
 ## 首要检查
 
-1. 重启桌面端并等待健康检查。
-2. 确认回环端口未被安全软件阻止。
-3. 检查首次运行下载是否完成。
-4. 打开应用数据 `logs` 目录中的服务日志。
-5. 记录桌面版本、系统、活动 Profile 与内核来源。
+1. 从**帮助 → 运行日志**复制日志，或打开应用数据中的 `logs/dsh-web.log`。
+2. 记录桌面版本、系统与架构、活动档案、内核版本和来源。
+3. 确认首次运行下载已完成，检查界面显示的实际服务地址。
+4. 保存活动任务和仓库修改后，再重启应用并等待健康检查。
 
-## 常见问题
+## 按症状处理
 
-<AccordionGroup>
-  <Accordion title="安装下载失败">确认可访问 Node.js、npm registry 和 GitHub Releases。瞬时故障后重试；企业代理或 TLS 拦截可能需要管理员配置。</Accordion>
-  <Accordion title="Harness 无法打开">其他进程可能占用端口。应用通常会自动选择更高的可用端口；查看 `logs/dsh-web.log` 获取准确错误。</Accordion>
-  <Accordion title="Linux 黑屏或崩溃">
-    Wayland 下优先 `.deb`；AppImage 可尝试：
-    ```bash
-    WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_DMABUF_RENDERER=1 GDK_BACKEND=x11 ./Deepseek*.AppImage
-    ```
-  </Accordion>
-  <Accordion title="无法识别 dsh">启用 CLI 集成并打开全新终端，确认平台 shim 目录位于 `PATH`。</Accordion>
-  <Accordion title="插件损坏">打开插件设置并记录错误，再对可选插件执行升级、恢复或卸载；必需内部插件会在启动时恢复。</Accordion>
-</AccordionGroup>
+| 症状 | 先尝试 |
+| --- | --- |
+| 下载失败 | 检查 Node.js、npm registry 和 GitHub Releases 的网络访问；临时失败后重试。企业代理或 TLS 拦截需按组织要求配置 |
+| Harness 无法打开 | 查看服务日志；默认端口占用时可回退到其他可用端口，检查安全软件是否阻止回环连接 |
+| 插件阻止启动 | 记录问题插件与原始错误，使用恢复页的单插件快照还原或卸载入口 |
+| 模型请求失败 | 检查凭据、余额、端点和模型名称，见[配置模型](../getting-started/configure-model) |
+| 找不到 `dsh` | 确认 CLI 集成已启用，在全新终端检查 PATH 和命令解析，见 [CLI 集成](../guides/cli-integration) |
+| Windows 缺少 WebView2 | 安装 Microsoft 提供的 WebView2 Runtime 后重试 |
+| macOS 阻止启动 | 核实下载来源后，在**系统设置 → 隐私与安全性**允许运行；同时检查 WebView 兼容能力 |
 
-{/* <!-- [故障排除日志与错误详情](/images/zh-CN/troubleshooting.webp) --> */}
+## 插件恢复与安全模式
+
+- 有单插件快照时，恢复页提供**从快照还原**；没有快照时不要假定可以回滚。
+- **卸除此插件并继续检测**针对列出的插件，不等于删除工作区或清空会话。
+- 仍不能启动时可使用**安全模式**切到 `safe` 档案，只加载核心与内置插件。
+
+<Warning>
+  安全模式用于启动排障，不是安全沙箱。它会移除 `safe` 档案中的非内置插件，并把无法解析的补丁改名为 `.broken-<时间戳>`。恢复后切回原档案；重置、删除或覆盖还原前先备份。
+</Warning>
+
+## Linux 黑屏
+
+Wayland 下可先尝试 `.deb`。AppImage 仍黑屏时尝试：
+
+```bash
+WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_DMABUF_RENDERER=1 GDK_BACKEND=x11 ./Deepseek*.AppImage
+```
+
+## 区分开发与正式环境
+
+Debug 使用 `~/.dsh.dev`（忽略继承的 `DSH_HOME`）及应用数据的 `dev/` 运行目录。服务日志为 `dev/logs/dsh-web.dev.log`，首选端口 `3081`；正式版首选 `3080`。两者都可能回退到其他端口，排障时不要混用日志和目录。
+
+{/* <!-- [故障排除日志与错误详情](/images/troubleshooting.webp) --> */}
 
 ## 获取帮助
 
-在[桌面端仓库](https://github.com/dsh-tauri/deepseek-harness-desktop/issues)搜索或提交 Issue。
-先从日志中移除令牌、隐私路径、仓库内容和个人数据，并提供复现步骤及最小相关日志片段。
+- [搜索已有 Issues](https://github.com/dsh-tauri/deepseek-harness-desktop/issues)，先查看是否已有相同问题。
+- 仍未解决时，[提交新 Issue](https://github.com/dsh-tauri/deepseek-harness-desktop/issues/new/choose)。
 
-
+提供复现步骤、版本信息和最小相关日志；先移除密钥、令牌、私人路径、提示、仓库内容与个人数据。

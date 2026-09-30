@@ -3,59 +3,56 @@ title: 内置插件概览
 description: 了解 DeepSeek Harness Desktop 随安装包提供的第一方桌面插件及其职责边界。
 ---
 
-DeepSeek Harness Desktop 通过少量第一方插件连接 Harness 与 Tauri 桌面壳。这些插件随安装包提供，
-启动前会检查其声明与文件；缺失或不一致时，桌面端会从内置资源恢复。
+当前桌面端随资源分发 11 个第一方插件；启动前检查并恢复缺失或不一致的副本。
 
 <Note>
-  内置插件要求 Harness 内核 **0.1.5-rc.1** 或更高版本。更低版本的内核不提供插件所需的客户端 API，
-  面板类插件无法加载。
+  推荐内核为 **0.2.0-rc.2**；桌面声明的兼容最低版本仍为 **0.1.5-rc.1**。最低版本检查不保证所有插件在旧内核上均可用。
 </Note>
 
-{/* <!-- [当前内置插件及其依赖关系](/images/zh-CN/built-in-plugins-overview.webp) --> */}
+{/* <!-- [当前内置插件及其依赖关系](/images/built-in-plugins-overview.webp) --> */}
 
 ## 插件列表
 
 <CardGroup cols={2}>
   <Card title="DSH Tauri" icon="arrows-left-right" href="./dsh-tauri">
-    连接原生导航栏和嵌入式 Harness 客户端，并提供桌面侧栏的面板入口。
+    桌面桥、导航与面板入口。
   </Card>
   <Card title="DSH Tauri UI" icon="sidebar" href="./dsh-tauri-ui">
-    提供桌面化设置侧边栏，并在能力缺失时安全降级。
+    桌面设置与能力缺失时的降级。
   </Card>
   <Card title="DSH Tauri Worktree" icon="code-branch" href="./dsh-tauri-worktree">
-    为会话创建隔离 Git Worktree，并在用户批准后检出回本地分支。
+    隔离 Git 工作树；检出须用户明确批准。
   </Card>
-  <Card title="DSH Tauri Panel Extension" icon="puzzle-piece" href="./dsh-tauri-panel-extension">
-    在 `dsh-tauri` 的面板入口上提供 Skills、技能仓库和 MCP 管理。
+  <Card title="DSH Tauri Extension" icon="puzzle-piece" href="./dsh-tauri-extension">
+    Skills、技能来源与 MCP 管理。
   </Card>
-  <Card title="DSH Tauri Panel Scheduler" icon="calendar" href="./dsh-tauri-panel-scheduler">
-    创建定时任务，在独立 Agent 会话中执行并保留运行记录。
+  <Card title="DSH Tauri Scheduler" icon="calendar" href="./dsh-tauri-scheduler">
+    定时任务、独立会话与执行记录。
   </Card>
-  <Card title="DSH Tauri Running Changes" icon="file-pen" href="./dsh-tauri-running-changes">
-    在回合运行期间显示改动文件数与 `+N -M` 行数。
-  </Card>
-  <Card title="DSH Tauri Session" icon="archive" href="./dsh-tauri-session">
-    管理已归档聊天，并将工作区删除操作改为归档。
+  <Card title="DSH Tauri Archive" icon="archive" href="./dsh-tauri-archive">
+    聊天归档、恢复与确认删除。
   </Card>
   <Card title="DSH Tauri Pet" icon="cat" href="./dsh-tauri-pet">
-    管理 Chat / Codex 桌宠、预设宠物下载和会话活动状态。
+    桌宠资源与会话活动状态。
   </Card>
   <Card title="DSH Tauri Rightclick Menu" icon="ellipsis" href="./dsh-tauri-rightclick">
-    为桌面封装端提供会话、工作区、文本和链接的右键操作。
+    会话、工作区、文本和链接的右键操作。
   </Card>
-  <Card title="DSH Tauri Model Config" icon="sliders" href="./dsh-tauri-model-config">
-    提供模型参数配置与端点兼容选项。
+  <Card title="DSH Tauri Model" icon="sliders" href="./dsh-tauri-model">
+    提供商、模型与端点兼容设置。
+  </Card>
+  <Card title="DSH Tauri SSH" icon="server" href="./dsh-tauri-ssh">
+    SSH 远端连接、安装与插件/Skills 同步。
+  </Card>
+  <Card title="DSH Tauri Notification" icon="bell" href="./dsh-tauri-notification">
+    完成提醒、审批与问题通知。
   </Card>
 </CardGroup>
 
-## 为什么是内置插件
+## 分发与权限
 
-这些能力需要与桌面窗口、导航、Profile、工作区或宿主文件系统配合，并且必须与桌面端版本共同测试。
-把它们作为插件实现，可以保留 Harness 的 host half/client half 架构，同时让桌面端承担明确的维护和恢复责任。
+- 清单以当前桌面 `plugins.built-in` 为准；旧 Running Changes 不再属于内置集合。
+- 社区预设另行安装；扩展插件的 Skills/MCP 面板不包含市场。
+- “内置”不提供额外操作系统沙箱。Harness 与插件仍可执行本地代码。
 
-<Note>
-  “内置”表示随桌面安装包分发并自动确保存在，不表示插件拥有额外的操作系统沙箱。
-  它们仍在 Harness 与桌面端允许的权限范围内运行。
-</Note>
-
-源码位于桌面仓库的 [`packages/`](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages) 目录。
+[插件管理](../guides/plugins) · [当前源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages)

@@ -3,42 +3,59 @@ title: DSH Tauri Pet
 description: Manage Chat and Codex pets, preset assets, and conversation activity states.
 ---
 
-`dsh-tauri-pet` provides Pets and Codex tabs in Settings and controls a separate transparent, always-on-top, frameless pet window through the `dsh-tauri` Tauri invoke bridge.
+`dsh-tauri-pet` provides Pets and Codex tabs in Harness settings and controls a separate transparent, frameless pet window through the [`dsh-tauri`](./dsh-tauri) bridge. Always-on-top and positioning behavior depend on the window system.
 
 <Tabs>
   <Tab title="Pets">
     <Frame>
-      <img src="/images/en/dsh-tauri-pet.png" alt="Pets tab with the pet list, size control, and the transparent pet window" />
+      <img src="/images/dsh-tauri-pet.png" alt="Pets tab with the pet list, size control, and the transparent pet window" />
     </Frame>
   </Tab>
   <Tab title="Codex">
     <Frame>
-      <img src="/images/en/dsh-tauri-pet-codex.png" alt="Codex tab with the import area and the pet size control" />
+      <img src="/images/dsh-tauri-pet-codex.png" alt="Codex tab with the import area and the pet size control" />
     </Frame>
   </Tab>
 </Tabs>
 
-## User-visible features
+## Select and enable a pet
 
-- **Pets**: view Chat-source pets and the preset pet catalog.
-- **Codex**: view Codex pets in `$HOME/.codex/pets` and import `.zip` resource packs.
-- Download preset pets to `$DSH_HOME/pets/<id>` and enable them after installation.
-- Create a standard session with `/hatch-dsh-pet` prefilled; the command is not submitted automatically.
-- Adjust pet size from 50–200% and display conversation activity, bubbles, and movement states.
-- The sidebar status dot reflects current window visibility; hiding the window does not disable it persistently.
+<Steps>
+  <Step title="Open pet settings">Open the pet section in Harness settings. Pets shows presets and local Chat pets; Codex shows local Codex pets and the ZIP import entry.</Step>
+  <Step title="Choose a pet">A preset card's enable action selects and enables the pet. Use the selection action for local pets. Deselecting a pet also closes an enabled window.</Step>
+  <Step title="Adjust or close">Size ranges from 50–200%. The Pets tab and the menu containing Settings offer enable / close actions. Closing persists the disabled state, so restarting does not turn the pet back on.</Step>
+</Steps>
 
-## Resource and data boundaries
+The pet displays activity states, bubbles, and movement based on sessions. It does not replace authorization or confirmation in a conversation.
 
-Preset pets are declared in `src-tauri/resources/preset-pets.json` with a remote repository, pinned commit, and asset directory. Media is not bundled with the plugin; users download it from Settings, and installation keeps only files under the declared asset prefix.
+## Resource sources
 
-Chat pets use `${DSH_HOME:-$HOME/.dsh}/pets`, while Codex pets use `$HOME/.codex/pets`. The two sources remain separate through `list_pets({ source: 'chat' | 'codex' })`. The plugin provides the `hatch-dsh-pet` skill under its own `providerName: dsh-tauri-pet`, without replacing other skill providers or default roots.
+| Source | How it loads | Location or definition |
+| --- | --- | --- |
+| Preset | Uses remote configuration and media directly, without a download, extraction, or local installation step. | `pets.built-in` in `src-tauri/resources/manifest.jsonc`; entries provide `config`, `uri`, `ext`, `kind`, and `size`. |
+| Chat | Reads the local pet directory when queried, rather than using a fixed preset list. | The current DSH data directory's `pets` subdirectory, default `~/.dsh/pets`. |
+| Codex | Reads the local directory, or imports a `.zip` from the Codex tab. | `$HOME/.codex/pets`. |
+
+Opening settings rereads the catalogs. Individual invalid local pets are skipped. ZIP imports write to the Codex directory and identify pets by their manifest ID. Duplicate IDs are rejected rather than overwriting existing pets.
+
+## Create your own pet
+
+The plugin provides the `hatch-dsh-pet` skill under its own `providerName: dsh-tauri-pet`, without replacing other skill providers.
+
+The creation entry requires an available project workspace. It opens a session with a `/hatch-dsh-pet` request prefilled, but does not send it. Review the draft before submitting it to have the Agent create a local Chat pet.
+
+## State and platform limits
+
+- The enabled switch is saved in desktop settings; closing destroys the window. Both `enabled` and `visible` derive from this switch. The latter is not an independent real-time window-visibility probe.
+- Native Wayland cannot guarantee pet positioning or always-on-top behavior. Force XWayland applies to the whole app, requires a restart, and may affect scaling and input methods.
+- Preset assets require network access. Local Chat and Codex pets load from local resources.
 
 <Warning>
-  Pet assets come from remote repositories; verify the source before downloading. The desktop and plugins still have the local code and file access allowed by Harness. Profiles are not operating-system sandboxes.
+  Use only trusted remote assets and ZIP packages. Harness and plugins can execute local code and access local files; profiles are not operating-system sandboxes.
 </Warning>
 
-## Related commands
+## Client bridge
 
-The client bridge wraps `get_pet_status`, `show_pet`, `hide_pet`, `set_active_pet`, `set_pet_size`, `list_pets`, `list_preset_pets`, `download_preset_pet`, and `import_pet`. See the plugin source for the complete implementation.
+State and selection use `get_pet_status`, `set_pet_enabled`, `set_active_pet`, and `set_pet_size`. Resources use `list_pets`, `list_preset_pets`, `get_pet_asset`, and `import_pet`. Native commands run through the desktop's allowlisted bridge; ordinary browsers are not guaranteed native pet-window support.
 
 [View source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-pet)

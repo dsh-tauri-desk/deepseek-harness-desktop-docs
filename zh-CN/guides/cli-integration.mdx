@@ -1,20 +1,19 @@
 ---
 title: CLI 集成
-description: 使用 DeepSeek Harness Desktop 安装的 dsh 命令。
+description: 验证桌面端提供的 dsh 命令并了解 PATH 与 shell 配置变化。
 ---
 
-正式版可在 `PATH` 中注册轻量 `dsh` shim。它使用兼容的本地 Node.js 或托管运行时启动 CLI，
-不会覆盖你的 shell 配置。
+正式版默认启用 CLI 集成，注册轻量 `dsh` shim，使用兼容的系统 Node.js 或托管运行时启动 Harness CLI。
 
 ## 验证命令
 
-关闭安装期间已打开的终端，在新终端运行：
+安装或修改设置后，关闭旧终端，在**全新终端进程**中运行：
 
 ```bash
 dsh --help
 ```
 
-查看 shell 实际解析的命令：
+查看实际解析到的命令：
 
 <Tabs>
   <Tab title="PowerShell">
@@ -29,31 +28,28 @@ dsh --help
   </Tab>
 </Tabs>
 
-## Shim 位置
-
-| 平台 | 目录 |
-| --- | --- |
-| Windows | `%LOCALAPPDATA%\deepseek-harness\bin` |
-| macOS 和 Linux | `~/.local/bin` |
-
-Shim 优先受支持的系统 Node.js，随后回退到应用数据中的托管运行时。pnpm 同样优先用户命令，
-否则运行托管的 `dependencies/pnpm/bin/pnpm.cjs`。
-
 <Frame>
-  <img src="/images/zh-CN/cli-integration.png" alt="设置中的 CLI 集成开关" />
+  <img src="/images/cli-integration.png" alt="设置中的 CLI 集成开关" />
 </Frame>
+
+## 修改范围
+
+| 平台 | Shim 目录 | 注册方式 |
+| --- | --- | --- |
+| Windows | `%LOCALAPPDATA%\deepseek-harness\bin` | 修改用户级 `PATH`，不是系统级 `PATH` |
+| macOS / Linux | `~/.local/bin` | 在受管理的 shell 启动文件中添加带标记的 PATH 块 |
+
+Unix 集成不会重写整个 shell 配置，但会修改相关启动文件；关闭集成会移除托管块。检测到用户自行安装的同名命令时会保留它，实际使用哪个命令仍以 shell 解析结果为准。
+
+Shim 优先使用受支持的系统 Node.js，否则回退到应用托管运行时。pnpm 同样优先用户命令，再使用托管版本。
 
 ## 找不到命令
 
-1. 确认桌面设置已启用 CLI 集成。
-2. 修改后重启应用。
-3. 打开全新终端，而非旧 shell 进程中的新标签。
-4. 确认 shim 目录存在于 `PATH`。
-5. 重新运行设置或查看[故障排除](../help/troubleshooting)。
+1. 在桌面**配置 → 应用**确认 CLI 集成已开启，并检查注册状态。
+2. 打开新终端进程，确认 shim 目录位于 `PATH`。
+3. 检查是否解析到其他已安装的 `dsh`；按界面提示修复集成。
+4. 仍失败时保留错误，查阅[故障排除](../help/troubleshooting)。
 
-<Note>Debug 构建不会注册或删除 `PATH`，也不会写入正式版 shim，以免开发运行改变生产环境。</Note>
-
-
-
-
-
+<Note>
+  Debug 构建不注册或删除用户 PATH，也不覆盖正式版 `dsh` shim；它可以为内部操作准备 pnpm shim。因此开发启动不代表已启用正式版 CLI 集成。
+</Note>

@@ -1,0 +1,32 @@
+---
+title: DSH Tauri Model
+description: Add model providers and configure model parameters and endpoint compatibility.
+---
+
+Use `dsh-tauri-model` in **Settings → Models** to manage providers, credentials, and models. It replaces the official model settings entry.
+
+{/* <!-- [Capacity inputs, image input, and thinking-mode switches on the model settings page](/images/dsh-tauri-model-config.png) --> */}
+
+## Configure a model
+
+1. Choose a provider from the built-in catalog or add a custom model API.
+2. Enter an API key; custom APIs also need a base URL and at least one model ID.
+3. Add models manually or **Fetch available models**, then review limits and capabilities.
+4. Save, select the model in a session, and send a test message.
+
+| Option | Behavior |
+| --- | --- |
+| Fetch config | Fills gaps for one model without replacing entered values |
+| Configure all models | Replaces limits disclosed by the endpoint; preserves undisclosed fields |
+| Image and thinking capabilities | Uses an online capability table, with cached data or naming rules as fallback; editable manually |
+| Disable Developer role | Appears only for routes explicitly using `openai-completions` |
+| Open config file | Opens the settings file, or its directory if the file is missing |
+
+## Data and boundaries
+
+- Configuration belongs to Harness settings; capability data is cached under `$DSH_HOME/dsh-tauri-model/`.
+- **Open config file** uses `$DSH_HOME/settings.yaml`, or `~/.dsh/settings.yaml` when unset; it does not detect custom `settings-file` paths.
+- Automatic configuration contacts provider endpoints or an online capability table and may be inaccurate.
+- Do not enable the official model settings entry alongside this plugin. Keep API keys out of screenshots and issue reports.
+
+[Model setup guide](../getting-started/configure-model) · [Source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-model)

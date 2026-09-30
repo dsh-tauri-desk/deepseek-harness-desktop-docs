@@ -1,53 +1,56 @@
 ---
 title: Troubleshooting
-description: Diagnose installation, startup, display, port, CLI, and plugin problems.
+description: Diagnose downloads, startup, plugins, display, models, and CLI problems by symptom.
 ---
 
-Start with the visible symptom, preserve logs, and change one thing at a time.
+Preserve errors and logs first, then change one thing at a time. Do not start by deleting data.
 
 ## First checks
 
-1. Restart the desktop app and wait for the health check.
-2. Confirm the configured loopback port is not blocked by security software.
-3. Check that first-run downloads completed.
-4. Open the service log from the app data `logs` directory.
-5. Record the desktop version, operating system, active profile, and core source.
+1. Copy logs from **Help → Run logs**, or open `logs/dsh-web.log` in application data.
+2. Record the desktop version, OS and architecture, active profile, and core version and source.
+3. Confirm first-run downloads completed and check the actual service address shown in the interface.
+4. Save active tasks and repository changes before restarting the app and waiting for the health check.
 
-## Common problems
+## Find your symptom
 
-<AccordionGroup>
-  <Accordion title="Installation download fails">
-    Confirm internet access to Node.js, npm registry, and GitHub Releases. Retry after a
-    transient failure. Corporate proxies or TLS interception may require administrator
-    configuration outside the app.
-  </Accordion>
-  <Accordion title="Harness does not open">
-    Another process may own the configured port. The app normally selects a higher free
-    port automatically. Check `logs/dsh-web.log` for the exact launch error.
-  </Accordion>
-  <Accordion title="Linux window is black or crashes">
-    Prefer `.deb` on Wayland. For AppImage, try:
-    ```bash
-    WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_DMABUF_RENDERER=1 GDK_BACKEND=x11 ./Deepseek*.AppImage
-    ```
-  </Accordion>
-  <Accordion title="dsh is not recognized">
-    Enable CLI integration and open a completely new terminal. Confirm the platform shim
-    directory is present in `PATH`.
-  </Accordion>
-  <Accordion title="A plugin is broken">
-    Open plugin settings, capture the error detail, then use upgrade, recovery, or
-    uninstall for optional plugins. Required internal plugins restore at startup.
-  </Accordion>
-</AccordionGroup>
+| Symptom | Try first |
+| --- | --- |
+| Download fails | Check access to Node.js, npm registry, and GitHub Releases; retry transient failures. Configure corporate proxies or TLS interception according to your organization's requirements |
+| Harness does not open | Read the service log; a busy default port can fall back to another available port. Check whether security software blocks loopback connections |
+| A plugin prevents startup | Record the named plugin and raw error; use the recovery page's individual plugin snapshot restore or removal action |
+| Model request fails | Check credentials, balance, endpoint, and model name; see [Configure a model](../getting-started/configure-model) |
+| `dsh` is not found | Confirm CLI integration is enabled, then check PATH and command resolution in a new terminal; see [CLI integration](../guides/cli-integration) |
+| Windows lacks WebView2 | Install Microsoft's WebView2 Runtime and retry |
+| macOS blocks startup | Verify the download source, then allow the app in **System Settings → Privacy & Security**; also check WebView compatibility |
 
-{/* <!-- [Troubleshooting log and error detail](/images/en/troubleshooting.webp) --> */}
+## Plugin recovery and safe mode
+
+- **Restore from snapshot** is offered when an individual plugin snapshot exists; do not assume rollback is available without one.
+- **Remove this plugin and continue checking** targets the listed plugin, not your workspaces or entire session history.
+- If startup still fails, **Safe Mode** switches to the `safe` profile with only core components and built-ins.
+
+<Warning>
+  Safe mode is for startup troubleshooting, not security isolation. It removes non-built-in plugins from the `safe` profile and renames unparseable patches to `.broken-<timestamp>`. Switch back to the original profile after recovery. Back up before resetting, deleting, or restoring over a profile.
+</Warning>
+
+## Black window on Linux
+
+On Wayland, try `.deb` first. If AppImage still shows a black window, try:
+
+```bash
+WEBKIT_DISABLE_COMPOSITING_MODE=1 WEBKIT_DISABLE_DMABUF_RENDERER=1 GDK_BACKEND=x11 ./Deepseek*.AppImage
+```
+
+## Separate development and release environments
+
+Debug uses `~/.dsh.dev`, ignoring inherited `DSH_HOME`, and a `dev/` runtime directory in application data. Its service log is `dev/logs/dsh-web.dev.log` and its preferred port is `3081`; release builds prefer `3080`. Both can fall back to another port. Use the logs and directories from the environment you are diagnosing.
+
+{/* <!-- [Troubleshooting log and error detail](/images/troubleshooting.webp) --> */}
 
 ## Ask for help
 
-Search or open an issue in the
-[desktop repository](https://github.com/dsh-tauri/deepseek-harness-desktop/issues).
-Remove tokens, private paths, repository content, and personal data from logs first.
-Include reproducible steps and the smallest relevant log section.
+- [Search existing issues](https://github.com/dsh-tauri/deepseek-harness-desktop/issues) for the same problem first.
+- If it remains unresolved, [open a new issue](https://github.com/dsh-tauri/deepseek-harness-desktop/issues/new/choose).
 
-
+Include reproducible steps, version information, and the smallest relevant log section. Remove keys, tokens, private paths, prompts, repository content, and personal data first.

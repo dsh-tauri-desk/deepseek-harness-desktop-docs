@@ -16,7 +16,6 @@ The preview is available at `http://localhost:3000` by default.
 ## Quality checks
 
 ```bash
-pnpm docs:audit
 pnpm validate
 pnpm links
 pnpm a11y
@@ -26,7 +25,7 @@ pnpm check
 English content lives in `en/`; Simplified Chinese content lives in `zh-CN/`.
 Keep both trees structurally aligned. Product screenshots preserve the required comment
 placeholder inside valid MDX, for example
-`{/* <!-- [Settings overview](/images/en/settings-overview.webp) --> */}`. Replace it
+`{/* <!-- [Settings overview](/images/settings-overview.webp) --> */}`. Replace it
 only after reviewed assets are available.
 
 ## Contributing

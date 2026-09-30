@@ -3,37 +3,53 @@ title: DSH Tauri Rightclick Menu
 description: 为会话、工作区、文本、链接和输入框提供原生风格的右键菜单。
 ---
 
-`dsh-tauri-rightclick` 面向承载 DeepSeek Harness Web UI 的 Tauri、Electron、WebView2、CEF 或 Qt WebEngine 封装端，不面向普通浏览器中的 `dsh web`。
+`dsh-tauri-rightclick` 在桌面内嵌 Harness UI 中提供上下文菜单，沿用 Harness 的会话、工作区服务和菜单组件。它不是操作系统的全局右键菜单。
 
 <Tabs>
   <Tab title="会话">
     <Frame>
-      <img src="/images/zh-CN/dsh-tauri-rightclick-session.png" alt="会话右键菜单：重命名会话、归档会话、在资源管理器中打开、复制工作目录、复制会话 ID、创建会话分支、刷新" />
+      <img src="/images/dsh-tauri-rightclick-session.png" alt="会话右键菜单：重命名会话、归档会话、在资源管理器中打开、复制工作目录、复制会话 ID、创建会话分支、刷新" />
     </Frame>
   </Tab>
   <Tab title="工作区">
     <Frame>
-      <img src="/images/zh-CN/dsh-tauri-rightclick-workspace.png" alt="工作区右键菜单：新建会话、在资源管理器中打开、重命名工作区、复制工作区路径、归档工作区、删除工作区、刷新" />
+      <img src="/images/dsh-tauri-rightclick-workspace.png" alt="工作区右键菜单：新建会话、在资源管理器中打开、重命名工作区、复制工作区路径、归档工作区、删除工作区、刷新" />
     </Frame>
   </Tab>
   <Tab title="输入框">
     <Frame>
-      <img src="/images/zh-CN/dsh-tauri-rightclick-input.png" alt="输入框上的右键菜单：撤销、重做、剪切、复制、粘贴、全选、刷新" />
+      <img src="/images/dsh-tauri-rightclick-input.png" alt="输入框上的右键菜单：撤销、重做、剪切、复制、粘贴、全选、刷新" />
     </Frame>
   </Tab>
 </Tabs>
 
-## 菜单范围
+## 在哪里右键
 
-- 会话：重命名、分叉、归档、打开目录、复制目录和会话 ID。
-- 工作区：新建会话、打开目录、重命名、复制路径、归档会话和安全移除工作区。
-- 文本、链接和输入框：复制或全选文本、打开或复制链接，以及撤销、重做、剪切、复制、粘贴。
-- 插件菜单：刷新当前 Harness 页面。
+| 目标 | 可用操作 |
+| --- | --- |
+| 正式会话行 | 重命名、分叉、归档，复制目录或会话 ID、打开目录；核心提供能力时可置顶 / 取消置顶。 |
+| 工作区行 | 新建会话、重命名显示名称、打开目录、复制路径、批量归档会话或移除工作区注册。 |
+| 未分组标题 | 批量归档未分组会话，排除空白会话和已归档会话。 |
+| 文本、链接、输入框 | 复制或全选文本、打开或复制链接，以及输入框的撤销、重做、剪切、复制、粘贴。 |
+| 菜单中的刷新 | 重新载入当前 Harness 页面，不重启本地 Harness 服务。 |
 
-官方已有的会话操作继续使用 Harness 公开服务。无法确认目标时，插件保留浏览器默认菜单；卸载后不留下补丁。
+空白新会话不弹出会话菜单；未命中支持的目标时保留默认菜单。会话操作优先使用官方行菜单或公开服务；缺少 `pinSession` / `unpinSession` 时不显示置顶入口，也不模拟置顶状态。
 
-## 安全边界
+## 归档不等于永久删除
 
-打开目录通过宿主 `host.openPath` 路由交给系统文件管理器，外链仅接受 `http` 和 `https` 并交给系统默认浏览器。插件不修改 `@deepseek-ai/*`、Tauri 壳或其他插件，也不模拟 Harness 当前未提供的置顶会话状态。
+| 操作 | 保留什么 |
+| --- | --- |
+| 归档单个或多个会话 | 保留会话记录，可在[归档管理](./dsh-tauri-archive)中恢复。 |
+| 删除工作区 | 仅移除工作区注册，保留项目文件夹与会话记录。 |
+| 永久删除会话 | 不由这里的归档或工作区移除操作执行；在归档管理中另行确认。 |
 
-源码与扩展协议见 [`packages/dsh-tauri-rightclick`](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-rightclick)。
+批量归档和删除工作区都会先显示确认提示。工作区重命名改变显示名称，不重命名磁盘上的目录。
+
+## 本机访问与兼容边界
+
+- 打开目录使用 `/api/desktop/dsh-tauri-rightclick/open/path`，交给运行 Harness 宿主的机器上的系统文件管理器。
+- 打开外链使用 `/api/desktop/dsh-tauri-rightclick/open/url`，仅接受 `http` / `https`，交给该机器的默认浏览器；不接受任意 URL scheme。
+- 其他封装端或普通浏览器不能仅凭 Web UI 可加载就视为支持全部操作；仍需对应的宿主路由、会话服务和剪贴板能力。
+- 停用插件会清理监听器与浮层。它不修改上游包、桌面壳或其他插件的文件。
+
+[查看源码与扩展协议](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-rightclick)

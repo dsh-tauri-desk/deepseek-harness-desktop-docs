@@ -5,7 +5,7 @@ description: 理解插件分发、Profile 范围、桌面集成与恢复机制�
 
 Harness 插件可扩展宿主运行时、贡献工具并添加 UI 集成。桌面端提供生命周期管理和受控原生桥接。
 
-{/* <!-- [插件宿主侧、客户端侧与 Tauri 桥](/images/zh-CN/plugin-architecture.webp) --> */}
+{/* <!-- [插件宿主侧、客户端侧与 Tauri 桥](/images/plugin-architecture.webp) --> */}
 
 ## 职责
 
@@ -17,12 +17,21 @@ Harness 插件可扩展宿主运行时、贡献工具并添加 UI 集成。桌�
 | 桌面管理器 | 安装、升级、移除、修复并报告插件状态 |
 | Profile | 持有自身的插件声明与配置 |
 
-## 内部插件生命周期
+## 内置插件与恢复
 
-Harness 启动前，桌面工作流确保活动 Profile 存在必需的第一方集成。声明缺失或不一致时，
-从应用内置副本恢复，使原生设置与面板功能在更新中断后仍可使用。
+Harness 启动前，桌面自动检查活动 Profile，并从应用内置副本恢复缺失或指向旧路径的集成；失败会写入日志。
+内置桥可自动恢复，但首次准备运行时、内核及选中的社区插件仍需要网络。
 
-可选预设和社区插件遵循常规安装、升级和卸载流程。Windows Minimal 修复插件在选择后从 GitHub 获取，并非内置源码。
+当前[发布清单](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc)包含 11 个内置包：
+
+| 分工 | 内置包 |
+| --- | --- |
+| 原生桥与 UI | `dsh-tauri`、`dsh-tauri-ui` |
+| 工作区与会话 | `dsh-tauri-worktree`、`dsh-tauri-archive`、`dsh-tauri-rightclick` |
+| 配置与连接 | `dsh-tauri-extension`、`dsh-tauri-model`、`dsh-tauri-ssh` |
+| 后台与系统 | `dsh-tauri-scheduler`、`dsh-tauri-pet`、`dsh-tauri-notification` |
+
+预设和社区插件按需安装、升级或移除。`running-changes` 未随当前版本发布；`dsh-win-terminal-inspector` 已弃用，启动时会尝试自动移除，不再提供可选 Minimal 修复入口。
 
 ## 通信路径
 
@@ -37,8 +46,3 @@ Harness 启动前，桌面工作流确保活动 Profile 存在必需的第一方
 </Warning>
 
 用户操作请参阅[插件](../guides/plugins)。
-
-
-
-
-

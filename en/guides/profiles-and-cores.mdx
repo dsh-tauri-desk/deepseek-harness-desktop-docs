@@ -3,52 +3,45 @@ title: Profiles and cores
 description: Separate Harness configuration with profiles and choose the active core.
 ---
 
-Profiles isolate Harness configuration, plugins, patches, and behavior. Cores determine
-which installed Harness distribution the desktop service runs.
+A profile defines the configuration, plugin, and patch environment. The core determines which Harness version runs the local service. Neither is an operating system sandbox.
 
-## Profiles
+## Choose a profile
 
-The default desktop profile is `web`. Additional profiles live under
-`$DSH_HOME/profiles/<id>` and can carry different plugin and patch configuration.
-Changing the active profile restarts or reconfigures the service so desktop controls
-and plugin operations target the selected profile.
+First installation creates and uses `tauri`; `web` is the built-in fallback. Other profiles live under `$DSH_HOME/profiles/<id>`. Session data lives outside profiles, so switching does not isolate all history.
 
-<Frame>
-  <img src="/images/en/profiles-cores-profile.png" alt="Profile settings" />
-</Frame>
+1. Create or clone a profile in desktop **Configuration → Profiles**.
+2. Pause active tasks and record workspaces and uncommitted changes.
+3. Switch profiles, restart when prompted, and check models and plugins.
 
 <Frame>
-  <img src="/images/en/profiles-cores-core.png" alt="Harness core versions and download actions" />
+  <img src="/images/profiles-cores-profile.png" alt="Profile settings" />
 </Frame>
 
-## Core sources
+Back up before deleting, resetting, or restoring over a profile. Profile backups cover only the current profile, not workspaces or complete session data outside it. Credentials are excluded by default; treat backups as sensitive files if you include them.
 
-| Source | Meaning | When to use it |
-| --- | --- | --- |
-| Automatic | Prefer a compatible local CLI core; otherwise use the app-managed core | Most users |
-| Local | Use the Harness core already installed for the CLI | CLI-focused development |
-| App | Use the prebuilt distribution downloaded by the desktop app | Reproducible desktop setup |
+## Choose a core
 
-The application can track and update its managed core independently from the desktop
-shell. If GitHub is unavailable, it keeps the existing local installation rather than
-removing a working core.
+<Frame>
+  <img src="/images/profiles-cores-core.png" alt="Harness core versions and download actions" />
+</Frame>
+
+| Source | Purpose |
+| --- | --- |
+| Automatic | Prefer a compatible local CLI core; otherwise use the managed core |
+| Local | Use a compatible local Harness installation detected by the desktop |
+| App | Use a prebuilt distribution downloaded by the desktop |
+
+The current recommended core is `0.2.0-rc.2`; the minimum accepted version is `0.1.5-rc.1`. Desktop and plugin compatibility rules still filter the version list; not every upstream version is guaranteed to work.
+
+## Before switching or upgrading
+
+1. Finish or pause tool tasks, back up the profile, and check repository status.
+2. Choose a compatible core; follow any prompt to use a separate version profile.
+3. Wait for the service to restart, then check session connection, models, and plugins.
+4. If errors occur, preserve logs and try an installed compatible version before deleting data.
 
 <Warning>
-  Profiles isolate Harness data from each other, but they do not create an operating
-  system security boundary. A profile still runs with the permissions granted to the
-  application and its tools.
+  Profiles and plugins run with the process's granted permissions. Use a separate user, container, or virtual machine to test untrusted plugins.
 </Warning>
 
-## Before switching
-
-1. Finish or pause active tool runs.
-2. Record uncommitted workspace changes.
-3. Switch the profile or core in settings.
-4. Confirm the service reconnects and the intended plugins are available.
-
-Learn how plugins relate to profiles in [Plugins](./plugins).
-
-
-
-
-
+Continue with [Plugins](./plugins) or [Updates](./updates).

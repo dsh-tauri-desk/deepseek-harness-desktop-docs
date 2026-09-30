@@ -1,21 +1,19 @@
 ---
 title: CLI integration
-description: Use the dsh command installed by DeepSeek Harness Desktop.
+description: Verify the desktop-provided dsh command and understand PATH and shell configuration changes.
 ---
 
-The released desktop app can register a lightweight `dsh` shim on your `PATH`. The shim
-starts the installed JavaScript CLI with a compatible local Node.js or the managed
-runtime, so it does not overwrite your shell configuration.
+Release builds enable CLI integration by default. A lightweight `dsh` shim starts the Harness CLI using compatible system Node.js or the managed runtime.
 
 ## Verify the command
 
-Close terminals that were open during installation. In a new terminal, run:
+After installation or setting changes, close old terminals and run this in a **new terminal process**:
 
 ```bash
 dsh --help
 ```
 
-To inspect which executable your shell resolves:
+Check which command your shell resolves:
 
 <Tabs>
   <Tab title="PowerShell">
@@ -30,36 +28,28 @@ To inspect which executable your shell resolves:
   </Tab>
 </Tabs>
 
-## Shim locations
-
-| Platform | Directory |
-| --- | --- |
-| Windows | `%LOCALAPPDATA%\deepseek-harness\bin` |
-| macOS and Linux | `~/.local/bin` |
-
-The shim prefers supported system Node.js versions and falls back to the runtime under
-the application data directory. pnpm follows the same principle: use a user-installed
-command first, otherwise run the managed `dependencies/pnpm/bin/pnpm.cjs`.
-
 <Frame>
-  <img src="/images/en/cli-integration.png" alt="CLI integration toggle in settings" />
+  <img src="/images/cli-integration.png" alt="CLI integration toggle in settings" />
 </Frame>
 
-## Command is not found
+## What changes
 
-1. Confirm CLI integration is enabled in desktop settings.
-2. Restart the application after changing the setting.
-3. Open a new terminal, not a new tab in an old shell process.
-4. Check that the shim directory appears in `PATH`.
-5. Re-run setup or consult [Troubleshooting](../help/troubleshooting).
+| Platform | Shim directory | Registration |
+| --- | --- | --- |
+| Windows | `%LOCALAPPDATA%\deepseek-harness\bin` | Changes user-level `PATH`, not system-level `PATH` |
+| macOS / Linux | `~/.local/bin` | Adds marked PATH blocks to managed shell startup files |
+
+Unix integration does not rewrite the entire shell configuration, but it does edit relevant startup files. Disabling integration removes the managed blocks. A detected user-installed command with the same name is preserved; shell resolution determines which command runs.
+
+The shim prefers supported system Node.js, then falls back to the app-managed runtime. pnpm similarly prefers the user command before the managed version.
+
+## Command not found
+
+1. Confirm CLI integration is enabled in desktop **Configuration → Application** and check registration status.
+2. Open a new terminal process and confirm the shim directory is in `PATH`.
+3. Check whether another installed `dsh` is selected; follow the interface prompts to repair integration.
+4. If it still fails, preserve the error and see [Troubleshooting](../help/troubleshooting).
 
 <Note>
-  Debug builds intentionally do not register or remove `PATH` entries and do not write
-  a release-style shim. This prevents development runs from changing the production
-  desktop environment.
+  Debug builds do not register or remove user PATH entries or overwrite the release `dsh` shim. They may prepare a pnpm shim for internal operations, so a development launch does not imply release CLI integration is enabled.
 </Note>
-
-
-
-
-

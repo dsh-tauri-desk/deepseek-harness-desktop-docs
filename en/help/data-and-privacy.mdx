@@ -1,37 +1,54 @@
 ---
 title: Data, privacy, and security
-description: Understand DeepSeek Harness Desktop data locations and network boundaries.
+description: Locate local data and understand backup scope, models, plugins, and remote-access boundaries.
 ---
 
-The Harness service listens on the loopback address `127.0.0.1`, and the desktop app embeds
-that local Web interface. Sessions and profiles stay on your computer, but model providers
-and installed plugins may have their own network behavior.
+Harness listens on loopback by default, and the desktop embeds its Web interface. Local storage does not mean fully offline operation: models, plugins, tools, and updates can use the network.
 
-## Data boundaries
+## Data locations
 
 | Data | Release location or boundary |
 | --- | --- |
-| Harness user data | `~/.dsh` (`DSH_HOME`) |
-| Profiles | `~/.dsh/profiles/<id>` |
-| Managed runtime and core | Operating system application data directory |
+| Harness user data | `~/.dsh` by default; release builds can honor `DSH_HOME` |
+| Profile configuration, plugins, and patches | `$DSH_HOME/profiles/<id>`; first installation uses `tauri`, with `web` as fallback |
+| Session and workspace records | Directories outside profiles in Harness data; switching profiles does not isolate all history |
+| Repository files and Git worktrees | Your chosen workspace directories, outside profile backups |
+| Default managed runtime and dependencies | `runtime/` and `dependencies/` in application data; the core uses `dependencies/dsh/` |
 | Desktop settings | `.store.dat` in application data |
 | Harness service log | `logs/dsh-web.log` in application data |
-| Service address | `http://127.0.0.1:3080` by default |
+| Profile backups | `$DSH_HOME/.backups/`; contents cover only the active profile directory |
+| Service address | Prefer `http://127.0.0.1:3080`; another port may be used if it is busy |
 
-## Network use
+Open the actual data directory from desktop **Configuration → Application**. Do not infer the active environment from a directory name alone.
 
-The application needs network access to download Node.js, pnpm, supporting tools, or the
-core; check for desktop and core updates; install plugins from npm or GitHub; call a model
-provider; or run a plugin or tool that accesses a remote service.
+## Back up and restore
+
+1. Back up the active profile in **Configuration → Profiles**. Credentials are excluded by default; treat backups as sensitive files if you include them.
+2. Prefer **Restore as a new profile** and verify it rather than overwriting the current environment.
+3. Separately back up workspaces, uncommitted changes, and complete Harness data you need to preserve.
 
 <Warning>
-  Harness executes tools and code. An application profile is not a sandbox. Use operating
-  system isolation, least-privilege credentials, reviewed plugins, and trusted workspaces
-  according to the risk.
+  Built-in backups are not snapshots of all of `$DSH_HOME`. They exclude workspaces and complete session data outside the profile. Stop active tasks and check which directories you need before deleting, resetting, restoring over data, or migrating.
 </Warning>
 
-## Back up or reset
+## Network and remote access
 
-Back up `~/.dsh` before moving a profile or attempting destructive repair. Remove API keys,
-user names, local paths, prompts, and repository content before publishing logs. Development
-builds use separate `~/.dsh.dev`, `.store.dev.dat`, and `logs/dsh-web.dev.log` data.
+| Operation | Network and trust boundary |
+| --- | --- |
+| First installation and updates | Download runtimes, the core, and tools from release or fallback sources |
+| Model requests | Send requests and necessary context to the chosen provider; check its data policy first |
+| Plugin installation and execution | Access npm/GitHub during installation; plugins can execute local code and contact remote services |
+| Remote use | Prefer an [SSH tunnel](../built-in-plugins/dsh-tauri-ssh); do not expose the service directly to the public internet |
+
+The desktop has no LAN setting. The packaged core permits LAN listening only with `DSH_PKG_ALLOW_LAN=1`. This does not replace upstream authentication, access tokens, or tool permissions, and host trust is not authentication.
+
+<Warning>
+  Profiles, workspaces, and Git worktrees are not operating system sandboxes. For untrusted code or plugins, use a separate user, container, or virtual machine, least-privilege credentials, and reviewed tool authorization. Keep keys and private data out of chat, screenshots, logs, and issues.
+</Warning>
+
+## Development environment isolation
+
+- Debug forces `~/.dsh.dev`, ignoring inherited `DSH_HOME`.
+- Default managed runtime and dependencies use `dev/runtime/` and `dev/dependencies/` in application data; the core uses `dev/dependencies/dsh/`.
+- The log is `dev/logs/dsh-web.dev.log`; settings use `.store.dev.dat` at the application data root.
+- Preferred ports are `3081` for debug and `3080` for release; either can fall back to another available port.

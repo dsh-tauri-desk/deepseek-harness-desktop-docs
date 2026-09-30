@@ -5,7 +5,7 @@ description: 理解 Tauri 桌面壳、本地 Harness 服务与嵌入式 Web UI �
 
 DeepSeek Harness Desktop 是 Tauri 2 应用，负责管理本地 Harness 服务，并在原生窗口中显示其 Web 界面。
 
-{/* <!-- [桌面端架构与进程边界](/images/zh-CN/architecture-overview.webp) --> */}
+{/* <!-- [桌面端架构与进程边界](/images/architecture-overview.webp) --> */}
 
 ## 主要层次
 
@@ -20,20 +20,15 @@ DeepSeek Harness Desktop 是 Tauri 2 应用，负责管理本地 Harness 服务�
 
 <Steps>
   <Step title="解析配置">Rust 确定正式版或 Debug 路径、活动 Profile、首选内核与端口。</Step>
-  <Step title="准备依赖">适当时复用兼容系统工具，否则准备托管 Node.js、pnpm 与预构建内核。</Step>
-  <Step title="确保插件">启动服务前检查并恢复必需的内部插件。</Step>
-  <Step title="启动并探测 Harness">后端启动概念上等价于 `dsh --profile <profile> --host 127.0.0.1 --port 3080` 的进程，然后等待健康检查。</Step>
-  <Step title="加载客户端">原生窗口从设置或加载状态切换到本地 Harness UI。</Step>
+  <Step title="准备依赖">复用兼容的本地工具或准备托管 Node.js、pnpm 与内核；首次启动需要联网下载缺少的依赖。</Step>
+  <Step title="确保插件">启动服务前检查并恢复活动 Profile 的内置插件。</Step>
+  <Step title="启动并探测 Harness">选定 Node 启动 Harness 入口，传入 `--profile <id> --port <port> --no-open`，然后等待健康检查。</Step>
+  <Step title="加载客户端">原生窗口从设置或加载状态切换到本地 Harness UI；默认端口为正式版 `3080`、Debug `3081`，占用时可避让。</Step>
 </Steps>
 
 ## 信任边界
 
 Web 客户端、Rust 后端、Harness 进程、插件、模型供应商和工作区是不同组件，但并非独立安全沙箱。
-Tauri command 缩小原生能力范围；Harness 工具和插件仍可使用用户权限执行本地代码。
+Tauri command 缩小原生能力范围；Harness 工具和插件仍可使用用户权限执行本地代码，Profile 不是操作系统沙箱。
 
 继续阅读[运行时与数据](./runtime-and-data)或[插件系统](./plugin-system)。
-
-
-
-
-

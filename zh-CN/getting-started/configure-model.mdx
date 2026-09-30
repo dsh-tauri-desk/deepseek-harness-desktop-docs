@@ -1,53 +1,63 @@
 ---
 title: 配置模型
-description: 开始第一个任务前添加 DeepSeek 或兼容的模型供应商。
+description: 通过 DeepSeek 官方账号登录、API 密钥或兼容供应商开始第一个任务。
 ---
 
-Harness 至少需要一个模型供应商才能在会话中响应。最短路径是在嵌入的 Harness 设置中添加
-DeepSeek API 密钥。
+开始任务前，先登录 DeepSeek 官方账号或配置至少一个模型供应商。这些入口位于嵌入的 Harness 界面，不是桌面端的**配置**对话框。
 
 <Frame>
-  <img src="/images/zh-CN/model-settings.png" alt="包含 DeepSeek 供应商卡片的 Harness 模型设置" />
+  <img src="/images/model-settings.png" alt="包含 DeepSeek 供应商卡片的 Harness 模型设置" />
 </Frame>
 
-## 添加 DeepSeek
+## 登录 DeepSeek 官方账号
+
+官方账号登录通过浏览器完成 DeepSeek 授权，使用 `deepseek-account` 模型路由；它不同于手动填写开放平台 API 密钥的 `deepseek-official` 路由，无需把 API 密钥粘贴到模型设置。
+
+<Steps>
+  <Step title="打开登录入口">
+    首次配置引导提供**登录**与**添加 API Key**两种方式。也可以在 Harness 侧边栏底部打开**更多 → 登录**，或进入**设置 → 账号与余额**点击**登录**。
+  </Step>
+  <Step title="在浏览器完成授权">
+    桌面端会自动打开系统浏览器中的 DeepSeek 官方授权页，按页面提示登录并授权。若页面没有自动打开，在等待登录弹窗点击**复制登录链接**，再手动粘贴到浏览器。超时或失败时点击**重新登录**；不继续时可取消。
+  </Step>
+  <Step title="回到 Harness 验证模型">
+    授权完成后，Harness 更新登录状态并关闭登录弹窗。回到会话输入区，选择 **DeepSeek 账号**下的可用模型和工作区，发送一个小型任务，例如概括仓库结构。
+  </Step>
+</Steps>
+
+{/* <!-- [DeepSeek 官方账号登录入口、等待浏览器授权与复制登录链接](/images/official-login.webp) --> */}
+
+- 登录凭据保存在本地 Harness 凭据存储中，重启后可继续读取；若提示登录信息失效，请重新登录。
+- 未配置任何供应商 API 密钥时，登录成功会将第一个可用的账号模型保存为默认模型；已有 API 密钥时不会覆盖默认模型。已有会话的模型选择不会因登录或可用性变化自动替换，请在输入区确认。
+- 在侧边栏账号菜单选择**退出登录**会移除本地登录凭据，不删除项目或会话数据；使用该账号的运行中任务会被中断。
+
+## 使用 DeepSeek API 密钥
 
 <Steps>
   <Step title="打开模型设置">
-    在 Harness 侧边栏打开**设置 → 模型**。这是嵌入式 Harness 界面，而不是桌面壳的**配置**对话框。
-    桌面端这一页由内置插件 [DSH Tauri Model Config](../built-in-plugins/dsh-tauri-model-config) 提供。
+    在 Harness 侧边栏打开**设置 → 模型**。桌面端通过内置 [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) 扩展这一页面；登录引导中的**添加 API Key**也可打开密钥配置。
   </Step>
-  <Step title="输入 API 密钥">
-    找到 DeepSeek 卡片，输入来自 [DeepSeek 开放平台](https://platform.deepseek.com/) 的密钥并保存。
+  <Step title="保存凭据">
+    编辑 DeepSeek 官方 API 供应商（`deepseek-official`），输入来自 [DeepSeek 开放平台](https://platform.deepseek.com/) 的 API 密钥并保存。
   </Step>
-  <Step title="选择模型">
-    返回会话输入区并选择可用模型。该选择会成为新会话的默认模型。
-  </Step>
-  <Step title="发送小型测试任务">
-    选择工作区，让 Harness 概括仓库。模型变化从下一次请求生效，无需重启 Harness 服务。
+  <Step title="选择模型并测试">
+    回到会话输入区，选择该供应商下的可用模型和工作区，发送测试任务。若失败，先检查凭据、端点和模型名称，再查看供应商返回的错误与账号额度信息。
   </Step>
 </Steps>
 
 <Warning>
-  不要把 API 密钥粘贴到聊天消息、仓库文件、截图或 Issue 中。Harness 单独存储供应商凭据，
-  浏览器界面只会收到脱敏描述。
+  不要把 API 密钥、登录凭据或授权链接放入聊天消息、仓库、截图或 Issue。模型请求会把所需上下文发送给你选择的供应商；处理敏感代码前确认其隐私政策与数据范围。账号登录不代表免费使用或固定额度，费用与可用额度以官方平台显示为准。
 </Warning>
 
-## 其他供应商
+## 其他供应商与自定义端点
 
-通过**添加供应商**配置 Anthropic、OpenAI 等已安装供应商；通过**添加自定义供应商**配置公司网关或
-自建 OpenAI 兼容端点。自定义供应商需要稳定的小写 Provider ID、基础 URL、协议、凭据和至少一个模型。
+在**设置 → 模型**点击**添加模型提供商**，选择添加方式：
 
-<Note>
-  供应商配置属于 Harness 功能，可以独立于桌面壳演进。桌面端在官方页面之上补了上下文与输出上限、
-  图片输入、思考模式和本地端点兼容选项，见 [DSH Tauri Model Config](../built-in-plugins/dsh-tauri-model-config)；
-  更上游的路由与供应商语义请参阅
-  [上游模型配置指南](https://deepseek-harness.github.io/deepseek-harness/guide/providers)。
-</Note>
+| 添加方式 | 需要准备 |
+| --- | --- |
+| **第三方模型提供商** | 内置目录中的供应商、对应凭据和可用模型 |
+| **自定义模型 API** | 稳定的小写 Provider ID、基础 URL、协议、凭据和至少一个模型 |
 
-接下来了解[桌面端与 Harness 界面](../guides/interface)。
+按端点支持情况配置上下文长度、输出上限、图片输入和思考模式；不要给不支持的模型启用这些能力。本地或公司网关的兼容选项见 [DSH Tauri Model](../built-in-plugins/dsh-tauri-model)。
 
-
-
-
-
+上游供应商语义见[模型配置指南](https://deepseek-harness.github.io/deepseek-harness/guide/providers)。接下来了解[桌面端与 Harness 界面](../guides/interface)。
