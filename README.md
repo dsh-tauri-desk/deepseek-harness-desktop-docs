@@ -25,7 +25,7 @@ pnpm check
 English content lives in `en/`; Simplified Chinese content lives in `zh-CN/`.
 Keep both trees structurally aligned. Product screenshots preserve the required comment
 placeholder inside valid MDX, for example
-`{/* <!-- [Settings overview](/images/en/settings-overview.webp) --> */}`. Replace it
+`{/* <!-- [Settings overview](/images/settings-overview.webp) --> */}`. Replace it
 only after reviewed assets are available.
 
 ## Contributing

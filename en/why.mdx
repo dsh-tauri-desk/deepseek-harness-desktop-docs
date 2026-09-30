@@ -1,43 +1,91 @@
 ---
 title: Why?
-description: Explain why we are building DeepSeek Harness Desktop alongside existing community clients.
+description: Explain why we are building DeepSeek Harness Desktop even though community desktop implementations already exist.
 ---
 
-We build DeepSeek Harness Desktop to provide a maintainable local desktop workflow, not to choose one client for everyone.
+Several community desktop clients for DeepSeek Harness already exist. We are not building
+another implementation because those projects are absent, and we do not believe every user
+should choose this project. We are building DeepSeek Harness Desktop because we make a
+different set of choices about project ownership, software quality, performance, and public claims.
 
-{/* <!-- [DeepSeek Harness Desktop product principles and boundaries](/images/en/why.webp) --> */}
+{/* <!-- [DeepSeek Harness Desktop product principles and boundaries](/images/why.webp) --> */}
 
 <Note>
-  This page explains our choices, not a ranking of community projects. Different clients suit different needs; see the [desktop client comparison](./guides/comparison) for the facts.
+  This page states our project position; it is not a ranking of community projects. Other
+  desktop clients may better serve different user needs.
+
+  See the [desktop client comparison](./guides/comparison) for the complete comparison.
 </Note>
 
-## Project choices
+## An open-source organization without commercial bundling
 
-| Principle | What it means for you |
-| --- | --- |
-| An open-source organization without commercial bundling | No forced services, model channels, or promotions unrelated to Harness; public source, discussions, and release processes |
-| A small, maintainable default set | First-party desktop integrations are built in; community presets remain optional, and plugin counts are not a quality measure |
-| Separate local service and desktop shell | Tauri uses the system WebView; Harness runs independently, with separate desktop and core updates |
-| Complete the basics first | Prioritize installation, startup, profiles, updates, logs, and recovery before adding features |
-| Verifiable commitments | Describe current source and release artifacts, state platform limits, and keep plans separate from shipped features |
+We want this software to be maintained by an open, transparent, and sustainable open-source
+organization rather than becoming a bundle for commercial services, model channels,
+sponsorship promotion, or traffic acquisition.
 
-“No commercial bundling” does not exclude individuals or organizations or dismiss other open-source models. It defines this project's product boundary.
+That means we aim to:
 
-## An experience goal, not a performance claim
+- make product decisions for the software itself rather than conversion, promotion, or commercial partnerships;
+- avoid presenting model gateways, paid services, or sponsorships as required product capabilities;
+- state our relationship with DeepSeek, upstream Harness, and other community projects clearly;
+- keep source, issue discussions, build processes, and release artifacts verifiable where possible;
+- record any future change to the project boundary explicitly instead of silently changing the promise.
 
-We aim to approach the product completeness demonstrated by Codex across functionality, responsiveness, stability, consistent details, and recovery. This is a goal, not a guarantee already achieved.
+“No commercial bundling” does not reject participation by individuals or organizations,
+and it does not reject every commercial open-source model. It means this project does not
+want to use the desktop client as a gateway that forces unrelated commercial products into Harness.
+
+## Quality before a community plugin bundle
+
+Harness provides strong composition through “everything is a plugin,” but community plugins
+currently vary in maintenance, interaction design, compatibility, error handling, and security
+boundaries. Preinstalling many plugins can increase the feature count quickly, but it also
+distributes their quality and supply-chain risks to every user.
+
+We choose a restrained default:
+
+- bundle only the features and first-party integrations required for the desktop runtime that we can continuously validate and recover;
+- keep optional plugins visibly optional instead of treating preinstalled quantity as software quality;
+- prioritize installation, startup, updates, profiles, cores, logs, and failure recovery;
+- explain plugin failures and offer recovery instead of exposing users directly to dependencies;
+- consider uninstall, upgrade, rollback, cross-platform behavior, and long-term maintenance before adding a capability.
+
+## Stay light and pursue Codex-level responsiveness
+
+Our goal is not only to open a window quickly. We want the desktop client to progressively
+reach the product standard demonstrated by Codex across **feature completeness, interaction
+responsiveness, stability, detail consistency, and recovery**.
+
+Tauri 2 is a means toward that goal, but not the only reason for the project:
+
+- reuse the system WebView instead of bundling another complete Chromium runtime;
+- manage processes, downloads, updates, PATH, and OS integration in Rust;
+- keep Harness as an independent local service while the desktop adds only necessary host capabilities;
+- update the desktop and Harness core separately to avoid unnecessary replacement.
 
 <Info>
-  Tauri does not automatically make an app faster or more memory-efficient. Runtimes, the core, plugins, startup time, and interaction latency all affect the experience and need measurement.
+  “Lightweight” is not only installer size. The Harness core, Node.js, pnpm, plugins,
+  startup time, memory, input latency, and recovery all affect the experience. We will
+  improve from measured results rather than claim performance leadership merely because we use Tauri.
 </Info>
 
-## Trust and boundaries
+## Stay restrained and objective
 
-- Optional presets require your installation approval and do not count as built-in plugins.
-- Profiles separate configuration and plugin environments, not operating system permissions.
-- Upstream and the ecosystem continue to change; use the desktop's supported version range.
-- Stars, feature lists, and unmeasured “safer” or “lighter” claims are not quality evidence.
+DeepSeek Harness and its ecosystem are changing quickly. We cannot guarantee that every
+plan will ship, and we cannot promise upstream stability. We therefore want to promise
+only what we can verify and maintain within our current ability.
+
+Our principles include:
+
+- do not present planned features as current delivery commitments;
+- do not substitute stars, plugin counts, or a feature checklist for reliability and user experience;
+- do not state unmeasured “faster,” “safer,” or “lighter” claims as absolute facts;
+- document unsupported platforms, known limitations, and failure modes clearly;
+- describe other projects from source, releases, and test results without guessing their motives;
+- reduce scope when our ability is insufficient and finish existing workflows first.
 
 <Warning>
-  Harness and plugins can execute local code. Fewer default bundles do not remove the risks of untrusted repositories, third-party plugins, or tool authorization. Check sources before installing and review permissions before execution.
+  Harness and plugins can execute local code. Reducing default bundles does not remove the
+  risks of third-party plugins, untrusted repositories, or authorized tools. Software quality
+  requires ongoing review, testing, and explicit trust boundaries—not only the words “open source” or “lightweight.”
 </Warning>

@@ -1,12 +1,12 @@
 ---
 title: 桌面客户端对比
-description: 对比四个 DeepSeek Harness 桌面项目的定位、平台覆盖、运行时、插件与恢复能力。
+description: 对比本项目、两个社区客户端与 DeepSeek 官方桌面端的定位、平台、运行时、插件与恢复能力。
 ---
 
 先按安装包、运行时管理和恢复方式选择，再比较插件与远程入口。
 
 <Note>
-  截至 2026-09-30，依据公开 README、版本清单、发布说明与实际 Release Assets。
+  截至 2026-09-30，依据公开 README、版本清单、发布说明、实际 Release Assets 与官方下载页。
   “未确认”表示材料没有明确说明，不代表功能不存在；不同发布渠道的能力不能混用。
 </Note>
 
@@ -17,48 +17,49 @@ description: 对比四个 DeepSeek Harness 桌面项目的定位、平台覆盖�
 | 本项目 | Tauri 2 + React；独立 Harness 服务 | 第一方桌面增强、运行时管理；社区插件按需选择 |
 | anywhere-labs/dsh-desktop | Electron；桌面本身是 DSH/Cordis 插件 | 插件式组合、Profile 向导、Agents Anywhere 手机控制 |
 | dataelement/dsh-desktop | Electron | 本地优先、可移植 Agent preset、PPT 与手机配对桥 |
-| DSH-EAC/DSH-Desktop-EAC | Tauri 2 | 一体化增强发行版；较多预装插件与保护/恢复工具 |
+| DeepSeek 官方桌面端 | Electron；内置完整 Harness Web UI 与 Host | 官方公共预览；桌面与内核同步更新，插件按需启用 |
 
 框架名称不是性能排名；安装体积、内存与响应速度还取决于运行时和插件，本文没有统一基准测试。
 
 ## 发布渠道与平台
 
-下表只列已上传的安装资产，不把 README 的构建目标当作可下载支持。
+下表只列公开可下载的安装资产，不把 README 的构建目标当作已发布支持。
 
 | 项目 | 正式渠道 | 预览 / 实验渠道 | 对应安装资产 |
 | --- | --- | --- | --- |
 | 本项目 | [v0.19.1](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.19.1) | [v0.20.0-beta.1](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.20.0-beta.1) | 两者：Win x64 EXE/MSI；macOS arm64/x64 DMG；Linux x64 AppImage/DEB |
 | anywhere-labs | [v2.0.17](https://github.com/anywhere-labs/dsh-desktop/releases/tag/v2.0.17) | [Beta.1](https://github.com/anywhere-labs/dsh-desktop/releases/tag/v2.0.17-beta.1)；[Next](https://github.com/anywhere-labs/dsh-desktop/releases/tag/v2.0.17-next) | 三渠道：Win x64 Setup；macOS Universal DMG；Linux x64 AppImage/DEB/tar.gz |
 | dataelement | [v0.10.0](https://github.com/dataelement/dsh-desktop/releases/tag/v0.10.0) | [v0.10.0-beta](https://github.com/dataelement/dsh-desktop/releases/tag/v0.10.0-beta) | 两者：Win x64 Setup；macOS arm64/x64 DMG/ZIP；README 明确暂不支持 Linux |
-| EAC | [v5.3.6](https://github.com/DSH-EAC/DSH-Desktop-EAC/releases/tag/v5.3.6) | [v6.0.0-beta.1](https://github.com/DSH-EAC/DSH-Desktop-EAC/releases/tag/v6.0.0-beta.1) | v5.3.6：Win x64 Setup/便携 ZIP、Linux x64 AppImage/DEB；Beta.1：仅 Win x64 |
+| DeepSeek 官方 | 未单列正式渠道 | [公共预览下载](https://www.deepseek.com/download/) | Win x64 EXE（Windows 10+）；macOS arm64 DMG（Apple silicon，macOS 13+） |
 
 - 本项目 v0.19.1 另有 Bundle 资产；v0.20.0-beta.1 当前 7 个安装资产中没有 Bundle。
 - anywhere 的 Linux 已在正式/Beta 渠道发布，并非 Next 独有；Linux 仅兼容模式，暂不提供 ARM64 包。
 - GitHub `latest` / `prerelease=false` 不等于正式渠道：anywhere 的 `latest` 指向实验 Next；dataelement 的 beta 标签也为 false。
-- EAC 的 [macOS arm64 v5.1.0](https://github.com/DSH-EAC/DSH-Desktop-EAC/releases/tag/v5.1.0) 是历史资产；AIO 与 v4.x `-linux` 是独立发行线，不与正式主线合并。
+- 官方下载页明确不支持 Intel Mac，未提供 Linux 桌面包；源码中的 macOS x64 构建目标不等于公开发布支持。
 
 ## 管理、插件与恢复
 
-本项目按当前 v0.20.0-beta.1 清单；EAC 的 README 功能表为 v5，且提示不再修复 v5 遗留 Bug，不据此推定 v6 Beta 能力。
+本项目按当前 v0.20.0-beta.1 清单；官方列依据公共预览页面与当前桌面源码，未把源码版本号当作下载包版本。
 
-| 比较项 | 本项目 | anywhere-labs | dataelement | EAC |
+| 比较项 | 本项目 | anywhere-labs | dataelement | DeepSeek 官方 |
 | --- | --- | --- | --- | --- |
-| Profile / 运行时 | 原生 Profile；多内核切换、复用本地 `dsh`、CLI 注册 | Profile 向导/切换；固定 Harness | 保留 Profile 数据；固定 Harness | v5 独立 `web-desktop` Profile；内核独立更新/回退 |
-| 插件策略 | 第一方内置；`dshmarket` 等为可选预设 | 桌面即插件；内置社区市场 | Harness 插件；第三方插件按需安装 | v5 预装增强插件与统一市场 |
-| 特色管理入口 | Skills/来源管理与 MCP 配置：`dsh-tauri-extension` | Profile 设置与插件 CLI | `.dshpreset` 导入/导出、模型供应商、PPT | v5 可视化 MCP、配置迁移 |
-| Worktree / 定时任务 | 会话 Git Worktree；定时执行与运行历史 | 未确认 | 未确认 | 未确认 |
-| 插件故障恢复 | 定位问题插件并引导移除 | 恢复助手 | 故障诊断；非破坏性 Safe Mode | v5 快照、体检、修复/回滚 |
+| Profile / 运行时 | 原生 Profile；多内核切换、复用本地 `dsh`、CLI 注册 | Profile 向导/切换；固定 Harness | 保留 Profile 数据；固定 Harness | 专用 `desktop` Profile；内核随桌面更新，可选 CLI 注册 |
+| 插件策略 | 第一方内置；`dshmarket` 等为可选预设 | 桌面即插件；内置社区市场 | Harness 插件；第三方插件按需安装 | 共用 Harness 插件管理器；Creator mode 创建插件 |
+| 特色管理入口 | Skills/来源管理与 MCP 配置：`dsh-tauri-extension` | Profile 设置与插件 CLI | `.dshpreset` 导入/导出、模型供应商、PPT | 插件管理、运行轨迹与开发者工具 |
+| Worktree / 定时任务 | 会话 Git Worktree；定时执行与运行历史 | 未确认 | 未确认 | Worktree 未确认；定时任务需启用插件，非默认开启 |
+| 插件故障恢复 | 定位问题插件并引导移除 | 恢复助手 | 故障诊断；非破坏性 Safe Mode | 原生恢复对话框；禁用第三方插件、备份 Profile patch 后重启 |
 
 - 本项目内核推荐 `0.2.0-rc.2`，最低 `0.1.5-rc.1`；anywhere 当前三渠道固定 `0.2.0-rc.2`。
 - dataelement 清单与 v0.10.0 发布说明为 `0.1.7-rc.2`，README 仍写 rc.1，以版本清单为准。
 - 本项目当前 ID 包括 `dsh-tauri-scheduler`、`dsh-tauri-archive`、`dsh-tauri-model`；Beta 新增 `dsh-tauri-notification` 原生通知。
+- 官方桌面与 CLI 共用会话、设置等产品数据，但插件启用状态与可执行依赖隔离；不等于多内核切换。
 
 ## 远程入口的区别
 
-| 机制 | 本项目 | anywhere-labs | dataelement | EAC |
+| 机制 | 本项目 | anywhere-labs | dataelement | DeepSeek 官方 |
 | --- | --- | --- | --- | --- |
 | SSH 远程主机 | 内置 `dsh-tauri-ssh`；连接远端 `dsh web`，经回环隧道访问 | 未确认 | 未确认 | 未确认 |
-| 手机续接 | 内置配对桥未确认；第三方预设另核对 | Agents Anywhere（2.0.9 起） | 独立配对桥：LAN / 临时公网隧道 | v6 Beta.1 发布说明提及手机桥；正式线未确认 |
+| 手机续接 | 内置配对桥未确认；第三方预设另核对 | Agents Anywhere（2.0.9 起） | 独立配对桥：LAN / 临时公网隧道 | 未确认 |
 
 - SSH 在远端主机运行 Harness；手机桥续接桌面会话，不是同一种“远程支持”。
 - anywhere 的浏览器打开不改变监听范围；另行开启 LAN 会暴露无鉴权入口，仅用于完全可信网络。
@@ -68,7 +69,7 @@ description: 对比四个 DeepSeek Harness 桌面项目的定位、平台覆盖�
 
 - 需要多内核管理、第一方面板、Worktree、定时任务或 SSH 主机连接：先看本项目，并确认正式/Beta 渠道。
 - 需要插件式桌面与 Agents Anywhere：看 anywhere；更重视可移植 preset、PPT 和配对手机桥：看 dataelement。
-- 希望预装较完整的增强工具集：看 EAC；先区分 v5 正式线、v6 Beta、AIO 与历史平台包，再核对恢复流程。
+- 希望直接使用官方 Harness 桌面预览：看官方下载页，先确认操作系统与架构，再按需启用插件。
 
 <Warning>
   Harness 与插件可执行本地代码。Profile、Worktree、Safe Mode 和插件保护不等于 OS 沙箱。
@@ -79,6 +80,6 @@ description: 对比四个 DeepSeek Harness 桌面项目的定位、平台覆盖�
 
 - 本项目：[README](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/README.md)、[Beta 清单](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/v0.20.0-beta.1/src-tauri/resources/manifest.jsonc)、[第一方插件](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages)。
 - anywhere：[README](https://github.com/anywhere-labs/dsh-desktop/blob/master/README.md)、[正式版清单](https://github.com/anywhere-labs/dsh-desktop/blob/v2.0.17/dsh-plugin-desktop/package.json)。
-- dataelement：[README](https://github.com/dataelement/dsh-desktop/blob/main/README.md)、[依赖清单](https://github.com/dataelement/dsh-desktop/blob/main/package.json)。
-- EAC：[当前 README（v5 范围）](https://github.com/DSH-EAC/DSH-Desktop-EAC/blob/main/README.md)、[v5.3.6 README](https://github.com/DSH-EAC/DSH-Desktop-EAC/blob/v5.3.6/README.md)。各渠道资产与说明见上表链接。
+- dataelement：[README](https://github.com/dataelement/dsh-desktop/blob/main/README.md)、[依赖清单](https://github.com/dataelement/dsh-desktop/blob/main/package.json)。各渠道资产与说明见上表链接。
+- DeepSeek 官方：[下载页](https://www.deepseek.com/download/)、[Harness 产品页](https://www.deepseek.com/harness/)、[桌面 README](https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/desktop/README.md)、[桌面清单](https://github.com/deepseek-ai/deepseek-harness/blob/master/apps/desktop/package.json)。平台以下载页为准，桌面技术与恢复边界以桌面源码为准。
 - 计划仅查看实时 [GitHub Project](https://github.com/orgs/dsh-tauri/projects/3/views/2)；本页不复制 Status、Priority、Quarter，也不把已交付的 SSH/定时任务列为计划。

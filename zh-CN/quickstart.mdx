@@ -1,50 +1,48 @@
 ---
 title: 快速开始
-description: 安装桌面端、配置模型并开始第一个本地任务。
+description: 通过轻量、免配置的桌面应用在本机运行 DeepSeek Harness。
 ---
 
-DeepSeek Harness Desktop 管理本地 Harness 服务、运行时、档案和插件。你无需手动安装 Node.js、pnpm 或 Docker；首次启动通常需要联网下载依赖，开始任务前还需配置模型供应商。
+DeepSeek Harness Desktop 通过原生 Tauri 桌面壳，统一管理本地运行时、Harness
+内核、插件与更新。安装后即可开始使用，无需自行配置 Node.js、pnpm 或 Docker。
 
 <Frame>
-  <img src="/images/zh-CN/home-overview.png" alt="DeepSeek Harness Desktop 中文主界面" />
+  <img src="/images/home-overview.png" alt="DeepSeek Harness Desktop 中文主界面" />
 </Frame>
-
-## 开始第一个任务
 
 <CardGroup cols={3}>
   <Card title="安装" icon="download" href="./installation">
-    选择与你的平台和架构匹配的发布资源。
+    为 Windows、macOS 或 Linux 选择安装包。
   </Card>
   <Card title="首次运行" icon="play" href="./getting-started/first-run">
-    下载依赖、选择可选插件并打开 Harness。
+    让应用准备本地运行时并打开 Harness。
   </Card>
-  <Card title="配置模型" icon="sliders" href="./getting-started/configure-model">
-    添加供应商凭据，选择模型并发送测试任务。
+  <Card title="了解架构" icon="diagram-project" href="./architecture/overview">
+    理解 Tauri、Harness 服务和插件如何协作。
   </Card>
 </CardGroup>
 
-## 分清两个设置入口
+## 桌面端提供什么
 
-| 入口 | 管理内容 |
-| --- | --- |
-| Harness **设置** | 模型、工具、Skills、MCP 和任务相关配置 |
-| 桌面端 **配置** | 应用行为、档案、插件、Harness 内核和更新 |
-
-首次安装使用桌面档案 `tauri`。正式版默认启用 [CLI 集成](./guides/cli-integration)，重新打开终端后可运行 `dsh --help`。
+- 使用 Tauri 2 构建的轻量原生桌面壳。
+- 带区域下载回退的运行时与 Harness 内核安装流程。
+- 统一管理 Profile、内核与插件的双语界面。
+- 为新终端会话注册 `dsh` 命令。
+- 第一方桌面集成与可选预设插件。
+- 桌面端和 Harness 内核相互独立的更新机制。
 
 <Warning>
-  Harness 和插件可以执行本地代码。只使用可信仓库和插件，并审查工具权限。档案和 Git 工作树不是操作系统沙箱；处理不可信代码时使用独立用户、容器或虚拟机等真正的隔离环境。
+  Harness 可以在你的计算机上执行代码。请仅使用可信仓库和插件，审查所需权限，
+  并在处理不可信代码时使用隔离工作区。
 </Warning>
 
-## 下一步
+## 选择阅读路径
 
 <CardGroup cols={2}>
-  <Card title="日常使用" icon="desktop" href="./guides/workspaces-and-sessions">
-    创建工作区和会话，按任务选择模型与工作树。
+  <Card title="使用桌面端" icon="desktop" href="./guides/workspaces-and-sessions">
+    了解会话、Profile、内核和插件的日常工作流。
   </Card>
   <Card title="参与开发" icon="code-pull-request" href="./development/setup">
-    准备桌面端源码开发环境。
+    配置 React 19 与 Rust/Tauri 开发环境。
   </Card>
 </CardGroup>
-
-实现边界见[架构概览](./architecture/overview)；启动失败时查阅[故障排除](./help/troubleshooting)。

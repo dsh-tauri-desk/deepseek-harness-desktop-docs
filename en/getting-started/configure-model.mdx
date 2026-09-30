@@ -1,38 +1,62 @@
 ---
 title: Configure a model
-description: Add a DeepSeek or compatible model provider before starting your first task.
+description: Start your first task with official DeepSeek account sign-in, an API key, or a compatible provider.
 ---
 
-Configure at least one model provider before starting a task. Model settings belong to the embedded Harness interface, not the desktop **Configuration** dialog.
+Before starting a task, sign in to your official DeepSeek account or configure at least one model provider. These entry points belong to the embedded Harness interface, not the desktop **Configuration** dialog.
 
 <Frame>
-  <img src="/images/en/model-settings.png" alt="Harness model settings with the DeepSeek provider card" />
+  <img src="/images/model-settings.png" alt="Harness model settings with the DeepSeek provider card" />
 </Frame>
 
-## Add DeepSeek
+## Sign in to your official DeepSeek account
+
+Account sign-in completes DeepSeek authorization in your browser and uses the `deepseek-account` model route. It is separate from the `deepseek-official` route that takes a manually entered Platform API key; you do not need to paste an API key into model settings for account sign-in.
+
+<Steps>
+  <Step title="Open a sign-in entry point">
+    Initial setup offers **Sign in** and **Add API Key**. You can also open **More → Sign in** at the bottom of the Harness sidebar, or go to **Settings → Account** and click **Sign in**.
+  </Step>
+  <Step title="Complete authorization in your browser">
+    The desktop automatically opens the official DeepSeek authorization page in your system browser. Follow its prompts to sign in and authorize. If the page does not open, click **Copy sign-in link** in the waiting dialog and paste it into your browser. Click **Sign in again** after a timeout or failure, or cancel if you do not want to continue.
+  </Step>
+  <Step title="Return to Harness and verify a model">
+    After authorization, Harness updates your sign-in status and closes the sign-in dialog. In the session composer, choose an available model under **DeepSeek Account** and a workspace, then send a small task such as summarizing the repository.
+  </Step>
+</Steps>
+
+{/* <!-- [Official DeepSeek account sign-in, waiting for browser authorization, and copying the sign-in link](/images/official-login.webp) --> */}
+
+- Sign-in credentials are kept in the local Harness credential store and can be read after a restart. Sign in again if Harness reports that your login is no longer valid.
+- When no provider API key is configured, successful sign-in saves the first available account model as the default. An existing API key prevents this default from being overwritten. Sign-in or availability changes do not automatically replace an existing session's model selection; check it in the composer.
+- **Sign out** in the sidebar account menu removes local sign-in credentials without deleting project or session data. It interrupts running tasks that use this account.
+
+## Use a DeepSeek API key
 
 <Steps>
   <Step title="Open model settings">
-    Open **Settings → Models** in the Harness sidebar. The desktop extends this page through the built-in [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) plugin.
+    Open **Settings → Models** in the Harness sidebar. The desktop extends this page through the built-in [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) plugin. **Add API Key** in the sign-in setup also opens key configuration.
   </Step>
   <Step title="Save credentials">
-    Enter an API key from the [DeepSeek Platform](https://platform.deepseek.com/) in the DeepSeek card and save it.
+    Edit the official DeepSeek API provider (`deepseek-official`), enter an API key from the [DeepSeek Platform](https://platform.deepseek.com/), and save it.
   </Step>
   <Step title="Select a model and test">
-    Return to the session composer, choose an available model and workspace, and send a small task such as summarizing the repository. If it fails, check credentials, balance, endpoint, and model name first.
+    Return to the session composer, choose an available model under that provider and a workspace, and send a test task. If it fails, check credentials, endpoint, and model name first, then review the provider's error and account allowance information.
   </Step>
 </Steps>
 
 <Warning>
-  Never put API keys in chat messages, repositories, screenshots, or issues. Model requests send the necessary context to your chosen provider; check its privacy policy and data scope before processing sensitive code.
+  Never put API keys, sign-in credentials, or authorization links in chat messages, repositories, screenshots, or issues. Model requests send the necessary context to your chosen provider; check its privacy policy and data scope before processing sensitive code. Account sign-in does not imply free usage or a fixed allowance; consult the official Platform for fees and available allowance.
 </Warning>
 
 ## Other providers and custom endpoints
 
-| Entry point | What you need |
+In **Settings → Models**, click **Add model provider** and choose how to add it:
+
+| Method | What you need |
 | --- | --- |
-| **Add provider** | An installed provider plugin, credentials, and available models |
-| **Add custom provider** | A stable lowercase Provider ID, base URL, protocol, credentials, and at least one model |
+| **Third-party model provider** | A provider from the built-in catalog, credentials, and available models |
+| **Custom model API** | A stable lowercase Provider ID, base URL, protocol, credentials, and at least one model |
 
 Configure context length, output limits, image input, and thinking modes only when the endpoint supports them. See [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) for local or company gateway compatibility options.
 

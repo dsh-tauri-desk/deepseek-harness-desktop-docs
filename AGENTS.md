@@ -96,7 +96,7 @@ The comparison tracks:
 - <https://github.com/dsh-tauri/deepseek-harness-desktop>
 - <https://github.com/anywhere-labs/dsh-desktop>
 - <https://github.com/dataelement/dsh-desktop>
-- <https://github.com/DSH-EAC/DSH-Desktop-EAC>
+- <https://www.deepseek.com/download/> — official Harness Desktop; also inspect the upstream desktop source.
 
 Every comparison refresh must:
 
@@ -163,7 +163,7 @@ description: 用一句话说明读者能完成什么。
 - Translate meaning and structure, not word order.
 - Preserve commands, package names, signatures, API and slot identifiers, paths, URLs, versions, errors, and configuration keys exactly.
 - Keep sections, tables, callouts, examples, claims, and links aligned.
-- Use `/images/zh-CN/` and `/images/en/` for locale-specific media.
+- Use shared `/images/` media in both locales; use reviewed Chinese screenshots rather than keeping locale-specific copies.
 - After a file move or rename, change both locales, both navigation entries, and all links.
 
 ## Writing style
@@ -229,11 +229,11 @@ Critical instructions must not be hidden in an accordion. Components should add 
 Before reviewed assets exist, preserve the exact placeholder inside valid MDX JSX comments:
 
 ```mdx
-{/* <!-- [清晰描述](/images/zh-CN/example.webp) --> */}
+{/* <!-- [清晰描述](/images/example.webp) --> */}
 ```
 
 ```mdx
-{/* <!-- [Clear description](/images/en/example.webp) --> */}
+{/* <!-- [Clear description](/images/example.webp) --> */}
 ```
 
 - Keep the inner `<!-- [description](path) -->` exact.

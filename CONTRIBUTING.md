@@ -21,11 +21,12 @@ Thank you for improving DeepSeek Harness Desktop documentation.
 
 ## Screenshot policy
 
+Use shared `/images/` assets in both languages; Chinese screenshots are the source.
 Until reviewed product images are ready, preserve the required HTML comment exactly
 inside an MDX JSX comment:
 
 ```mdx
-{/* <!-- [Concise description](/images/en/path-to-image.webp) --> */}
+{/* <!-- [Concise description](/images/path-to-image.webp) --> */}
 ```
 
 The inner `<!-- [description](path) -->` text must remain unchanged. The JSX wrapper is

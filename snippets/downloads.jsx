@@ -481,6 +481,7 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
       previewTag: "预览版",
       published: "发布于",
       noAssets: "该版本没有可下载的安装包。",
+      bundle: "捆绑版（Bundle）",
       releaseNotes: "查看该版本的发布说明",
       allReleases: "全部版本",
       platforms: { windows: "Windows", macos: "macOS", linux: "Linux", other: "其他文件" },
@@ -502,6 +503,7 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
       previewTag: "pre-release",
       published: "Published",
       noAssets: "This release has no downloadable installers.",
+      bundle: "Bundled installers (Bundle)",
       releaseNotes: "Read the release notes",
       allReleases: "All releases",
       platforms: { windows: "Windows", macos: "macOS", linux: "Linux", other: "Other files" },
@@ -524,7 +526,7 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
 
   const classifyAsset = (name) => {
     const lower = name.toLowerCase()
-    if (lower.endsWith("-setup.exe"))
+    if (lower.endsWith(".exe"))
       return { platform: "windows", kind: "winSetup", rank: 0 }
     if (lower.endsWith("_zh-cn.msi"))
       return { platform: "windows", kind: "winMsiZh", rank: 1 }
@@ -571,15 +573,16 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
         url: asset.url,
         size: asset.size,
         rank: meta.rank,
+        bundle: /_bundle_/i.test(asset.name ?? ""),
       })
     }
-    return PLATFORM_ORDER
-      .filter(platform => buckets[platform].length > 0)
+    return [false, true].flatMap(bundle => PLATFORM_ORDER
       .map(platform => ({
-        platform,
-        label: copy.platforms[platform],
-        items: buckets[platform].sort((a, b) => a.rank - b.rank),
+        platform: `${platform}:${bundle ? "bundle" : "standard"}`,
+        label: bundle ? `${copy.platforms[platform]} · ${copy.bundle}` : copy.platforms[platform],
+        items: buckets[platform].filter(item => item.bundle === bundle).sort((a, b) => a.rank - b.rank),
       }))
+      .filter(group => group.items.length > 0))
   }
 
   const releases = [...SNAPSHOT].sort((a, b) => (b.published ?? "").localeCompare(a.published ?? ""))
