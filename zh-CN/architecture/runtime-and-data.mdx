@@ -9,7 +9,7 @@ description: 了解桌面端如何选择运行时、启动 Harness，并隔离�
 
 | 项目 | 当前值 |
 | --- | --- |
-| 桌面版本 | `0.20.0-beta.1`（预发布） |
+| 桌面版本 | `0.22.1`（正式版）；最新预览版为 `0.20.1-beta.4` |
 | Harness 内核 | 推荐 `0.2.0-rc.2`；当前清单与本地 CLI 校验最低值为 `0.1.5-rc.1` |
 | 托管环境 | Node.js `v22.22.0`、pnpm `11.7.0` |
 
@@ -17,6 +17,16 @@ description: 了解桌面端如何选择运行时、启动 Harness，并隔离�
 - 复用兼容的本地工具；缺失或原生模块 ABI 不兼容时可回退托管副本。
 - 托管内核来自 [deepseek-harness-pkg](https://github.com/dsh-tauri/deepseek-harness-pkg)，优先官方 GitHub 资源，失败时尝试镜像。
 - 版本以[运行时清单](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc)为准。
+
+## 数据目录迁移
+
+非 Debug 构建可在**配置 → 数据**中更改数据目录；Windows 安装器也可选择位置。
+
+- 迁移依次执行复制、校验（文件数与字节数）、把旧目录改名为 `<旧目录>.moved-<时间戳>`，最后重写用户级 `DSH_HOME`；不会删除原数据。
+- 先完成任务并关闭使用相同目录的其他客户端；桌面端会停止本机 Harness 后迁移。校验不完整会报 `DATA_DIR_COPY_INCOMPLETE`。
+- 可回滚；若当前目录非空，会先改名为 `<目标目录>.current-<时间戳>`。
+- 开发构建固定使用 `~/.dsh.dev` 并忽略 `DSH_HOME`，因此不能迁移数据目录。
+- 更改后已打开的终端需要重启才能使用新路径。
 
 ## 正式版与 Debug 隔离
 

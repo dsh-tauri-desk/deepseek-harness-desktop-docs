@@ -17,7 +17,9 @@ description: 了解桌面化设置侧边栏及其兼容性降级机制。
   <Step title="返回应用">关闭侧栏后恢复内容列与侧栏交互。设置打开期间，背景内容和 Better Sidebar 不可操作。</Step>
 </Steps>
 
-设置入口注册在 `sidebar.settings`，侧栏渲染在 `shell.overlay`。桌面宿主也可用 `dsh://settings:open` 消息直接打开指定分区。
+设置入口注册在 `sidebar.settings`，通过可用的 `settings.launcher` 保留官方入口；侧栏渲染在 `shell.overlay`。桌面宿主也可用 `dsh://settings:open` 消息直接打开指定分区。
+
+移动设备保留官方设置对话框；主题、语言快捷选择和移动布局由独立的 [`dsh-tauri-mobile-ui`](./dsh-tauri-mobile-ui) 提供，不属于桌面设置侧栏。
 
 ## 会话体验
 

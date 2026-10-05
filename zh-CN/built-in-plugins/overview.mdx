@@ -3,7 +3,7 @@ title: 内置插件概览
 description: 了解 DeepSeek Harness Desktop 随安装包提供的第一方桌面插件及其职责边界。
 ---
 
-当前桌面端随资源分发 11 个第一方插件；启动前检查并恢复缺失或不一致的副本。
+当前桌面端随资源分发 12 个第一方插件；启动前检查并恢复缺失或不一致的副本。
 
 <Note>
   推荐内核为 **0.2.0-rc.2**；桌面声明的兼容最低版本仍为 **0.1.5-rc.1**。最低版本检查不保证所有插件在旧内核上均可用。
@@ -20,11 +20,14 @@ description: 了解 DeepSeek Harness Desktop 随安装包提供的第一方桌�
   <Card title="DSH Tauri UI" icon="sidebar" href="./dsh-tauri-ui">
     桌面设置与能力缺失时的降级。
   </Card>
+  <Card title="DSH Tauri Mobile UI" icon="mobile" href="./dsh-tauri-mobile-ui">
+    触屏布局与移动端偏好；不含手势侧栏。
+  </Card>
   <Card title="DSH Tauri Worktree" icon="code-branch" href="./dsh-tauri-worktree">
     隔离 Git 工作树；检出须用户明确批准。
   </Card>
   <Card title="DSH Tauri Extension" icon="puzzle-piece" href="./dsh-tauri-extension">
-    Skills、技能来源与 MCP 管理。
+    官方插件管理、可选市场、Skills 与 MCP。
   </Card>
   <Card title="DSH Tauri Scheduler" icon="calendar" href="./dsh-tauri-scheduler">
     定时任务、独立会话与执行记录。
@@ -52,7 +55,8 @@ description: 了解 DeepSeek Harness Desktop 随安装包提供的第一方桌�
 ## 分发与权限
 
 - 清单以当前桌面 `plugins.built-in` 为准；旧 Running Changes 不再属于内置集合。
-- 社区预设另行安装；扩展插件的 Skills/MCP 面板不包含市场。
+- 社区预设另行安装；扩展面板有可用的官方插件管理页时将其置于首位。可选市场是独立页签，仅在桌面 iframe 中且市场服务可渲染时显示。
+- 内置插件可在设置中停用，停用前会提示风险。
 - “内置”不提供额外操作系统沙箱。Harness 与插件仍可执行本地代码。
 
 [插件管理](../guides/plugins) · [当前源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages)

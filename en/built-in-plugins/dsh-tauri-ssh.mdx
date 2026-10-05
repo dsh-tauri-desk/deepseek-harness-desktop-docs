@@ -3,7 +3,7 @@ title: DSH Tauri SSH
 description: Connect to a remote Harness over SSH and sync plugins and Skills.
 ---
 
-Manage remote machines in **Settings → Servers**. `dsh-tauri-ssh` is off by default; enable it before connecting.
+Manage remote machines in **Settings → Service**. `dsh-tauri-ssh` is off by default; enable it before connecting.
 
 {/* <!-- [SSH server settings, connection status, and remote window entry](/images/dsh-tauri-ssh.webp) --> */}
 
@@ -11,21 +11,32 @@ Manage remote machines in **Settings → Servers**. `dsh-tauri-ssh` is off by de
 
 1. Enable SSH and choose a `~/.ssh/config` alias or **Add machine**.
 2. Check the host, user, and SSH port; optionally set a remote port, profile, or start command.
-3. Select **Test** or **Connect**, then **Open** the remote window.
-4. On the initiating machine, choose **Sync to remote** and select third-party plugins and user-level Skills.
+3. Select **Test** or **Connect** and follow handshake, startup, probe progress, and logs. Once connected and a desktop bridge is available, select **Open** to enter a remote window.
+4. Failed or dropped connections retry automatically according to configuration, with a countdown. Select **Disconnect** to stop retries.
+5. On the initiating machine, choose **Sync to remote** and confirm the target and selected items. Remote sessions show a hint instead of initiating another sync from that side.
+
+Machines can have an identifying color and an optionally tinted border. Without a desktop bridge, ordinary browsers do not show the native remote-window **Open** entry.
 
 | Default | Value or behavior |
 | --- | --- |
 | SSH / remote Web port | `22` / `3080` |
 | Remote profile | `remote` |
-| Credentials | Local SSH agent and keys; optional password or key passphrase |
+| Credentials | Local SSH agent, `IdentityFile`, and default keys; optional key passphrase or password fallback |
 | Manual machine vs config alias | A manual machine with the same ID takes precedence |
-| Built-in desktop plugins | Synced automatically on connection; excluded from manual selection |
+| Built-in desktop plugins | Automatic sync attempted on connection; excluded from manual selection |
 | Third-party plugins / Skills | Runs remote `dsh plugin add` / writes to `~/.dsh/skills` |
+
+## One-way sync to remote
+
+- Connections attempt to sync built-in desktop plugins. If that fails, the remote can fall back to its native UI; the full desktop interface is not guaranteed.
+- Manual sync previews the current profile's third-party dependencies and user-level Skills, with syncable items selected by default. Choose a connected target before confirming.
+- Plugins support npm and Git installation sources. `file:`, `link:`, `workspace:`, and HTTP URL dependencies are marked unsyncable; local dependency directories are not copied.
+- Skills come from direct subdirectories of `$DSH_HOME/skills` (`dsh`) and `~/.agents/skills` (`agents`). Both write to remote `~/.dsh/skills`. This is one-way transfer, not bidirectional sync; same-name files may be overwritten, so check the target first.
+- Results show per-item success, failure, and output, with a failed-item retry. Plugin sync may also copy local build approvals or approve dependencies identified in installation output before retrying. Sync only trusted code.
 
 ## Install Harness on the remote
 
-Use **Install dsh** to download, verify, and deploy to remote `~/.dsh-desktop`, then connect automatically.
+Use **Install dsh** to download and deploy to remote `~/.dsh-desktop`, then connect automatically. Downloads are verified when a trusted digest and a remote hashing tool are available. Otherwise, the flow logs a warning and continues; verification is not guaranteed.
 
 | Automatic installation platform | Distribution |
 | --- | --- |
@@ -40,7 +51,7 @@ Installation may copy `DEEPSEEK_API_KEY` and optional `DEEPSEEK_BASE_URL` from t
 
 - Machine configuration, including saved credentials: `$DSH_HOME/ssh/machines.json`.
 - First connections automatically record host fingerprints in `$DSH_HOME/ssh/known-hosts.json`; later mismatches are rejected.
-- When `DSH_HOME` is unset, these paths use `~/.dsh`. The connection API is `/api-ssh` on local loopback.
+- When `DSH_HOME` is unset, these paths use `~/.dsh`. Host APIs use `/api/desktop/dsh-tauri-ssh`. The native desktop bridge forwards only allowlisted endpoints to the local Harness service.
 - The remote Web service is accessed through an SSH tunnel; its Web port need not be exposed publicly.
 
 <Warning>

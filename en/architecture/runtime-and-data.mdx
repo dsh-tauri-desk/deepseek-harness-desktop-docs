@@ -10,7 +10,7 @@ This allows core updates and development builds without mixing profile state.
 
 | Item | Current value |
 | --- | --- |
-| Desktop version | `0.20.0-beta.1` (prerelease) |
+| Desktop version | `0.22.1` (stable); the latest preview is `0.20.1-beta.4` |
 | Harness core | Recommended `0.2.0-rc.2`; the current manifest and local CLI validation minimum is `0.1.5-rc.1` |
 | Managed environment | Node.js `v22.22.0`, pnpm `11.7.0` |
 
@@ -18,6 +18,16 @@ This allows core updates and development builds without mixing profile state.
 - Compatible local tools are reused; missing tools or incompatible native-module ABIs can trigger managed fallback.
 - The managed core comes from [deepseek-harness-pkg](https://github.com/dsh-tauri/deepseek-harness-pkg), using official GitHub assets first and a mirror on failure.
 - The [runtime manifest](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc) defines the versions.
+
+## Data directory migration
+
+Non-debug builds can change the data directory in **Configuration → Data**; the Windows installer also offers a location choice.
+
+- Migration copies, verifies file and byte counts, renames the old directory to `<old>.moved-<timestamp>`, and finally rewrites the user-level `DSH_HOME`. It never deletes the original data.
+- Finish tasks and close other clients using the same directory. The desktop stops local Harness before migrating; incomplete verification raises `DATA_DIR_COPY_INCOMPLETE`.
+- Rollback is available; a non-empty current directory is renamed to `<target>.current-<timestamp>` first.
+- Debug builds force `~/.dsh.dev` and ignore `DSH_HOME`, so they cannot migrate the data directory.
+- Open terminals need a restart to pick up the new path.
 
 ## Release and debug isolation
 

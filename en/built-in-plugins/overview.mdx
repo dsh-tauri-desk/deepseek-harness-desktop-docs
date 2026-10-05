@@ -3,7 +3,7 @@ title: Built-in plugins overview
 description: Understand the first-party desktop plugins shipped with DeepSeek Harness Desktop and their boundaries.
 ---
 
-The desktop currently ships 11 first-party plugins as resources. Startup checks restore missing or inconsistent copies.
+The desktop currently ships 12 first-party plugins as resources. Startup checks restore missing or inconsistent copies.
 
 <Note>
   The recommended core is **0.2.0-rc.2**; the desktop's declared compatibility minimum remains **0.1.5-rc.1**. Passing the minimum check does not guarantee every plugin works on an older core.
@@ -20,11 +20,14 @@ The desktop currently ships 11 first-party plugins as resources. Startup checks 
   <Card title="DSH Tauri UI" icon="sidebar" href="./dsh-tauri-ui">
     Desktop settings with capability-based fallback.
   </Card>
+  <Card title="DSH Tauri Mobile UI" icon="mobile" href="./dsh-tauri-mobile-ui">
+    Touch layouts and mobile preferences; no gesture sidebar.
+  </Card>
   <Card title="DSH Tauri Worktree" icon="code-branch" href="./dsh-tauri-worktree">
     Isolated Git worktrees; checkout needs explicit user approval.
   </Card>
   <Card title="DSH Tauri Extension" icon="puzzle-piece" href="./dsh-tauri-extension">
-    Skills, skill sources, and MCP management.
+    Official plugin manager, optional market, Skills, and MCP.
   </Card>
   <Card title="DSH Tauri Scheduler" icon="calendar" href="./dsh-tauri-scheduler">
     Scheduled tasks, independent sessions, and run history.
@@ -52,7 +55,8 @@ The desktop currently ships 11 first-party plugins as resources. Startup checks 
 ## Distribution and permissions
 
 - The current desktop `plugins.built-in` manifest is authoritative. Running Changes is no longer in the built-in set.
-- Community presets are installed separately; the Extensions Skills/MCP panel has no marketplace.
+- Community presets are installed separately. Extensions puts the official plugin manager first when available. The optional market is a separate tab, shown only inside the desktop iframe when its market service can render.
+- Built-in plugins can be disabled in settings after a risk confirmation.
 - “Built in” adds no OS sandbox. Harness and plugins can still execute local code.
 
 [Plugin management](../guides/plugins) · [Current source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages)

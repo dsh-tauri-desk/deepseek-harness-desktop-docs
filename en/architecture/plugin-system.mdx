@@ -23,16 +23,19 @@ The desktop app adds lifecycle management and a controlled bridge to native feat
 Before Harness starts, the desktop checks the active profile and restores missing integrations or outdated paths from bundled copies. Failures are logged.
 The built-in bridge can recover automatically, but first-time preparation of runtimes, the core, and selected community plugins still needs network access.
 
-The current [release manifest](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc) contains 11 built-in packages:
+The current [release manifest](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc) contains 12 built-in packages:
 
 | Role | Built-in packages |
 | --- | --- |
-| Native bridge and UI | `dsh-tauri`, `dsh-tauri-ui` |
+| Native bridge and UI | `dsh-tauri`, `dsh-tauri-ui`, `dsh-tauri-mobile-ui` |
 | Workspaces and sessions | `dsh-tauri-worktree`, `dsh-tauri-archive`, `dsh-tauri-rightclick` |
 | Configuration and connections | `dsh-tauri-extension`, `dsh-tauri-model`, `dsh-tauri-ssh` |
 | Background and system features | `dsh-tauri-scheduler`, `dsh-tauri-pet`, `dsh-tauri-notification` |
 
-Preset and community plugins are installed, upgraded, or removed as needed. `running-changes` is not shipped in this release. `dsh-win-terminal-inspector` is deprecated and startup attempts to remove it automatically; it is no longer an optional Minimal repair choice.
+- `dsh-tauri-mobile-ui` provides touch layouts and mobile preferences, not a standalone mobile app or pairing bridge.
+- Built-in integrations can be disabled in settings after a risk confirmation.
+- `running-changes` is not shipped in this release.
+- `dsh-win-terminal-inspector` is deprecated; startup attempts to remove it automatically. It is no longer an optional Minimal repair choice.
 
 ## Communication path
 

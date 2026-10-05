@@ -22,7 +22,7 @@ pnpm tauri build
 
 ## Current release artifacts
 
-The current desktop source is `0.20.0-beta.1`. The [`v0.20.0-beta.1` prerelease](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.20.0-beta.1) provides these installers:
+The current desktop source is `0.22.x`; the latest preview is [`v0.20.1-beta.4`](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.20.1-beta.4). The stable [`v0.22.1`](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.22.1) provides these installers:
 
 | Platform | Release assets |
 | --- | --- |
@@ -31,7 +31,7 @@ The current desktop source is `0.20.0-beta.1`. The [`v0.20.0-beta.1` prerelease]
 | macOS Intel | `x64.dmg` |
 | Linux x64 | `.AppImage`, `.deb` |
 
-The separate stable release is [`v0.19.1`](https://github.com/dsh-tauri/deepseek-harness-desktop/releases/tag/v0.19.1). Do not label the prerelease stable or infer unreleased architectures from source code or CI targets.
+Four additional `_Bundle` offline packages (`.exe`, `.deb`, and two `.dmg` files) embed the managed Node.js runtime, pnpm, and core so the first launch needs no network. Do not label a prerelease stable or infer unreleased architectures from source code or CI targets.
 
 {/* <!-- [GitHub Actions release pipeline](/images/release-pipeline.webp) --> */}
 

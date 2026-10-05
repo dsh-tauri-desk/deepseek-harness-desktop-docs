@@ -1,0 +1,31 @@
+---
+title: DSH Tauri Mobile UI
+description: Quick theme and language selection and a simplified conversation layout on mobile devices.
+---
+
+`dsh-tauri-mobile-ui` is a separate built-in client plugin that adds quick preferences and a simplified layout for touch-oriented devices. The desktop settings sidebar remains the responsibility of [`dsh-tauri-ui`](./dsh-tauri-ui).
+
+{/* <!-- [Theme and language selection and the official settings entry on a mobile device](/images/dsh-tauri-mobile-ui.webp) --> */}
+
+## Use the mobile preferences entry
+
+- Select a light / dark theme and a registered interface language directly at the settings entry.
+- Select the gear to open the official settings dialog. This does not add a separate settings model or native Configuration page.
+- When supported, switches the conversation view to `standard` once after the plugin loads. It does not continuously lock the view mode.
+
+## Simplified layout
+
+| Area | Mobile adjustment |
+| --- | --- |
+| Composer | Hides desktop dock tool areas. |
+| Conversation and page headers | Hides some titles, toolbars, and turn error-code displays. |
+| Messages | Adjusts scroll padding and lets user messages use the full width. |
+
+## Activation and boundaries
+
+- Detection uses browser input capabilities: `(hover: none)`, `(any-pointer: coarse)`, and `(any-hover: none)` must all match. Window width or device name alone is not enough.
+- Narrowing a desktop browser window does not guarantee the mobile preferences entry. Connecting a mouse or another input device may also change detection.
+- Requires Harness settings, theme, language, and conversation-view capabilities. Missing entries do not mean the plugin creates replacement settings services.
+- The current release does not provide a gesture sidebar. This plugin does not turn the Web page into a standalone native mobile app.
+
+[View source](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-mobile-ui)

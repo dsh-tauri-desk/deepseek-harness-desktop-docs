@@ -1,6 +1,6 @@
 ---
 title: Desktop settings
-description: Configure the local service, zoom, CLI integration, profiles, plugins, and core engine.
+description: Configure desktop appearance, the local service, and proxy; manage profiles, plugins, cores, and data.
 ---
 
 Open **Configuration** in the desktop title bar. Model providers, tools, and agent behavior remain in the embedded Harness **Settings**.
@@ -23,6 +23,27 @@ Open **Configuration** in the desktop title bar. Model providers, tools, and age
 
 The desktop has no LAN setting. Packaged-core LAN opt-in does not replace authentication or permissions; see [Data, privacy, and security](../help/data-and-privacy). See [CLI integration](./cli-integration) for PATH and shell configuration changes.
 
+## Appearance
+
+| Setting | Purpose and when it applies |
+| --- | --- |
+| Palette | Eight options: `default`, `nord`, `solarized`, `forest`, `amber`, `github`, `github-dimmed`, `github-high-contrast` |
+| Terminal mode | Hides the sidebar while keeping the original fonts; the top-left sidebar button reveals it |
+| Transparency and opacity | Background opacity `20%–100%`; switching native transparency needs a full app exit and relaunch, not closing to the tray |
+| Keep session area opaque | In transparency mode, keeps the session and right-side areas opaque while the surrounding area shows the desktop |
+
+## Data, network, and processes
+
+| Entry point | Common actions |
+| --- | --- |
+| **Configuration → Data** | Inspect disk usage, check a destination, migrate, or roll back; available in non-debug builds, while debug forces `~/.dsh.dev` |
+| **Configuration → Application → Proxy URL** | Supports `http`, `https`, `socks5`, and `socks5h`; saved changes apply to new desktop downloads, updates, and plugin-metadata requests |
+| **Help → Task Manager** | Inspect the local app, Harness, and child processes by name, PID, CPU, memory, and uptime; refreshes every 2 seconds by default |
+| **Configuration → Profiles → Backup** | Profile backups or a recovery export including sessions; their restore procedures differ, see [Data, privacy, and security](../help/data-and-privacy) |
+
+- Leave the proxy empty to inherit system or environment settings. Local loopback connections stay direct; do not assume all model or plugin traffic uses this proxy.
+- Only Harness child processes can be ended; Harness can also be restarted. Both interrupt affected tasks. OS-managed WebView processes may be missing.
+
 ## Profiles
 
 First installation uses `tauri`; `web` is the built-in fallback profile. Profiles manage configuration, plugins, and patches, not operating system isolation.
@@ -39,7 +60,7 @@ First installation uses `tauri`; `web` is the built-in fallback profile. Profile
 
 | Panel | Common actions |
 | --- | --- |
-| **Plugins** | Inspect sources, versions, and errors; install, upgrade, or remove optional plugins, and use explicit recovery actions |
+| **Plugins** | Inspect sources, versions, and errors; install optional plugins from repositories or local directories, upgrade, or remove them; disabling built-ins requires risk confirmation |
 | **Core Engine** | Download compatible versions, select a source, and switch; the desktop and Harness core update separately |
 
 Do not delete a profile or core as the first troubleshooting step. Copy logs first and determine whether the issue concerns dependencies, a plugin, the service, or a model.

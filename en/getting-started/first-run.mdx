@@ -32,11 +32,13 @@ First launch prepares the local Harness service, then loads its Web interface in
 
 | Component | Current version or purpose |
 | --- | --- |
-| Desktop | `0.20.0-beta.1` |
+| Desktop | `0.22.1` (stable); latest preview `0.20.1-beta.4` |
 | Harness core | Recommended `0.2.0-rc.2`; minimum accepted `0.1.5-rc.1`, still subject to compatibility rules |
 | Node.js / pnpm | `22.22.0` / `11.7.0` |
-| Built-in plugins | 11 first-party desktop integrations |
+| Built-in plugins | 12 first-party desktop integrations, disableable in settings |
 | Optional presets | Only community plugins you approve are installed; they do not count as built-ins |
+
+The Windows installer can choose the data directory; non-debug builds can later migrate or roll it back in **Configuration → Data**. See [Runtime and data](../architecture/runtime-and-data).
 
 ## Verify setup
 

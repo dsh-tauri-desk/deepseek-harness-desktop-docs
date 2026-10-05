@@ -21,14 +21,31 @@ Harness listens on loopback by default, and the desktop embeds its Web interface
 
 Open the actual data directory from desktop **Configuration → Application**. Do not infer the active environment from a directory name alone.
 
+## Data directory migration
+
+Non-debug builds can change the data directory in **Configuration → Data**; the Windows installer also offers a location choice.
+
+- Migration copies, verifies file and byte counts, renames the old directory to `<old>.moved-<timestamp>`, and finally rewrites the user-level `DSH_HOME`. It never deletes the original data.
+- Finish tasks and close other clients using the same directory. The desktop stops local Harness before migrating; incomplete verification raises `DATA_DIR_COPY_INCOMPLETE`.
+- Rollback is available; a non-empty current directory is renamed to `<target>.current-<timestamp>` first.
+- Debug builds force `~/.dsh.dev` and ignore `DSH_HOME`, so they cannot migrate.
+- Open terminals need a restart to pick up the new path.
+
 ## Back up and restore
 
 1. Back up the active profile in **Configuration → Profiles**. Credentials are excluded by default; treat backups as sensitive files if you include them.
 2. Prefer **Restore as a new profile** and verify it rather than overwriting the current environment.
 3. Separately back up workspaces, uncommitted changes, and complete Harness data you need to preserve.
 
+### Recovery export (includes sessions)
+
+- Open **Configuration → Profiles → Backup → Recovery export (includes sessions)**. Finish tasks and close other desktop, CLI, and Web clients using the same data directory; local Harness remains stopped after export.
+- Includes all profiles, sessions, and shared storage as `data.tar.zst` and `README.txt` under application data's `recovery-backups/`. Export is rejected if application data lives inside `DSH_HOME`.
+- Excludes `node_modules`, `.backups`, `.plugin-backups`, and `.harness.pid`; links or junctions cause an error. Exports are not automatically pruned.
+- Follow `README.txt` to extract into a new empty directory, inspect the data, and reinstall dependencies with the matching core. **The profile Restore button cannot restore this archive**.
+
 <Warning>
-  Built-in backups are not snapshots of all of `$DSH_HOME`. They exclude workspaces and complete session data outside the profile. Stop active tasks and check which directories you need before deleting, resetting, restoring over data, or migrating.
+  Profile backups exclude sessions outside profiles; recovery exports exclude external workspaces. Other configuration can contain keys even with credentials unchecked. Keep archives private and copy them to another device against disk failure.
 </Warning>
 
 ## Network and remote access
@@ -38,6 +55,7 @@ Open the actual data directory from desktop **Configuration → Application**. D
 | First installation and updates | Download runtimes, the core, and tools from release or fallback sources |
 | Model requests | Send requests and necessary context to the chosen provider; check its data policy first |
 | Plugin installation and execution | Access npm/GitHub during installation; plugins can execute local code and contact remote services |
+| Application proxy | **Configuration → Application → Proxy URL** supports `http`, `https`, `socks5`, and `socks5h` for desktop downloads, updates, and plugin metadata; local connections stay direct, and not all model or plugin traffic is covered |
 | Remote use | Prefer an [SSH tunnel](../built-in-plugins/dsh-tauri-ssh); do not expose the service directly to the public internet |
 
 The desktop has no LAN setting. The packaged core permits LAN listening only with `DSH_PKG_ALLOW_LAN=1`. This does not replace upstream authentication, access tokens, or tool permissions, and host trust is not authentication.

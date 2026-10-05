@@ -22,16 +22,19 @@ Harness 插件可扩展宿主运行时、贡献工具并添加 UI 集成。桌�
 Harness 启动前，桌面自动检查活动 Profile，并从应用内置副本恢复缺失或指向旧路径的集成；失败会写入日志。
 内置桥可自动恢复，但首次准备运行时、内核及选中的社区插件仍需要网络。
 
-当前[发布清单](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc)包含 11 个内置包：
+当前[发布清单](https://github.com/dsh-tauri/deepseek-harness-desktop/blob/main/src-tauri/resources/manifest.jsonc)包含 12 个内置包：
 
 | 分工 | 内置包 |
 | --- | --- |
-| 原生桥与 UI | `dsh-tauri`、`dsh-tauri-ui` |
+| 原生桥与 UI | `dsh-tauri`、`dsh-tauri-ui`、`dsh-tauri-mobile-ui` |
 | 工作区与会话 | `dsh-tauri-worktree`、`dsh-tauri-archive`、`dsh-tauri-rightclick` |
 | 配置与连接 | `dsh-tauri-extension`、`dsh-tauri-model`、`dsh-tauri-ssh` |
 | 后台与系统 | `dsh-tauri-scheduler`、`dsh-tauri-pet`、`dsh-tauri-notification` |
 
-预设和社区插件按需安装、升级或移除。`running-changes` 未随当前版本发布；`dsh-win-terminal-inspector` 已弃用，启动时会尝试自动移除，不再提供可选 Minimal 修复入口。
+- `dsh-tauri-mobile-ui` 仅提供触屏布局与移动端偏好设置，不是独立移动应用或配对桥。
+- 内置集成可在设置中停用，停用前需确认风险。
+- `running-changes` 未随当前版本发布。
+- `dsh-win-terminal-inspector` 已弃用；启动时会尝试自动移除，不再提供可选 Minimal 修复入口。
 
 ## 通信路径
 

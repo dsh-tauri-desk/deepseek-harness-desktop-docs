@@ -3,7 +3,7 @@ title: DSH Tauri Extension
 description: Manage Skills, skill sources, and MCP servers.
 ---
 
-Open **Extensions** in the sidebar. `dsh-tauri-extension` provides Skills and MCP tabs.
+Open **Extensions** in the sidebar. `dsh-tauri-extension` brings official plugin management, Skills, and MCP into one panel. **Plugins** is the first tab when the official manager is available.
 
 <Frame>
   <img src="/images/dsh-tauri-panel-extension.png" alt="Skills management page in the Extensions panel" />
@@ -13,24 +13,30 @@ Open **Extensions** in the sidebar. `dsh-tauri-extension` provides Skills and MC
   <img src="/images/mcp.png" alt="MCP server management page in the Extensions panel" />
 </Frame>
 
+## Plugins
+
+- Embeds the official Harness plugin manager and its installation and management capabilities, without a separate plugin catalog or configuration model.
+- Hides the duplicate sidebar entry while the official page is available. If that capability is missing or withdrawn, the original entry remains or returns instead of an empty tab.
+- A **Market** tab can appear when a renderable market service is available in the desktop iframe. It is absent when the service is missing or incompatible, not an independent community marketplace bundled with this plugin. See [plugin management](../guides/plugins).
+
 ## Skills
 
 - Search, filter, enable, or disable skills; inspect content or open directories.
 - Import GitHub skill repositories or add local skill directories.
 - Edit skills from writable sources; check the target directory before deletion.
-- **New skill** opens a blank session and prefills `/skill-creator ` without sending it.
+- **New skill** requires an available project workspace. It opens or reuses a blank session and prefills `/skill-creator ` without sending it.
 
 ## MCP
 
-- Add, edit, enable, disable, or delete servers using a form or JSON.
-- Import configuration from Claude Code or Codex and check connection status.
-- Restart the host when a configuration change requires it.
+- Add, edit, enable, disable, or delete servers using a form or JSON, and inspect global and current-profile configuration sources.
+- Import configuration from Claude Code or Codex. The check only tests command resolution or HTTP reachability; it does not guarantee a successful MCP protocol handshake.
+- Restart the host when prompted after configuration changes. Restarting interrupts running turns and may lose unsaved input.
 
 ## Data and boundaries
 
-- Custom skills and source records live under `$DSH_HOME/skills/`; MCP configuration belongs to the current profile.
+- Custom skills live under `$DSH_HOME/skills/`; skill sources can point to local directories or imported GitHub repositories.
+- MCP reads global and current-profile `cordis.patch.yml` files. Management actions default to writing the current profile.
 - Host routes use `/api/desktop/dsh-tauri-extension`.
-- This plugin has no marketplace; see [plugin management](../guides/plugins) for community plugins.
-- Skills and MCP can trigger local code execution. Verify sources and permissions before importing.
+- Plugins, Skills, and MCP can trigger local code execution. Verify sources and permissions before importing.
 
 [Source and third-party notices](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-extension)

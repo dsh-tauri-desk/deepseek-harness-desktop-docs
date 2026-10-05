@@ -3,7 +3,7 @@ title: DSH Tauri Extension
 description: 管理 Skills、技能来源与 MCP 服务器。
 ---
 
-在侧栏打开**扩展**。`dsh-tauri-extension` 提供 Skills 与 MCP 两个标签页。
+在侧栏打开**扩展**。`dsh-tauri-extension` 将官方插件管理、Skills 与 MCP 集中在一个面板；官方管理页面可用时，**插件**是第一个标签页。
 
 <Frame>
   <img src="/images/dsh-tauri-panel-extension.png" alt="扩展面板中的 Skills 管理页面" />
@@ -13,24 +13,30 @@ description: 管理 Skills、技能来源与 MCP 服务器。
   <img src="/images/mcp.png" alt="扩展面板中的 MCP 服务器管理页面" />
 </Frame>
 
+## 插件
+
+- 嵌入 Harness 的官方插件管理页面，沿用其安装与管理能力，不另建插件目录或配置模型。
+- 官方页面可用时收起重复的侧栏入口；能力缺失或撤下时恢复原入口，不显示空白标签页。
+- 桌面 iframe 中另有可渲染的市场服务时，可增加**市场**标签页；未安装或不兼容时不出现。这不是插件自带的独立社区市场，相关操作见[插件管理](../guides/plugins)。
+
 ## Skills
 
 - 搜索、筛选、启停技能，查看内容或打开目录。
 - 导入 GitHub 技能仓库或添加本地技能目录。
 - 编辑可写来源中的技能；删除前检查目标目录。
-- **新建技能**打开空白会话并预填 `/skill-creator `，不会自动发送。
+- **新建技能**需要可用的项目工作区，打开或复用空白会话并预填 `/skill-creator `，不会自动发送。
 
 ## MCP
 
-- 用表单或 JSON 新增、编辑、启停与删除服务器。
-- 从 Claude Code 或 Codex 配置导入，检查连接状态。
-- 配置变更后按提示重启宿主。
+- 用表单或 JSON 新增、编辑、启停与删除服务器，查看全局与当前 Profile 的配置来源。
+- 从 Claude Code 或 Codex 配置导入。检查操作仅检测命令是否可解析或 HTTP 地址是否可达，不保证 MCP 协议握手成功。
+- 配置变更后按提示重启宿主；重启会中断正在进行的回合，并可能丢失未保存的输入。
 
 ## 数据与边界
 
-- 自定义技能及来源记录位于 `$DSH_HOME/skills/`；MCP 配置写入当前 Profile。
+- 自定义技能位于 `$DSH_HOME/skills/`；技能来源可指向本地目录或导入的 GitHub 仓库。
+- MCP 读取全局及当前 Profile 的 `cordis.patch.yml`，管理入口默认写入当前 Profile。
 - 宿主路由前缀为 `/api/desktop/dsh-tauri-extension`。
-- 插件不含市场；社区插件见[插件管理](../guides/plugins)。
-- Skills 与 MCP 可触发本地代码执行，导入前确认来源与权限。
+- 插件、Skills 与 MCP 可触发本地代码执行，导入前确认来源与权限。
 
 [源码与第三方声明](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-extension)

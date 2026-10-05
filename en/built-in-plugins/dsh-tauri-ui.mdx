@@ -17,7 +17,9 @@ description: Understand the desktop settings sidebar and its compatibility fallb
   <Step title="Return to the app">Closing the sidebar restores the content column and sidebar interactions. Background content and Better Sidebar are not interactive while settings are open.</Step>
 </Steps>
 
-The settings entry uses `sidebar.settings`, and the sidebar renders in `shell.overlay`. The desktop host can also open a specific section through a `dsh://settings:open` message.
+The settings entry uses `sidebar.settings` and preserves the official entry through `settings.launcher` when available. The sidebar renders in `shell.overlay`. The desktop host can also open a specific section through a `dsh://settings:open` message.
+
+Mobile devices keep the official settings dialog. Quick theme and language selection and mobile layout belong to the separate [`dsh-tauri-mobile-ui`](./dsh-tauri-mobile-ui) plugin, not the desktop settings sidebar.
 
 ## Session experience
 

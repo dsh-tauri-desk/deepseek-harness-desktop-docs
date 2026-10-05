@@ -49,6 +49,7 @@ Bulk archiving and workspace deletion show a confirmation first. Renaming a work
 
 - Opening a directory uses `/api/desktop/dsh-tauri-rightclick/open/path` and the system file manager on the machine running the Harness host.
 - Opening an external link uses `/api/desktop/dsh-tauri-rightclick/open/url` and that machine's default browser. Only `http` / `https` URLs are accepted, not arbitrary URL schemes.
+- Inputs on mobile devices keep the browser's native long-press menu so the plugin does not take over pasting. Other supported targets can still show plugin menus, without desktop shortcut hints.
 - Loading the Web UI in another wrapper or an ordinary browser does not imply support for every action. Host routes, session services, and clipboard capabilities are still required.
 - Disabling the plugin cleans up listeners and overlays. It does not edit upstream packages, the desktop shell, or other plugins' files.
 

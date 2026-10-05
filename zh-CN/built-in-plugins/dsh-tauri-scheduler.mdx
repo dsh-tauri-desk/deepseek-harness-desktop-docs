@@ -46,7 +46,7 @@ Chat 工具：`scheduler_create`、`scheduler_list`、`scheduler_update`、`sche
 - 宿主路由前缀为 `/api/desktop/dsh-tauri-scheduler`。
 
 <Warning>
-  任务能够执行 Agent 指令与本地工具。保存前检查工作区和权限；休眠或服务停止期间不会执行。
+  定时执行不弹出审批提示，按所选权限边界运行 Agent 指令与本地工具。保存前检查工作区和权限；休眠或服务停止期间不会执行。
 </Warning>
 
 [源码](https://github.com/dsh-tauri/deepseek-harness-desktop/tree/main/packages/dsh-tauri-scheduler)

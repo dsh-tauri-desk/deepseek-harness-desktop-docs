@@ -28,6 +28,12 @@ description: Manage Chat and Codex pets, preset assets, and conversation activit
 
 The pet displays activity states, bubbles, and movement based on sessions. It does not replace authorization or confirmation in a conversation.
 
+## Dragging and flinging
+
+- Grab the pet to drag its window. Releasing after a fast drag can fling it; slow movement or pausing before release does not guarantee a fling.
+- Flight uses the current monitor's work area, with gravity, edge rebounds, a landing squash, and friction. Grabbing the pet again stops flight immediately.
+- This interaction belongs to a single native pet window, without collisions between pets. Positioning and flinging remain subject to window-system limits.
+
 ## Resource sources
 
 | Source | How it loads | Location or definition |
@@ -36,13 +42,21 @@ The pet displays activity states, bubbles, and movement based on sessions. It do
 | Chat | Reads the local pet directory when queried, rather than using a fixed preset list. | The current DSH data directory's `pets` subdirectory, default `~/.dsh/pets`. |
 | Codex | Reads the local directory, or imports a `.zip` from the Codex tab. | `$HOME/.codex/pets`. |
 
-Opening settings rereads the catalogs. Individual invalid local pets are skipped. ZIP imports write to the Codex directory and identify pets by their manifest ID. Duplicate IDs are rejected rather than overwriting existing pets.
+Opening settings rereads the catalogs. Invalid local manifests are skipped. An invalid atlas may leave a placeholder thumbnail but cannot load as a working pet. ZIP imports write to the Codex directory and identify pets by their manifest ID. Duplicate IDs are rejected rather than overwriting existing pets.
 
 ## Create your own pet
 
 The plugin provides the `hatch-dsh-pet` skill under its own `providerName: dsh-tauri-pet`, without replacing other skill providers.
 
-The creation entry requires an available project workspace. It opens a session with a `/hatch-dsh-pet` request prefilled, but does not send it. Review the draft before submitting it to have the Agent create a local Chat pet.
+1. The creation entry requires an available project workspace. It opens or reuses a blank session and prefills a `/hatch-dsh-pet` request. Review the draft before sending it.
+2. The skill guides the Agent through a video-material workflow: a 10-second green-screen video for each action, followed by keying, normalization, and atlas baking. This requires an external AI video tool and material-processing tools such as Python 3, ffmpeg, numpy, and scipy. The plugin does not provide a video-generation service itself.
+3. Deliver the result under `$DSH_HOME/pets/<petId>/`: `pet.json` plus a PNG / WebP atlas. Atlases have 8 columns and support 9 rows for v1 or 11 rows for v2; use v2 for new pets. After validation, reopen settings to select the pet, without restarting.
+
+Local custom pets do not load video packages directly. Remote video presets and local atlases are separate resource paths. Do not import the upstream `dsh-pet` video directory or plugin package as a local Chat pet.
+
+<Note>
+  Reusing upstream animations, prompts, source videos, or derivatives requires respecting the non-commercial restriction and linking to the [upstream author](https://github.com/PC2005-cloud/dsh-pet) wherever the work is introduced, displayed, or distributed. The code license does not cover the material license.
+</Note>
 
 ## State and platform limits
 

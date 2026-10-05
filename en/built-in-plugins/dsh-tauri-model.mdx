@@ -17,8 +17,9 @@ Use `dsh-tauri-model` in **Settings → Models** to manage providers, credential
 | Option | Behavior |
 | --- | --- |
 | Fetch config | Fills gaps for one model without replacing entered values |
-| Configure all models | Replaces limits disclosed by the endpoint; preserves undisclosed fields |
+| Configure all models | Overwrites corresponding manual values with endpoint limits and preset input types or thinking levels; preserves fields with no source |
 | Image and thinking capabilities | Uses an online capability table, with cached data or naming rules as fallback; editable manually |
+| Thinking levels | With thinking enabled, select `off`, `minimal`, `low`, `medium`, `high`, `xhigh`, or `max`; a declaration does not guarantee endpoint support |
 | Disable Developer role | Appears only for routes explicitly using `openai-completions` |
 | Open config file | Opens the settings file, or its directory if the file is missing |
 
