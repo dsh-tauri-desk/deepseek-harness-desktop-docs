@@ -33,6 +33,31 @@ Plugins add tools, panels, and system integrations. Distinguish built-in plugins
 
 Presets do not count as built-ins or suit every task. Check maintenance, network dependencies, and data handling before installing. Presets such as DSH Market use the dedicated installation flow in the first-run guide or plugin management—not a chat request to the agent.
 
+## Local plugins and hot reload
+
+Besides npm and GitHub installs, the plugin panel can mount a local plugin source directory directly—useful for plugins you develop or are still editing.
+
+1. In **Configuration → Plugins**, click the folder button next to the install field and choose a plugin directory that contains `package.json`.
+2. The panel fills in a `link:` absolute-path spec, shows a read-only precheck result, and writes it into the active profile when you click **Install**.
+3. After a successful install, restart Harness when prompted so the local plugin loads with the profile.
+
+The install field also accepts hand-written specs. A `link:` or `file:` prefix, a drive-letter absolute path, a UNC path, and `./` or `../` relative paths are all treated as local directories; relative paths resolve against the managed `dsh` installation directory. Separate multiple specs with commas or whitespace to install them in one operation.
+
+<Note>
+  A local install writes a `link:` declaration into the profile; the plugin source stays where it is. Moving or deleting that directory makes the plugin fail to load on the next start.
+</Note>
+
+Hot reload is on by default. Before Harness starts, the desktop turns the source directories of mounted local plugins into a watch list, writes it to `cordis.hmr.patch.yml` in application data, and injects it with `--patch` into the core's HMR plugin; when the source changes, the core disposes and re-imports that plugin without restarting the service.
+
+- Only plugins installed from a local path are watched; npm and GitHub installs are not.
+- Toggling the switch takes effect after the service restarts, when the watch list is recalculated.
+- With no mounted local plugin directory the panel says so, and no patch layer is written.
+- `node_modules`, hidden directories, and `cache` or `data` directories are not watched.
+
+<Warning>
+  Hot reload runs the source on your disk. Mounting an untrusted directory is the same as running the code inside it.
+</Warning>
+
 ## Install, update, and recover
 
 1. Open desktop **Configuration → Plugins** and check the active profile, sources, versions, and errors.
