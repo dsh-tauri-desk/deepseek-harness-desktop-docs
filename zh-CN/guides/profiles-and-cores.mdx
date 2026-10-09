@@ -3,11 +3,11 @@ title: Profile 与内核
 description: 使用 Profile 隔离 Harness 配置，并选择活动内核。
 ---
 
-Profile（档案）决定配置、插件和补丁环境；内核决定本地服务运行哪个 Harness 版本。两者都不是操作系统沙箱。
+[Profile](https://deepseek-harness.github.io/deepseek-harness/reference/#profile-%E4%B8%8E%E7%BB%84%E5%90%88%E5%8C%85)（档案）决定配置、插件和补丁环境；内核决定本地服务运行哪个 Harness 版本。
 
 ## 选择档案
 
-首次安装创建并使用 `tauri`，`web` 是内置回退档案。其他档案位于 `$DSH_HOME/profiles/<id>`；会话数据位于档案外，不能假定切换档案会隔离全部历史。
+首次安装创建并使用 `tauri` 档案，`web` 是官方启动的默认档案。其他档案位于 `$DSH_HOME/profiles/<id>`；会话数据位于档案外，切换档案不会会隔离全部历史会话。
 
 1. 在桌面**配置 → 档案**创建或克隆档案。
 2. 暂停活动任务，记录工作区和未提交修改。
@@ -19,24 +19,34 @@ Profile（档案）决定配置、插件和补丁环境；内核决定本地服�
 
 删除、重置或覆盖还原前先备份。档案备份只覆盖当前档案范围，不包含工作区或档案外的完整会话数据；凭据默认不包含，勾选后需按敏感文件保管。
 
-## 选择内核
+## 档案数据迁移
+
+当官方核心存在跨版本号升级时，桌面端会推荐你使用新的档案，而新的档案将会丢失插件与相关的配置，我们可以在档案中选择”档案数据迁移“，从而安全的迁移插件与档案数据。
 
 <Frame>
-  <img src="/images/profiles-cores-core.png" alt="Harness 内核版本与下载操作" />
+  <img src="/images/profiles-migration.png" alt="Profile 档案设置" />
+</Frame>
+
+## 选择核心
+
+核心源自于官方 Github [Releases](https://github.com/deepseek-ai/deepseek-harness/releases) 中所发布的所有版本，由 [deepseek-harness-pkg](https://github.com/dsh-tauri/deepseek-harness-pkg) 自动打包发布，不同的核心将对插件的适配性造成影响。
+
+<Frame>
+  <img src="/images/profiles-cores-core.png" alt="Harness 核心版本与下载操作" />
 </Frame>
 
 | 来源 | 用途 |
 | --- | --- |
-| 自动 | 优先使用兼容的本地 CLI 内核，否则使用托管内核 |
+| 自动 | 优先使用兼容的本地 CLI 核心，否则使用托管核心 |
 | Local | 使用桌面端检测到且兼容的本地 Harness |
 | App | 使用桌面端下载的预构建发行版 |
 
-当前推荐内核为 `0.2.0-rc.2`，最低接受版本为 `0.1.5-rc.1`。版本列表仍由桌面端和插件兼容规则筛选，不保证任意上游版本都能使用。
+当前推荐核心为 `0.2.0-rc.2`，最低接受版本为 `0.1.5-rc.1`。版本列表仍由桌面端和插件兼容规则筛选，不保证任意上游版本都能使用。
 
 ## 切换或升级前
 
 1. 完成或暂停活动工具任务，备份档案并检查仓库状态。
-2. 选择兼容内核；若提示使用独立的版本档案，按提示操作。
+2. 选择兼容核心；若提示使用独立的版本档案，按提示操作。
 3. 等待服务重启，确认会话连接、模型和插件状态。
 4. 出现错误时先保留日志，尝试已安装的兼容版本，不要先删除数据。
 

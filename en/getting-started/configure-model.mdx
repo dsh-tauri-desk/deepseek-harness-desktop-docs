@@ -5,13 +5,22 @@ description: Start your first task with official DeepSeek account sign-in, an AP
 
 Before starting a task, sign in to your official DeepSeek account or configure at least one model provider. These entry points belong to the embedded Harness interface, not the desktop **Configuration** dialog.
 
-<Frame>
-  <img src="/images/model-settings.png" alt="Harness model settings with the DeepSeek provider card" />
-</Frame>
+<Tabs>
+  <Tab title="Sign-in option in the lower left">
+    <Frame>
+      <img src="/images/login.png" alt="Official DeepSeek account sign-in entry point" />
+    </Frame>
+  </Tab>
+  <Tab title="Configure a model in Settings">
+    <Frame>
+      <img src="/images/model-settings.png" alt="Harness model settings with the DeepSeek provider card" />
+    </Frame>
+  </Tab>
+</Tabs>
 
 ## Sign in to your official DeepSeek account
 
-Account sign-in completes DeepSeek authorization in your browser and uses the `deepseek-account` model route. It is separate from the `deepseek-official` route that takes a manually entered Platform API key; you do not need to paste an API key into model settings for account sign-in.
+Signing in from the lower-left menu completes DeepSeek authorization in your browser and uses the `deepseek-account` model route. It is separate from the `deepseek-official` route that takes a manually entered Platform API key; you do not need to paste an API key into model settings for account sign-in.
 
 <Steps>
   <Step title="Open a sign-in entry point">
@@ -35,7 +44,7 @@ Account sign-in completes DeepSeek authorization in your browser and uses the `d
 
 <Steps>
   <Step title="Open model settings">
-    Open **Settings → Models** in the Harness sidebar. The desktop extends this page through the built-in [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) plugin. **Add API Key** in the sign-in setup also opens key configuration.
+    Open **Settings → Models** in the Harness sidebar. The desktop extends this page through the built-in [Model configuration](../built-in-plugins/dsh-tauri-model) plugin. **Add API Key** in the sign-in setup also opens key configuration.
   </Step>
   <Step title="Save credentials">
     Edit the official DeepSeek API provider (`deepseek-official`), enter an API key from the [DeepSeek Platform](https://platform.deepseek.com/), and save it.
@@ -58,6 +67,6 @@ In **Settings → Models**, click **Add model provider** and choose how to add i
 | **Third-party model provider** | A provider from the built-in catalog, credentials, and available models |
 | **Custom model API** | A stable lowercase Provider ID, base URL, protocol, credentials, and at least one model |
 
-Configure context length, output limits, image input, and thinking modes only when the endpoint supports them. See [DSH Tauri Model](../built-in-plugins/dsh-tauri-model) for local or company gateway compatibility options.
+Configure context length, output limits, image input, and thinking modes only when the endpoint supports them. See [Model configuration](../built-in-plugins/dsh-tauri-model) for local or company gateway compatibility options.
 
 For upstream provider semantics, see the [model configuration guide](https://deepseek-harness.github.io/deepseek-harness/guide/providers). Next, explore the [desktop and Harness interface](../guides/interface).

@@ -604,6 +604,7 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
       previewTag: "预览版",
       published: "发布于",
       noAssets: "该版本没有可下载的安装包。",
+      standard: "普通版",
       bundle: "捆绑版（Bundle）",
       releaseNotes: "查看该版本的发布说明",
       allReleases: "全部版本",
@@ -626,6 +627,7 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
       previewTag: "pre-release",
       published: "Published",
       noAssets: "This release has no downloadable installers.",
+      standard: "Standard installers",
       bundle: "Bundled installers (Bundle)",
       releaseNotes: "Read the release notes",
       allReleases: "All releases",
@@ -702,7 +704,8 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
     return [false, true].flatMap(bundle => PLATFORM_ORDER
       .map(platform => ({
         platform: `${platform}:${bundle ? "bundle" : "standard"}`,
-        label: bundle ? `${copy.platforms[platform]} · ${copy.bundle}` : copy.platforms[platform],
+        bundle,
+        label: copy.platforms[platform],
         items: buckets[platform].filter(item => item.bundle === bundle).sort((a, b) => a.rank - b.rank),
       }))
       .filter(group => group.items.length > 0))
@@ -763,28 +766,34 @@ export const ReleaseDownloads = ({ lang = "zh-CN" }) => {
         </a>
       </div>
 
-      {groups.length === 0
-        ? <p className="mt-4 text-sm text-zinc-950/60 dark:text-white/60">{copy.noAssets}</p>
-        : groups.map(group => (
-            <div key={group.platform} className="mt-6">
-              <p className="text-sm font-medium text-zinc-950 dark:text-white">{group.label}</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {group.items.map(item => (
-                  <a
-                    key={item.key}
-                    className="inline-flex items-baseline gap-2 rounded-lg border border-zinc-950/15 dark:border-white/20 px-3 py-2 text-sm font-medium text-zinc-950 dark:text-white hover:border-zinc-950/30 dark:hover:border-white/40"
-                    href={item.url}
-                    title={item.name}
-                  >
-                    <span>{item.label}</span>
-                    {item.size
-                      ? <span className="text-xs font-normal text-zinc-950/50 dark:text-white/50">{item.size}</span>
-                      : null}
-                  </a>
+      <Tabs sync={false}>
+        {[false, true].map(bundle => (
+          <Tab key={String(bundle)} title={bundle ? copy.bundle : copy.standard}>
+            {groups.filter(group => group.bundle === bundle).length === 0
+              ? <p className="mt-4 text-sm text-zinc-950/60 dark:text-white/60">{copy.noAssets}</p>
+              : groups.filter(group => group.bundle === bundle).map(group => (
+                  <div key={group.platform} className="mt-6">
+                    <p className="text-sm font-medium text-zinc-950 dark:text-white">{group.label}</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {group.items.map(item => (
+                        <a
+                          key={item.key}
+                          className="inline-flex items-baseline gap-2 rounded-lg border border-zinc-950/15 dark:border-white/20 px-3 py-2 text-sm font-medium text-zinc-950 dark:text-white hover:border-zinc-950/30 dark:hover:border-white/40"
+                          href={item.url}
+                          title={item.name}
+                        >
+                          <span>{item.label}</span>
+                          {item.size
+                            ? <span className="text-xs font-normal text-zinc-950/50 dark:text-white/50">{item.size}</span>
+                            : null}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 ))}
-              </div>
-            </div>
-          ))}
+          </Tab>
+        ))}
+      </Tabs>
     </div>
   )
 }

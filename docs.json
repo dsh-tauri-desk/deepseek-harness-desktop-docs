@@ -109,6 +109,7 @@
               "zh-CN/guides/interface",
               "zh-CN/guides/workspaces-and-sessions",
               "zh-CN/guides/settings",
+              "zh-CN/guides/appearance",
               "zh-CN/guides/profiles-and-cores",
               "zh-CN/guides/plugins",
               "zh-CN/guides/cli-integration",
@@ -126,12 +127,12 @@
               "zh-CN/built-in-plugins/dsh-tauri-worktree",
               "zh-CN/built-in-plugins/dsh-tauri-extension",
               "zh-CN/built-in-plugins/dsh-tauri-scheduler",
-              "zh-CN/built-in-plugins/dsh-tauri-archive",
               "zh-CN/built-in-plugins/dsh-tauri-pet",
               "zh-CN/built-in-plugins/dsh-tauri-rightclick",
               "zh-CN/built-in-plugins/dsh-tauri-model",
               "zh-CN/built-in-plugins/dsh-tauri-ssh",
-              "zh-CN/built-in-plugins/dsh-tauri-notification"
+              "zh-CN/built-in-plugins/dsh-tauri-notification",
+              "zh-CN/built-in-plugins/dsh-tauri-archive"
             ]
           },
           {
@@ -197,6 +198,7 @@
               "en/guides/interface",
               "en/guides/workspaces-and-sessions",
               "en/guides/settings",
+              "en/guides/appearance",
               "en/guides/profiles-and-cores",
               "en/guides/plugins",
               "en/guides/cli-integration",
@@ -214,12 +216,12 @@
               "en/built-in-plugins/dsh-tauri-worktree",
               "en/built-in-plugins/dsh-tauri-extension",
               "en/built-in-plugins/dsh-tauri-scheduler",
-              "en/built-in-plugins/dsh-tauri-archive",
               "en/built-in-plugins/dsh-tauri-pet",
               "en/built-in-plugins/dsh-tauri-rightclick",
               "en/built-in-plugins/dsh-tauri-model",
               "en/built-in-plugins/dsh-tauri-ssh",
-              "en/built-in-plugins/dsh-tauri-notification"
+              "en/built-in-plugins/dsh-tauri-notification",
+              "en/built-in-plugins/dsh-tauri-archive"
             ]
           },
           {

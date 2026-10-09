@@ -3,22 +3,35 @@ title: 插件
 description: 在 DeepSeek Harness Desktop 中安装、更新、恢复和理解插件。
 ---
 
-插件可以添加工具、面板和系统集成。先区分内置插件与可选社区插件，再决定安装或恢复方式。
+插件可以添加工具、面板和系统集成。
 
 ## 插件类型
 
 | 类型 | 来源与控制 |
 | --- | --- |
-| 内置 | 11 个第一方桌面集成，由桌面端确保安装；不是社区插件合集 |
 | 预设 | 向导提供的 6 个可选社区插件，经确认后下载，可更新或移除 |
 | 其他社区插件 | 手动或通过市场安装；先检查来源、兼容性与执行能力 |
 
-- 当前清单和各插件操作见[内置插件概览](../built-in-plugins/overview)。
-- `dsh-tauri-experimental` 是默认关闭的可选实验包，不计入这 11 个插件。
+<Tabs>
+  <Tab title="插件管理(桌面端)">
+    <Frame>
+      <img src="/images/plugins-desktop.png" alt="桌面端插件管理弹窗中的已安装插件与预设" />
+    </Frame>
+  </Tab>
+  <Tab title="官方插件页">
+    <Frame>
+      <img src="/images/plugins.png" alt="官方插件页中的插件状态与开关" />
+    </Frame>
+  </Tab>
+  <Tab title="插件市场（dsh-market）">
+    <Frame>
+      <img src="/images/plugins-market.png" alt="dsh-market 插件市场中的发现页与安装状态" />
+    </Frame>    
+  </Tab>
+</Tabs>
 
-<Frame>
-  <img src="/images/plugins.png" alt="带状态和恢复操作的插件管理器" />
-</Frame>
+- 桌面壳插件管理不同于官方插件页，即使在应用崩溃也依旧可以处理插件的异常情况，进行卸载与删除/禁用
+- 插件市场仅在安装预设插件（dsh-market）后显示，如初始化未选择，可在桌面端插件管理弹窗中出现打开预设
 
 ## 可选预设
 

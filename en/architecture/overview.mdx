@@ -8,6 +8,37 @@ and displays its web interface inside a native window.
 
 {/* <!-- [Desktop architecture and process boundaries](/images/architecture-overview.webp) --> */}
 
+## Architecture diagram
+
+This diagram shows the local runtime path: the desktop UI communicates with the Rust backend through Tauri commands. The backend manages a separate Harness service process, and the embedded client accesses it through a loopback address.
+
+```text
++---------------------------+      +---------------------------+
+| Tauri window / WebView    |      | Native backend            |
+| Desktop UI (React)        |<---->| Rust / Tauri 2            |
+| Settings, profiles, etc.  | IPC  | Runtime & service manager |
+|                           |      +-------------+-------------+
+| +-----------------------+ |                    |
+| | Embedded Harness UI   | |          launch / stop / health
+| | (iframe)              | |                    |
+| +-----------+-----------+ |                    v
++-------------|-------------+      +---------------------------+
+              +------------------->| Local Harness service     |
+                 127.0.0.1:<port>  | Node.js / dsh             |
+                                   | Sessions, tools, plugins  |
+                                   +-------------+-------------+
+                                                 |
+                                   +-------------+-------------+
+                                   |                           |
+                                   v                           v
+                          +----------------+          +----------------+
+                          | Local data &   |          | Model provider |
+                          | workspace      |          | APIs           |
+                          +----------------+          +----------------+
+```
+
+IPC represents commands and events between the desktop UI and native backend. Local data includes profiles and sessions. Component boundaries are not security sandboxes: tools and plugins can still execute local code.
+
 ## Main layers
 
 | Layer | Technology | Responsibility |

@@ -3,11 +3,11 @@ title: Profiles and cores
 description: Separate Harness configuration with profiles and choose the active core.
 ---
 
-A profile defines the configuration, plugin, and patch environment. The core determines which Harness version runs the local service. Neither is an operating system sandbox.
+[Profile](https://deepseek-harness.github.io/deepseek-harness/reference/#profile-%E4%B8%8E%E7%BB%84%E5%90%88%E5%8C%85) defines the configuration, plugin, and patch environment. The core determines which Harness version runs the local service.
 
 ## Choose a profile
 
-First installation creates and uses `tauri`; `web` is the built-in fallback. Other profiles live under `$DSH_HOME/profiles/<id>`. Session data lives outside profiles, so switching does not isolate all history.
+First installation creates and uses the `tauri` profile; `web` is the default profile started officially. Other profiles live under `$DSH_HOME/profiles/<id>`. Session data lives outside profiles, so switching profiles does not isolate all session history.
 
 1. Create or clone a profile in desktop **Configuration → Profiles**.
 2. Pause active tasks and record workspaces and uncommitted changes.
@@ -19,7 +19,17 @@ First installation creates and uses `tauri`; `web` is the built-in fallback. Oth
 
 Back up before deleting, resetting, or restoring over a profile. Profile backups cover only the current profile, not workspaces or complete session data outside it. Credentials are excluded by default; treat backups as sensitive files if you include them.
 
+## Migrate profile data
+
+When the official core has a cross-version upgrade, the desktop recommends a new profile, but that new profile loses plugins and related configuration. Choose **Migrate profile data** in Profiles to move plugins and profile data safely.
+
+<Frame>
+  <img src="/images/profiles-migration.png" alt="Profile data migration in desktop Profile settings" />
+</Frame>
+
 ## Choose a core
+
+Cores come from every version published in the official GitHub [Releases](https://github.com/deepseek-ai/deepseek-harness/releases) and are packaged automatically by [deepseek-harness-pkg](https://github.com/dsh-tauri/deepseek-harness-pkg). Different cores affect plugin compatibility.
 
 <Frame>
   <img src="/images/profiles-cores-core.png" alt="Harness core versions and download actions" />

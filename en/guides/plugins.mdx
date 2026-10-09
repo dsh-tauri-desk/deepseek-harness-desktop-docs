@@ -3,22 +3,35 @@ title: Plugins
 description: Install, update, recover, and understand plugins in DeepSeek Harness Desktop.
 ---
 
-Plugins add tools, panels, and system integrations. Distinguish built-in plugins from optional community plugins before choosing how to install or recover them.
+Plugins add tools, panels, and system integrations.
 
 ## Plugin types
 
 | Type | Source and control |
 | --- | --- |
-| Built-in | 11 first-party desktop integrations ensured by the desktop; not a community plugin bundle |
 | Preset | Six optional community plugins offered by the guide; downloaded after approval and can be updated or removed |
 | Other community plugins | Installed manually or through a marketplace; check sources, compatibility, and execution capabilities first |
 
-- See the [built-in plugin overview](../built-in-plugins/overview) for the current inventory and instructions.
-- `dsh-tauri-experimental` is an optional experimental package, disabled by default and not counted among these 11 plugins.
+<Tabs>
+  <Tab title="Desktop plugin management">
+    <Frame>
+      <img src="/images/plugins-desktop.png" alt="Desktop plugin management dialog" />
+    </Frame>
+  </Tab>
+  <Tab title="Official plugins page">
+    <Frame>
+      <img src="/images/plugins.png" alt="Plugin manager with status and recovery actions" />
+    </Frame>
+  </Tab>
+  <Tab title="Plugin marketplace (dsh-market)">
+    <Frame>
+      <img src="/images/plugins-market.png" alt="Plugin marketplace provided by dsh-market" />
+    </Frame>
+  </Tab>
+</Tabs>
 
-<Frame>
-  <img src="/images/plugins.png" alt="Plugin manager with status and recovery actions" />
-</Frame>
+- Desktop shell plugin management is separate from the official plugins page; even if the app crashes, you can still handle plugin errors and uninstall or disable plugins.
+- The plugin marketplace appears only after you install the `dsh-market` preset. If you did not select it during setup, you can open the preset from the desktop plugin management dialog.
 
 ## Optional presets
 

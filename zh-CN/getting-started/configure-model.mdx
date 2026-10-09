@@ -5,13 +5,24 @@ description: 通过 DeepSeek 官方账号登录、API 密钥或兼容供应商�
 
 开始任务前，先登录 DeepSeek 官方账号或配置至少一个模型供应商。这些入口位于嵌入的 Harness 界面，不是桌面端的**配置**对话框。
 
-<Frame>
-  <img src="/images/model-settings.png" alt="包含 DeepSeek 供应商卡片的 Harness 模型设置" />
-</Frame>
+<Tabs>
+  <Tab title="左下登录选项">
+    <Frame>
+    <img src="/images/login.png" alt="DeepSeek 官方账号登录入口" />
+  </Frame>
+  </Tab>
+  <Tab title="设置配置模型">
+    <Frame>
+      <img src="/images/model-settings.png" alt="包含 DeepSeek 供应商卡片的 Harness 模型设置" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+
 
 ## 登录 DeepSeek 官方账号
 
-官方账号登录通过浏览器完成 DeepSeek 授权，使用 `deepseek-account` 模型路由；它不同于手动填写开放平台 API 密钥的 `deepseek-official` 路由，无需把 API 密钥粘贴到模型设置。
+左下菜单官方账号登录通过浏览器完成 DeepSeek 授权，使用 `deepseek-account` 模型路由；它不同于手动填写开放平台 API 密钥的 `deepseek-official` 路由，无需把 API 密钥粘贴到模型设置。
 
 <Steps>
   <Step title="打开登录入口">

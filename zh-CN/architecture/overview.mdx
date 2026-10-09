@@ -7,6 +7,37 @@ DeepSeek Harness Desktop 是 Tauri 2 应用，负责管理本地 Harness 服务�
 
 {/* <!-- [桌面端架构与进程边界](/images/architecture-overview.webp) --> */}
 
+## 架构图
+
+下图展示本地运行路径：桌面 UI 通过 Tauri command 与 Rust 后端交互，后端管理独立的 Harness 服务进程；嵌入客户端通过回环地址访问该服务。
+
+```text
++---------------------------+      +---------------------------+
+| Tauri window / WebView    |      | Native backend            |
+| Desktop UI (React)        |<---->| Rust / Tauri 2            |
+| Settings, profiles, etc.  | IPC  | Runtime & service manager |
+|                           |      +-------------+-------------+
+| +-----------------------+ |                    |
+| | Embedded Harness UI   | |          launch / stop / health
+| | (iframe)              | |                    |
+| +-----------+-----------+ |                    v
++-------------|-------------+      +---------------------------+
+              +------------------->| Local Harness service     |
+                 127.0.0.1:<port>  | Node.js / dsh             |
+                                   | Sessions, tools, plugins  |
+                                   +-------------+-------------+
+                                                 |
+                                   +-------------+-------------+
+                                   |                           |
+                                   v                           v
+                          +----------------+          +----------------+
+                          | Local data &   |          | Model provider |
+                          | workspace      |          | APIs           |
+                          +----------------+          +----------------+
+```
+
+图中的 IPC 表示桌面 UI 与原生后端的命令及事件交互；本地数据包含档案与会话数据。组件边界不等于安全沙箱，工具与插件仍可能执行本地代码。
+
 ## 主要层次
 
 | 层 | 技术 | 职责 |

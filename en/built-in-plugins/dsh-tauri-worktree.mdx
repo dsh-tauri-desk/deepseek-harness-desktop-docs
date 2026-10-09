@@ -1,13 +1,22 @@
 ---
-title: DSH Tauri Worktree
+title: Worktree
 description: Isolate changes in per-session Git worktrees and check them back to local branches after approval.
 ---
 
 `dsh-tauri-worktree` creates an isolated Git worktree for a session. Make changes there, then choose whether to check the work back to a local branch or discard it.
 
-<Frame>
-  <img src="/images/dsh-tauri-worktree.png" alt="Flow from the main workspace into a worktree and back to a local branch" />
-</Frame>
+<Tabs>
+  <Tab title="Select a worktree">
+    <Frame>
+      <img src="/images/dsh-tauri-worktree-select.png" alt="Selecting a worktree from the main workspace" />
+    </Frame>
+  </Tab>
+  <Tab title="Work in the worktree session">
+    <Frame>
+      <img src="/images/dsh-tauri-worktree.png" alt="Worktree session" />
+    </Frame>
+  </Tab>
+</Tabs>
 
 ## Start isolated work
 
