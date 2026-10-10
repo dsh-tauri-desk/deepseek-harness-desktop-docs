@@ -11,6 +11,8 @@ Harness listens on loopback by default, and the desktop embeds its Web interface
 | --- | --- |
 | Harness user data | `~/.dsh` by default; release builds can honor `DSH_HOME` |
 | Profile configuration, plugins, and patches | `$DSH_HOME/profiles/<id>`; first installation uses `tauri`, with `web` as fallback |
+| Local plugin source | The directory you choose; it is not copied into the profile, which only stores a `link:` declaration |
+| Local plugin hot-reload patch layer | `cordis.hmr.patch.yml` in application data; absent when no local plugin is mounted |
 | Session and workspace records | Directories outside profiles in Harness data; switching profiles does not isolate all history |
 | Repository files and Git worktrees | Your chosen workspace directories, outside profile backups |
 | Default managed runtime and dependencies | `runtime/` and `dependencies/` in application data; the core uses `dependencies/dsh/` |

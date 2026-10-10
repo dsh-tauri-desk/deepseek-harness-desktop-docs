@@ -33,6 +33,14 @@ Harness 启动前，桌面自动检查活动 Profile，并从应用内置副本�
 
 预设和社区插件按需安装、升级或移除。`running-changes` 未随当前版本发布；`dsh-win-terminal-inspector` 已弃用，启动时会尝试自动移除，不再提供可选 Minimal 修复入口。
 
+## 本地路径与热重载
+
+除注册表来源外，插件也可以从本地目录挂载：spec 会被规范化为 `link:` 加绝对路径，档案中保存的是指向源码目录的链接声明，源码不会被复制。
+
+桌面端为这类插件维护一条独立的 HMR 补丁层。启动 Harness 前，已挂载的本地源码目录被折算成 watch root，写入应用数据中的 `cordis.hmr.patch.yml`，再以 `--patch` 注入核心自带的 `@deepseek-ai/dsh-hmr`。该文件与用户手写的档案补丁相互独立；关闭开关或没有本地插件时会被移除。
+
+补丁层只管监听范围：真正的热重载由核心 HMR 完成，卸载并重新导入该插件后重建它的 fiber，不重启 Harness 服务。忽略规则覆盖 `node_modules`、隐藏目录，以及 `cache`、`data` 目录。
+
 ## 通信路径
 
 1. 嵌入式 Harness 客户端调用客户端插件暴露的集成。

@@ -34,6 +34,14 @@ The current [release manifest](https://github.com/dsh-tauri/deepseek-harness-des
 
 Preset and community plugins are installed, upgraded, or removed as needed. `running-changes` is not shipped in this release. `dsh-win-terminal-inspector` is deprecated and startup attempts to remove it automatically; it is no longer an optional Minimal repair choice.
 
+## Local paths and hot reload
+
+Besides registry sources, plugins can be mounted from a local directory: the spec is normalized to `link:` plus an absolute path, so the profile stores a link declaration to the source directory rather than a copy.
+
+The desktop keeps a separate HMR patch layer for these plugins. Before Harness starts, the mounted local source directories become watch roots, written to `cordis.hmr.patch.yml` in application data and injected with `--patch` into the core's `@deepseek-ai/dsh-hmr`. That file is independent of profile patches you write by hand and is removed when the switch is off or no local plugin is mounted.
+
+The patch layer only defines the watch scope: the core's HMR performs the actual reload, disposing and re-importing the plugin and rebuilding its fiber without restarting the Harness service. Ignore rules cover `node_modules`, hidden directories, and `cache` and `data` directories.
+
 ## Communication path
 
 1. The embedded Harness client invokes an integration exposed by its client plugin.
